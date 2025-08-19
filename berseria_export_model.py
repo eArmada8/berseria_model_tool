@@ -41,6 +41,8 @@ def trianglestrip_to_list(ib_list):
         else:
             triangles.append([ib_list[i], ib_list[i+2], ib_list[i+1]]) #DirectX implementation
             #triangles.append([ib_list[i+1], ib_list[i], ib_list[i+2]]) #OpenGL implementation
+    # Remove degenerate triangles
+    triangles = [x for x in triangles if len(set(x)) == 3]
     return(triangles)
 
 def read_opening_dict (f):
@@ -517,7 +519,7 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
     vgmap_nodes = [node_list.index(x) for x in list(vgmap.keys())]
     ibms = [skel_struct[j]['inv_matrix'] for j in vgmap_nodes]
     inv_mtx_buffer = b''.join([struct.pack("<16f", *x) for x in ibms])
-    base_name = dlb_file.split('.')[0].split('_')[0]
+    base_name = dlb_file.split('.TOMDLB_D')[0]
     # Meshes
     if write_raw_buffers == True:
         overwrite_buffers = copy.deepcopy(overwrite)
@@ -594,6 +596,9 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
                     write_vb(meshes[i]['vb'], '{0}/{1}.vb'.format(base_name, filename), meshes[i]['fmt'])
                     with open("{0}/{1}.vgmap".format(base_name, filename), 'wb') as ff:
                         ff.write(json.dumps(vgmap, indent=4).encode('utf-8'))
+                    with open("{0}/{1}.material".format(base_name, filename), 'wb') as ff:
+                        ff.write(json.dumps({'material':gltf_data['materials'][primitive["material"]]['name']},
+                            indent=4).encode('utf-8'))
                 primitives.append(primitive)
         if len(primitives) > 0:
             if mesh_node_ids[mesh] in node_list: # One of the new nodes
@@ -636,12 +641,13 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
             with open(base_name+'.gltf', 'wb') as f:
                 f.write(json.dumps(gltf_data, indent=4).encode("utf-8"))
 
-def process_dlb (dlb_file, dlp_file, overwrite = False, write_raw_buffers = False, write_binary_gltf = True):
+def process_dlb (dlb_file, overwrite = False, write_raw_buffers = False, write_binary_gltf = True):
     with open(dlb_file, 'rb') as f:
         magic = f.read(4)
         if magic == b'DPDF':
             unk_int, = struct.unpack("<I", f.read(4))
             opening_dict = read_opening_dict (f)
+            dlp_file = opening_dict[0]
             magic = f.read(4)
             if magic == b'BLDM':
                 unk_int2, = struct.unpack("<I", f.read(4))
@@ -649,16 +655,19 @@ def process_dlb (dlb_file, dlp_file, overwrite = False, write_raw_buffers = Fals
                 #toc[0] - Nodes.  1 - (mesh) 0x16c, 0x82, mostly zeros (6x zero len sections) (skel) 0x10 header, 6 sections.  2 - 16 zero bytes, 3 - 0x16c, 0x82, mostly zeros.  
                 #4 - starts with 0x16c, 0x82, lots of floats.  5 - 0x20 bytes, all zeros
                 #6 - meshes.  7 - materials.  8,9,10,11 - dunno
-                skel_struct = read_section_0(f, toc[0])
-                meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlb_file, dlp_file)
-                # Attempt to incorporate an external skeleton (skipped if skeleton already complete)
-                skel_struct = find_and_add_external_skeleton (skel_struct, bone_palette_ids)
-                if all([y in [x['id'] for x in skel_struct] for y in bone_palette_ids]):
-                    skel_index = {skel_struct[i]['id']:i for i in range(len(skel_struct))}
-                    vgmap = {skel_struct[skel_index[bone_palette_ids[i]]]['name']:i for i in range(len(bone_palette_ids))}
-                material_dict = read_section_7(f, toc[7])
-                write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_dict,\
-                    overwrite = overwrite, write_raw_buffers = write_raw_buffers, write_binary_gltf = write_binary_gltf)
+                if os.path.exists(dlp_file) or os.path.exists(dlp_file.upper()): # TLTool uses uppercase extension
+                    skel_struct = read_section_0(f, toc[0])
+                    meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlb_file, dlp_file)
+                    # Attempt to incorporate an external skeleton (skipped if skeleton already complete)
+                    skel_struct = find_and_add_external_skeleton (skel_struct, bone_palette_ids)
+                    if all([y in [x['id'] for x in skel_struct] for y in bone_palette_ids]):
+                        skel_index = {skel_struct[i]['id']:i for i in range(len(skel_struct))}
+                        vgmap = {skel_struct[skel_index[bone_palette_ids[i]]]['name']:i for i in range(len(bone_palette_ids))}
+                    material_dict = read_section_7(f, toc[7])
+                    write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_dict,\
+                        overwrite = overwrite, write_raw_buffers = write_raw_buffers, write_binary_gltf = write_binary_gltf)
+                else:
+                    print("Skipping {0} as {1} not present...".format(dlb_file, dlp_file))
     return
 
 if __name__ == "__main__":
@@ -675,17 +684,13 @@ if __name__ == "__main__":
         parser.add_argument('-d', '--dumprawbuffers', help="Write fmt/ib/vb/vgmap files in addition to glb", action="store_true")
         parser.add_argument('-o', '--overwrite', help="Overwrite existing files", action="store_true")
         parser.add_argument('dlb_filename', help="Name of dlb file to process.")
-        parser.add_argument('dlp_filename', help="Name of dlp file to process.")
         args = parser.parse_args()
-        if os.path.exists(args.dlb_filename) and args.dlb_filename[-5:] == 'DLB_D'\
-                and os.path.exists(args.dlp_filename) and args.dlp_filename[-5:] == 'DLP_P':
-            process_mdl(args.dlb_filename, args.dlp_filename, overwrite = args.overwrite, \
+        if os.path.exists(args.dlb_filename) and args.dlb_filename[-5:] == 'DLB_D':
+            process_dlb(args.dlb_filename, overwrite = args.overwrite, \
                 write_raw_buffers = args.dumprawbuffers, write_binary_gltf = args.textformat)
     else:
-        tom_files = glob.glob('*.TOMDL*')
-        tom_file = input("which DLB file?  [input number e.g. type 3975 for 00003975] ")
-        if int(tom_file) > 1:
-            dlb_file_match = [x for x in tom_files if '{0:08d}'.format(int(tom_file)) in x]
-            dlp_file_match = [x for x in tom_files if '{0:08d}'.format(int(tom_file)+1) in x]
-            if len(dlb_file_match) > 0 and len(dlp_file_match) > 0:
-                process_dlb(dlb_file_match[0], dlp_file_match[0])
+        dlb_files = glob.glob('*.TOMDLB_D')
+        # Remove external skeletons
+        dlb_files = [x for x in dlb_files if not 'BONE' in x]
+        for dlb_file in dlb_files:
+            process_dlb(dlb_file)
