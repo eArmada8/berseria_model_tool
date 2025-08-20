@@ -193,13 +193,13 @@ def find_and_add_external_skeleton (skel_struct, bone_palette_ids):
         skel_struct = combine_skeletons (primary_skeleton_file, skel_struct)
     return(skel_struct)
 
-def make_fmt(num_uvs):
+def make_fmt(num_uvs, has_weights = True):
     fmt = {'stride': '0', 'topology': 'trianglelist', 'format':\
         "DXGI_FORMAT_R16_UINT", 'elements': []}
     element_id, stride = 0, 0
     semantic_index = {'TEXCOORD': 0} # Counters for multiple indicies
     elements = []
-    for i in range(4+num_uvs):
+    for i in range(2 + num_uvs + (2 if has_weights else 0)):
             # I think order matters in this dict, so we will define the entire structure with default values
             element = {'id': '{0}'.format(element_id), 'SemanticName': '', 'SemanticIndex': '0',\
                 'Format': '', 'InputSlot': '0', 'AlignedByteOffset': str(stride),\
@@ -242,7 +242,7 @@ def trianglestrip_to_list(ib_list):
             #triangles.append([ib_list[i+1], ib_list[i], ib_list[i+2]]) #OpenGL implementation
     return(triangles)
 
-def read_mesh (main_f, idx_f, start_offset, num_uv_maps):
+def read_mesh (main_f, idx_f, start_offset, flags):
     def read_floats (f, num):
         return(list(struct.unpack("<{}f".format(num), f.read(num * 4))))
     def read_bytes (f, num):
@@ -268,44 +268,63 @@ def read_mesh (main_f, idx_f, start_offset, num_uv_maps):
     main_f.seek(start_offset)
     num_uvs, num_idx, offset_uvs, offset_idx = struct.unpack("<2H2I", main_f.read(12))
     uv_stride = (offset_idx - offset_uvs) // num_uvs
+    num_uv_maps = flags & 0xF
     #num_uv_maps = (uv_stride - 4) // 8 # 4 byte buffer + VEC2 per map
-    num_vertices = list(struct.unpack("<4I", main_f.read(16)))
     verts = []
     norms = []
-    blend_idx = []
-    weights = []
-    for i in range(len(num_vertices)):
+    if flags & 0xF0 == 0x50:
+        num_vertices = list(struct.unpack("<4I", main_f.read(16)))
+        blend_idx = []
+        weights = []
+        for i in range(len(num_vertices)):
+            vert_offset = main_f.tell()
+            norm_offset = vert_offset + 12
+            blend_idx_offset = norm_offset + 12
+            weights_offset = blend_idx_offset + 4
+            stride = 28 + (i * 4)
+            end_offset = main_f.tell() + (num_vertices[i] * stride)
+            main_f.seek(vert_offset)
+            verts.extend(read_interleaved_floats(main_f, 3, stride, num_vertices[i]))
+            main_f.seek(norm_offset)
+            norms.extend(read_interleaved_floats(main_f, 3, stride, num_vertices[i]))
+            main_f.seek(blend_idx_offset)
+            blend_idx.extend(read_interleaved_bytes(main_f, 4, stride, num_vertices[i]))
+            if i > 0:
+                main_f.seek(weights_offset)
+                weights.extend(read_interleaved_floats(main_f, i, stride, num_vertices[i]))
+            else:
+                weights.extend([[1.0] for _ in range(num_vertices[i])])
+            main_f.seek(end_offset)
+        weights = fix_weights(weights)
+    elif flags & 0xF0 == 0x70:
+        num_unk, = struct.unpack("<I", main_f.read(4)) # Dunno what this is, maybe shape morphs?
+        unk_list = list(struct.unpack("<{}I".format(num_unk), main_f.read(4 * num_unk)))
+        num_vertices = num_uvs
         vert_offset = main_f.tell()
         norm_offset = vert_offset + 12
-        blend_idx_offset = norm_offset + 12
-        weights_offset = blend_idx_offset + 4
-        stride = 28 + (i * 4)
-        end_offset = main_f.tell() + (num_vertices[i] * stride)
+        stride = 24
+        end_offset = main_f.tell() + (num_vertices * stride)
         main_f.seek(vert_offset)
-        verts.extend(read_interleaved_floats(main_f, 3, stride, num_vertices[i]))
+        verts.extend(read_interleaved_floats(main_f, 3, stride, num_vertices))
         main_f.seek(norm_offset)
-        norms.extend(read_interleaved_floats(main_f, 3, stride, num_vertices[i]))
-        main_f.seek(blend_idx_offset)
-        blend_idx.extend(read_interleaved_bytes(main_f, 4, stride, num_vertices[i]))
-        if i > 0:
-            main_f.seek(weights_offset)
-            weights.extend(read_interleaved_floats(main_f, i, stride, num_vertices[i]))
-        else:
-            weights.extend([[1.0] for _ in range(num_vertices[i])])
-        main_f.seek(end_offset)
-    weights = fix_weights(weights)
+        norms.extend(read_interleaved_floats(main_f, 3, stride, num_vertices))
+        main_f.seek(end_offset) # More data after this
     uv_maps = []
     for i in range(num_uv_maps):
         idx_f.seek(offset_uvs + 4 + (i * 8))
         uv_maps.append(read_interleaved_floats (idx_f, 2, uv_stride, num_uvs))
     idx_f.seek(offset_idx)
     idx_buffer = list(struct.unpack("<{}H".format(num_idx), idx_f.read(num_idx * 2)))
-    fmt = make_fmt(len(uv_maps))
+    fmt = make_fmt(len(uv_maps), True)
     vb = [{'Buffer': verts}, {'Buffer': norms}]
     for uv_map in uv_maps:
         vb.append({'Buffer': uv_map})
-    vb.append({'Buffer': weights})
-    vb.append({'Buffer': blend_idx})
+    if flags & 0xF0 == 0x50:
+        vb.append({'Buffer': weights})
+        vb.append({'Buffer': blend_idx})
+    elif flags & 0xF0 == 0x70:
+        vb.append({'Buffer': [[1.0, 0.0, 0.0, 0.0] for _ in range(len(verts))]})
+        vb.append({'Buffer': [[0, 0, 0, 0] for _ in range(len(verts))]})
     return({'fmt': fmt, 'vb': vb, 'ib': trianglestrip_to_list(idx_buffer)})
 
 #Meshes, offset should be toc[6].  Requires dlp filename for uv's and index buffer.
@@ -336,7 +355,7 @@ def read_section_6 (f, offset, dlb_file, dlp_file):
             data["data_block_size"], = struct.unpack("<Q", f.read(8))
             current_offset = f.tell()
             data["name"] = read_string (f, data['string_offset'])
-            meshes.append(read_mesh (f, idx_f, data['data_offset'], data["flags"] & 0xF))
+            meshes.append(read_mesh (f, idx_f, data['data_offset'], data["flags"]))
             mesh_blocks_info.append(data)
             f.seek(current_offset)
     return(meshes, bone_palette_ids, mesh_blocks_info)
@@ -362,8 +381,10 @@ def read_section_7 (f, offset):
         f.seek(offset1)
         vals1 = struct.unpack("<{}I".format(num_vals1), f.read(num_vals1 * 4))
         f.seek(offset2)
-        assert num_vals2 == 0x17
-        vals2 = struct.unpack("<8I4f4If6I", f.read(92))
+        if num_vals2 == 0x17:
+            vals2 = struct.unpack("<8I4f4If6I", f.read(92))
+        else:
+            vals2 = struct.unpack("<{}I".format(num_vals2), f.read(num_vals2 * 4))
         set_0.append({'base': values, 'vals1': vals1, 'vals2': vals2})
     set_1 = [] # Texture assignments, each is a tuple where the second number points to set_6
     for i in range(section_7_toc[1]['num_entries']):
@@ -534,7 +555,7 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
         primitives = []
         for j in range(len(mesh_block_tree[mesh])): #Submesh
             i = mesh_block_tree[mesh][j]
-            if mesh_blocks_info[i]["flags"] in [83, 84]:
+            if mesh_blocks_info[i]["flags"] & 0xC0:
                 # Vertex Buffer
                 gltf_fmt = convert_fmt_for_gltf(meshes[i]['fmt'])
                 vb_stream = io.BytesIO()
@@ -642,6 +663,7 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
                 f.write(json.dumps(gltf_data, indent=4).encode("utf-8"))
 
 def process_dlb (dlb_file, overwrite = False, write_raw_buffers = False, write_binary_gltf = True):
+    print("Processing {}...".format(dlb_file))
     with open(dlb_file, 'rb') as f:
         magic = f.read(4)
         if magic == b'DPDF':
