@@ -309,10 +309,25 @@ def read_mesh (main_f, idx_f, start_offset, flags):
         main_f.seek(norm_offset)
         norms.extend(read_interleaved_floats(main_f, 3, stride, num_vertices))
         main_f.seek(end_offset) # More data after this
+    elif flags & 0xF0 == 0x0:
+        num_vertices = num_uvs
+        vert_offset = idx_f.seek(offset_uvs)
+        norm_offset = vert_offset + 12
+        stride = 28 + ((flags & 0xF) * 8) # 12 + 12 + 4 extra for UV padding
+        idx_f.seek(vert_offset)
+        verts.extend(read_interleaved_floats(idx_f, 3, stride, num_vertices))
+        idx_f.seek(norm_offset)
+        norms.extend(read_interleaved_floats(idx_f, 3, stride, num_vertices))
+        main_f.seek(20,1)
     uv_maps = []
-    for i in range(num_uv_maps):
-        idx_f.seek(offset_uvs + 4 + (i * 8))
-        uv_maps.append(read_interleaved_floats (idx_f, 2, uv_stride, num_uvs))
+    if not flags & 0xF0 == 0x0:
+        for i in range(num_uv_maps):
+            idx_f.seek(offset_uvs + 4 + (i * 8))
+            uv_maps.append(read_interleaved_floats (idx_f, 2, uv_stride, num_uvs))
+    else:
+        for i in range(num_uv_maps):
+            idx_f.seek(offset_uvs + 28)
+            uv_maps.append(read_interleaved_floats (idx_f, 2, stride, num_uvs))
     idx_f.seek(offset_idx)
     idx_buffer = list(struct.unpack("<{}H".format(num_idx), idx_f.read(num_idx * 2)))
     fmt = make_fmt(len(uv_maps), True)
@@ -322,13 +337,13 @@ def read_mesh (main_f, idx_f, start_offset, flags):
     if flags & 0xF0 == 0x50:
         vb.append({'Buffer': weights})
         vb.append({'Buffer': blend_idx})
-    elif flags & 0xF0 == 0x70:
+    elif flags & 0xF0 in [0x0, 0x70]:
         vb.append({'Buffer': [[1.0, 0.0, 0.0, 0.0] for _ in range(len(verts))]})
         vb.append({'Buffer': [[0, 0, 0, 0] for _ in range(len(verts))]})
     return({'fmt': fmt, 'vb': vb, 'ib': trianglestrip_to_list(idx_buffer)})
 
 #Meshes, offset should be toc[6].  Requires dlp filename for uv's and index buffer.
-def read_section_6 (f, offset, dlb_file, dlp_file):
+def read_section_6 (f, offset, dlp_file):
     f.seek(offset)
     section_6_unk = struct.unpack("<4I", f.read(16))
     section_6_toc = []
@@ -564,72 +579,71 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
         primitives = []
         for j in range(len(mesh_block_tree[mesh])): #Submesh
             i = mesh_block_tree[mesh][j]
-            if mesh_blocks_info[i]["flags"] & 0xC0:
-                # Vertex Buffer
-                gltf_fmt = convert_fmt_for_gltf(meshes[i]['fmt'])
-                vb_stream = io.BytesIO()
-                write_vb_stream(meshes[i]['vb'], vb_stream, gltf_fmt, e='<', interleave = False)
-                block_offset = len(giant_buffer)
-                primitive = {"attributes":{}}
-                for element in range(len(gltf_fmt['elements'])):
-                    primitive["attributes"][gltf_fmt['elements'][element]['SemanticName']]\
-                        = len(gltf_data['accessors'])
-                    gltf_data['accessors'].append({"bufferView" : len(gltf_data['bufferViews']),\
-                        "componentType": gltf_fmt['elements'][element]['componentType'],\
-                        "count": len(meshes[i]['vb'][element]['Buffer']),\
-                        "type": gltf_fmt['elements'][element]['accessor_type']})
-                    if gltf_fmt['elements'][element]['SemanticName'] == 'POSITION':
-                        gltf_data['accessors'][-1]['max'] =\
-                            [max([x[0] for x in meshes[i]['vb'][element]['Buffer']]),\
-                             max([x[1] for x in meshes[i]['vb'][element]['Buffer']]),\
-                             max([x[2] for x in meshes[i]['vb'][element]['Buffer']])]
-                        gltf_data['accessors'][-1]['min'] =\
-                            [min([x[0] for x in meshes[i]['vb'][element]['Buffer']]),\
-                             min([x[1] for x in meshes[i]['vb'][element]['Buffer']]),\
-                             min([x[2] for x in meshes[i]['vb'][element]['Buffer']])]
-                    gltf_data['bufferViews'].append({"buffer": 0,\
-                        "byteOffset": block_offset,\
-                        "byteLength": len(meshes[i]['vb'][element]['Buffer']) *\
-                        gltf_fmt['elements'][element]['componentStride'],\
-                        "target" : 34962})
-                    block_offset += len(meshes[i]['vb'][element]['Buffer']) *\
-                        gltf_fmt['elements'][element]['componentStride']
-                vb_stream.seek(0)
-                giant_buffer += vb_stream.read()
-                vb_stream.close()
-                del(vb_stream)
-                # Index Buffers
-                ib_stream = io.BytesIO()
-                write_ib_stream(meshes[i]['ib'], ib_stream, gltf_fmt, e='<')
-                # IB is 16-bit so can be misaligned, unlike VB
-                while (ib_stream.tell() % 4) > 0:
-                    ib_stream.write(b'\x00')
-                primitive["indices"] = len(gltf_data['accessors'])
+            # Vertex Buffer
+            gltf_fmt = convert_fmt_for_gltf(meshes[i]['fmt'])
+            vb_stream = io.BytesIO()
+            write_vb_stream(meshes[i]['vb'], vb_stream, gltf_fmt, e='<', interleave = False)
+            block_offset = len(giant_buffer)
+            primitive = {"attributes":{}}
+            for element in range(len(gltf_fmt['elements'])):
+                primitive["attributes"][gltf_fmt['elements'][element]['SemanticName']]\
+                    = len(gltf_data['accessors'])
                 gltf_data['accessors'].append({"bufferView" : len(gltf_data['bufferViews']),\
-                    "componentType": gltf_fmt['componentType'],\
-                    "count": len([index for triangle in meshes[i]['ib'] for index in triangle]),\
-                    "type": gltf_fmt['accessor_type']})
+                    "componentType": gltf_fmt['elements'][element]['componentType'],\
+                    "count": len(meshes[i]['vb'][element]['Buffer']),\
+                    "type": gltf_fmt['elements'][element]['accessor_type']})
+                if gltf_fmt['elements'][element]['SemanticName'] == 'POSITION':
+                    gltf_data['accessors'][-1]['max'] =\
+                        [max([x[0] for x in meshes[i]['vb'][element]['Buffer']]),\
+                         max([x[1] for x in meshes[i]['vb'][element]['Buffer']]),\
+                         max([x[2] for x in meshes[i]['vb'][element]['Buffer']])]
+                    gltf_data['accessors'][-1]['min'] =\
+                        [min([x[0] for x in meshes[i]['vb'][element]['Buffer']]),\
+                         min([x[1] for x in meshes[i]['vb'][element]['Buffer']]),\
+                         min([x[2] for x in meshes[i]['vb'][element]['Buffer']])]
                 gltf_data['bufferViews'].append({"buffer": 0,\
-                    "byteOffset": len(giant_buffer),\
-                    "byteLength": ib_stream.tell(),\
-                    "target" : 34963})
-                ib_stream.seek(0)
-                giant_buffer += ib_stream.read()
-                ib_stream.close()
-                del(ib_stream)
-                primitive["mode"] = 4 #TRIANGLES
-                primitive["material"] = mesh_blocks_info[i]['material']
-                if write_raw_buffers == True and overwrite_buffers == True:
-                    filename = '{0:02d}_{1}'.format(i, mesh_node_ids[mesh])
-                    write_fmt(meshes[i]['fmt'], '{0}/{1}.fmt'.format(base_name, filename))
-                    write_ib(meshes[i]['ib'], '{0}/{1}.ib'.format(base_name, filename), meshes[i]['fmt'])
-                    write_vb(meshes[i]['vb'], '{0}/{1}.vb'.format(base_name, filename), meshes[i]['fmt'])
-                    with open("{0}/{1}.vgmap".format(base_name, filename), 'wb') as ff:
-                        ff.write(json.dumps(vgmap, indent=4).encode('utf-8'))
-                    with open("{0}/{1}.material".format(base_name, filename), 'wb') as ff:
-                        ff.write(json.dumps({'material':gltf_data['materials'][primitive["material"]]['name']},
-                            indent=4).encode('utf-8'))
-                primitives.append(primitive)
+                    "byteOffset": block_offset,\
+                    "byteLength": len(meshes[i]['vb'][element]['Buffer']) *\
+                    gltf_fmt['elements'][element]['componentStride'],\
+                    "target" : 34962})
+                block_offset += len(meshes[i]['vb'][element]['Buffer']) *\
+                    gltf_fmt['elements'][element]['componentStride']
+            vb_stream.seek(0)
+            giant_buffer += vb_stream.read()
+            vb_stream.close()
+            del(vb_stream)
+            # Index Buffers
+            ib_stream = io.BytesIO()
+            write_ib_stream(meshes[i]['ib'], ib_stream, gltf_fmt, e='<')
+            # IB is 16-bit so can be misaligned, unlike VB
+            while (ib_stream.tell() % 4) > 0:
+                ib_stream.write(b'\x00')
+            primitive["indices"] = len(gltf_data['accessors'])
+            gltf_data['accessors'].append({"bufferView" : len(gltf_data['bufferViews']),\
+                "componentType": gltf_fmt['componentType'],\
+                "count": len([index for triangle in meshes[i]['ib'] for index in triangle]),\
+                "type": gltf_fmt['accessor_type']})
+            gltf_data['bufferViews'].append({"buffer": 0,\
+                "byteOffset": len(giant_buffer),\
+                "byteLength": ib_stream.tell(),\
+                "target" : 34963})
+            ib_stream.seek(0)
+            giant_buffer += ib_stream.read()
+            ib_stream.close()
+            del(ib_stream)
+            primitive["mode"] = 4 #TRIANGLES
+            primitive["material"] = mesh_blocks_info[i]['material']
+            if write_raw_buffers == True and overwrite_buffers == True:
+                filename = '{0:02d}_{1}'.format(i, mesh_node_ids[mesh])
+                write_fmt(meshes[i]['fmt'], '{0}/{1}.fmt'.format(base_name, filename))
+                write_ib(meshes[i]['ib'], '{0}/{1}.ib'.format(base_name, filename), meshes[i]['fmt'])
+                write_vb(meshes[i]['vb'], '{0}/{1}.vb'.format(base_name, filename), meshes[i]['fmt'])
+                with open("{0}/{1}.vgmap".format(base_name, filename), 'wb') as ff:
+                    ff.write(json.dumps(vgmap, indent=4).encode('utf-8'))
+                with open("{0}/{1}.material".format(base_name, filename), 'wb') as ff:
+                    ff.write(json.dumps({'material':gltf_data['materials'][primitive["material"]]['name']},
+                        indent=4).encode('utf-8'))
+            primitives.append(primitive)
         if len(primitives) > 0:
             if mesh_node_ids[mesh] in node_list: # One of the new nodes
                 node_id = node_list.index(mesh_node_ids[mesh])
@@ -697,7 +711,7 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = False, write_b
                 #6 - meshes.  7 - materials.  8,9,10,11 - dunno
                 if os.path.exists(dlp_file) or os.path.exists(dlp_file.upper()): # TLTool uses uppercase extension
                     skel_struct = read_section_0(f, toc[0])
-                    meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlb_file, dlp_file)
+                    meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlp_file)
                     # Attempt to incorporate an external skeleton (skipped if skeleton already complete)
                     skel_struct = find_and_add_external_skeleton (skel_struct, bone_palette_ids)
                     if all([y in [x['id'] for x in skel_struct] for y in bone_palette_ids]):
