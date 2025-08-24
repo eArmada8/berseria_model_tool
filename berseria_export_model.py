@@ -494,7 +494,7 @@ def fix_strides(submesh):
     return(submesh)
 
 def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_struct,\
-        overwrite = False, write_raw_buffers = True, write_binary_gltf = True):
+        opening_dict, overwrite = False, write_raw_buffers = True, write_binary_gltf = True):
     gltf_data = {}
     gltf_data['asset'] = { 'version': '2.0' }
     gltf_data['accessors'] = []
@@ -662,6 +662,8 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
             ff.write(json.dumps(mesh_struct, indent=4).encode('utf-8'))
         with open("{0}/material_info.json".format(base_name), 'wb') as ff:
             ff.write(json.dumps(material_struct, indent=4).encode('utf-8'))
+        with open("{0}/linked_files.json".format(base_name), 'wb') as ff:
+            ff.write(json.dumps(opening_dict, indent=4).encode('utf-8'))
     # Write GLB
     gltf_data['buffers'].append({"byteLength": len(giant_buffer)})
     if (os.path.exists(base_name + '.gltf') or os.path.exists(base_name + '.glb')) and (overwrite == False):
@@ -708,7 +710,7 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                         skel_index = {skel_struct[i]['id']:i for i in range(len(skel_struct))}
                         vgmap = {skel_struct[skel_index[bone_palette_ids[i]]]['name']:i for i in range(len(bone_palette_ids))}
                     material_struct = read_section_7(f, toc[7])
-                    write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_struct,\
+                    write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_struct, opening_dict,\
                         overwrite = overwrite, write_raw_buffers = write_raw_buffers, write_binary_gltf = write_binary_gltf)
                 else:
                     print("Skipping {0} as {1} not present...".format(dlb_file, dlp_file))
@@ -731,7 +733,7 @@ if __name__ == "__main__":
         args = parser.parse_args()
         if os.path.exists(args.dlb_filename) and args.dlb_filename[-5:] == 'DLB_D':
             process_dlb(args.dlb_filename, overwrite = args.overwrite, \
-                write_raw_buffers = args.dumprawbuffers, write_binary_gltf = args.textformat)
+                write_raw_buffers = args.skiprawbuffers, write_binary_gltf = args.textformat)
     else:
         dlb_files = glob.glob('*.TOMDLB_D')
         # Remove external skeletons

@@ -18,7 +18,9 @@ I am as always very thankful for the dedicated reverse engineers at the Kiseki m
 
 ## Usage:
 ### berseria_export_model.py
-Double click the python script and it will search the current folder for all .TOMDLB_D files that are not skeletons (`BONE` is not in the name) and with its corresponding .TOMDLP_P file.  Textures should be placed in a `textures` folder.
+Double click the python script and it will search the current folder for all .TOMDLB_D files that are not skeletons (`BONE` is not in the name) and with its corresponding .TOMDLP_P file.  Additionally, it will output 3 JSON files, one with metadata from the mesh section, one with the data from the materials section, and (for convenience) a list of linked files (*e.g.* textures) used by the MDL.
+
+Additionally it will output a glTF file, by default in the binary .glb format.  Textures should be placed in a `textures` folder.
 
 **Command line arguments:**
 `berseria_export_model.py [-h] [-t] [-s] [-o] dlb_filename dlp_filename`
