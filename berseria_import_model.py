@@ -153,6 +153,7 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
             uvidx_data.extend(new_ib_block)
             sec_1_data.extend(submesh_datablock)
             sec_1_header.extend(struct.pack("<Q", len(submesh_datablock) + 0xC))
+        # Unweighted meshes
         elif mesh_blocks_info[i]["flags"] & 0xF0 == 0x0:
             uv_block = bytearray()
             for j in range(len(vb[0]['Buffer'])):
@@ -170,6 +171,9 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
             uvidx_data.extend(new_ib_block)
             sec_1_data.extend(struct.pack("<5I", 0, 0, 0, 0, 0))
             sec_1_header.extend(struct.pack("<Q", 0x20))
+        # Unsupported mesh type, e.g. 0x70 mesh
+        else:
+            return False, False
     sec_1 = sec_1_header + sec_1_data
     sec_2 = bytearray(struct.pack("<{}I".format(len(bone_palette_ids)), *bone_palette_ids))
     sec_3 = struct.pack("<2I", len(mesh_blocks_info), len(bone_palette_ids))
@@ -303,6 +307,9 @@ def process_tomdlb (tomdlb_file):
                 mesh_unk = struct.unpack("<2I", data_blocks[6][0:8])
                 data_blocks[6], dlp_block = create_section_6 (tomdlb_file, data_blocks[6],
                     dlp_file, material_struct, mesh_unk[0], mesh_unk[1])
+                if dlp_block == False: # Rebuild failed, due to unsupported mesh type
+                    print("Unsupported mesh detected, skipping {}...".format(tomdlb_file))
+                    return False
                 # Create new material block
                 mat_unk = struct.unpack("<2I", data_blocks[7][0:8])
                 data_blocks[7] = create_section_7 (material_struct, mat_unk[0], mat_unk[1])
@@ -339,7 +346,7 @@ def process_tomdlb (tomdlb_file):
                     shutil.copy2(dlp_file, dlp_file + '.bak')
                 with open(dlp_file, 'wb') as ff:
                     ff.write(dlp_block)
-    return
+    return True
 
 if __name__ == "__main__":
     # Set current directory
