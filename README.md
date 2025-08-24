@@ -1,6 +1,8 @@
 # Tales of Berseria mesh tools
 A script to get the mesh data in and out of the .TOMBDLB_D/.TOMDLP_P files from Tales of Berseria.  The meshes are exported as raw buffers in the .fmt/.ib/.vb/.vgmap that are compatible with DarkStarSword Blender import plugin for 3DMigoto.  A glTF file is also exported for purposes of weight painting and texture assignment, but the glTF file is not used for modding.
 
+*NOTE:*  There are multiple mesh types, denoted by the upper four bits of the flag byte (`0x00`: not animated e.g weapons, `0x50` skeletally animated e.g. bodies, `0x70` unsure animation e.g. faces).  While berseria_export_meshes.py is able to get mesh data out of all three, a lot of data is not interpreted for `0x70` meshes and berseria_import_meshes.py cannot rebuild them.
+
 ## Tutorials:
 
 Please see the [wiki](https://github.com/eArmada8/berseria_model_tool/wiki), and the detailed documentation below.
@@ -38,11 +40,53 @@ Double click the python script and it will search the current folder for all .TO
 
 It will make a backup of the originals, then overwrite the originals.  It will not overwrite backups; for example if "model.TOMDLB_D.bak" already exists, then it will write the backup to "model.TOMDLB_D.bak1", then to "model.TOMDLB_D.bak2", and so on.
 
+*NOTE:* Newer versions of the Blender plugin export .vb0 files instead of .vb files.  Do not attempt to rename .vb0 files to .vb files, just leave them as-is and the scripts will look for the correct file.
+
 **Command line arguments:**
 `berseria_import_model.py [-h] tomdlb_filename`
 
 `-h, --help`
 Shows help message.
+
+**Adding and deleting meshes**
+
+If meshes are missing (.fmt/.ib/.vb files that have been deleted), then the script will automatically insert an empty (invisible) mesh in its place.  Metadata does not need to be altered.
+
+The script only looks for mesh files that are listed in the `mesh_info.json`.  If you want to add a new mesh, you will need to add metadata.  So to add another mesh, add a section to the end of `mesh_info.json` like this:
+```
+    {
+        "id_referenceonly": 0,
+        "name": "HAND0_R_VEL_HUM_000_MISHAPE",
+        "mesh": 2,
+        "submesh": 0,
+        "node": -1,
+        "flags": 83,
+        "unknown": 0
+    },
+```
+`id_referenceonly` is *NOT* used by the script, the meshes are calculated by entry order starting from zero (JSON convention) e.g. the first entry is always `0`, the third entry always `2`, etc, no matter what you put in that spot.  The import script doesn't even read `id_referenceonly`; it is only there for convenience.  When exporting new meshes from Blender, be sure to adhere to the filename convention of id number with 2 digits, underscore and name.  For example, the above entry should be `00_HAND0_R_VEL_HUM_000_MISHAPE.vb` for the import script to find it.
+
+The combination of `mesh` and `submesh` should probably be unique in the file.  Most of the time `node` is `-1`.  Flags should match the mesh you are using, with the tens digit being `8` if the mesh has weights, and the second digit being the number of UV maps in the mesh.  When figuring out the number of UV maps, it is the presence of the buffer, not whether you use them - so even if the other UV maps are blanks or repeats, they must be accounted for in the flags.  For the models this tool supports, `unknown` is almost always `0`.
+
+Be sure to add a comma to the } for the section prior if you are using a text editor, or better yet use a dedicated JSON editor.  I actually recommend editing JSON in a dedicated editor, because python is not forgiving if you make mistakes with the JSON structure.  (Try https://jsoneditoronline.org)  Also, be sure to point material to a real section in material_info.json.  You might want to create a new section, or use an existing one.
+
+**Changing textures and adding materials**
+
+First look inside the .material file for the mesh you want to edit.  For example, if you want to edit the metadata for `00_HAND0_R_VEL_HUM_000_MISHAPE.vb` then it will be inside `00_HAND0_R_VEL_HUM_000_MISHAPE.material`.  If you edit the file in a text editor, you will see the assignment.  It looks like this:
+
+```
+{
+    "material": "HAND1_VEL_HUM_000_MAT"
+}
+```
+
+Go to material_info.json, and go that section.  For example, if "material" in mesh_info was "HAND1_VEL_HUM_000_MAT", then go to the section of material_info.json with the tag ```"name": "HAND1_VEL_HUM_000_MAT"```.  Under textures, you can change the file names.  When changing the texture filenames, do not put the `.totexd_b` extension as the tool will automatically add the extension when making the .TOMDLB_D file.
+
+When making mods with new textures, I highly recommend giving them unique names, instead of asking the user to overwrite textures that already exist.  That way, you do not have to worry about when two or more models use the same textures.  Because the game uses a filename hashing system, be sure to check that the new filename does not accidentally overwrite an old name.  Another option is to overwrite unused textures, as Tales of Berseria has many unused assets left over from Tales of Zesteria.
+
+**Changing the skeleton**
+
+It is not possible to change the skeleton as the skeleton is external.
 
 ### totexp_p_to_dds.py
 Double click the python script in a folder with .TOTEXP_P files and it will convert them to .dds textures.  The corresponding .TOTEXB_D files are not necessary.
