@@ -232,16 +232,6 @@ def make_fmt(num_uvs, has_weights = True):
     fmt['elements'] = elements
     return(fmt)
 
-def trianglestrip_to_list(ib_list):
-    triangles = []
-    for i in range(len(ib_list)-2):
-        if i % 2 == 0:
-            triangles.append([ib_list[i], ib_list[i+1], ib_list[i+2]])
-        else:
-            triangles.append([ib_list[i], ib_list[i+2], ib_list[i+1]]) #DirectX implementation
-            #triangles.append([ib_list[i+1], ib_list[i], ib_list[i+2]]) #OpenGL implementation
-    return(triangles)
-
 def read_mesh (main_f, idx_f, start_offset, flags):
     def read_floats (f, num):
         return(list(struct.unpack("<{}f".format(num), f.read(num * 4))))
