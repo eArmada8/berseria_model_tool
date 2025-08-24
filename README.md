@@ -2,7 +2,7 @@
 A script to get the mesh data in and out of the .TOMBDLB_D/.TOMDLP_P files from Tales of Berseria.  The meshes are exported as raw buffers in the .fmt/.ib/.vb/.vgmap that are compatible with DarkStarSword Blender import plugin for 3DMigoto.  A glTF file is also exported for purposes of weight painting and texture assignment, but the glTF file is not used for modding.
 
 ## Credits:
-I am as always very thankful for the dedicated reverse engineers at the Kiseki modding discord, for their brilliant work, and for sharing that work so freely.  I am also very thankful to DaZombieKiller for TalesOfTools as well as for sharing lots of knowledge about the Tales of Berseria file structure and modding.  This toolset also utilizes the tstrip module (python file format interface) adapted for Sega_NN_tools by Argx2121, and I am grateful for its use - it is unmodified and is distributed under its original license.
+I am as always very thankful for the dedicated reverse engineers at the Kiseki modding discord, for their brilliant work, and for sharing that work so freely.  I am also very thankful to DaZombieKiller for [TalesOfTools](https://github.com/DaZombieKiller/TalesOfTools) as well as for sharing lots of knowledge about the Tales of Berseria file structure and modding.  This toolset also utilizes the tstrip module (python file format interface) adapted for [Sega_NN_tools](https://github.com/Argx2121/Sega_NN_tools/) by Argx2121, and I am grateful for its use - it is unmodified and is distributed under its original license.
 
 ## Requirements:
 1. Python 3.10 and newer is required for use of these scripts.  It is free from the Microsoft Store or python.org, for Windows users.  For Linux users, please consult your distro.
