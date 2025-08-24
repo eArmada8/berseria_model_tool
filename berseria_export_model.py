@@ -1,7 +1,8 @@
 # Tool to export model data from the dlb/dlp format used by Tales of Berseria.
 #
-# Usage:  Run by itself without commandline arguments and it will ask for a file number and
-# output a glb file.  It will do its best to find the matching dlp file and skeleton file.
+# Usage:  Run by itself without commandline arguments and it will search for non-skeletal
+# TOMDLB_D/TOMDLP_P files and export raw meshes for modding as well as a .gib file for
+# weight-painting and texture preview.  It will do its best to find the matching skeleton file.
 #
 # For command line options, run:
 # /path/to/python3 berseria_export_model.py --help
@@ -9,7 +10,6 @@
 # Requires lib_fmtibvb.py, put in the same directory
 #
 # GitHub eArmada8/berseria_model_tool
-
 
 try:
     import struct, json, numpy, glob, copy, os, sys
@@ -494,7 +494,7 @@ def fix_strides(submesh):
     return(submesh)
 
 def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_struct,\
-        overwrite = False, write_raw_buffers = False, write_binary_gltf = True):
+        overwrite = False, write_raw_buffers = True, write_binary_gltf = True):
     gltf_data = {}
     gltf_data['asset'] = { 'version': '2.0' }
     gltf_data['accessors'] = []
@@ -684,7 +684,7 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
             with open(base_name+'.gltf', 'wb') as f:
                 f.write(json.dumps(gltf_data, indent=4).encode("utf-8"))
 
-def process_dlb (dlb_file, overwrite = False, write_raw_buffers = False, write_binary_gltf = True):
+def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_binary_gltf = True):
     print("Processing {}...".format(dlb_file))
     with open(dlb_file, 'rb') as f:
         magic = f.read(4)
@@ -725,7 +725,7 @@ if __name__ == "__main__":
         import argparse
         parser = argparse.ArgumentParser()
         parser.add_argument('-t', '--textformat', help="Write gltf instead of glb", action="store_false")
-        parser.add_argument('-d', '--dumprawbuffers', help="Write fmt/ib/vb/vgmap files in addition to glb", action="store_true")
+        parser.add_argument('-s', '--skiprawbuffers', help="Skip writing fmt/ib/vb/vgmap files in addition to glb", action="store_false")
         parser.add_argument('-o', '--overwrite', help="Overwrite existing files", action="store_true")
         parser.add_argument('dlb_filename', help="Name of dlb file to process.")
         args = parser.parse_args()
