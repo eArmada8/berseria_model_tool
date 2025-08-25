@@ -55,6 +55,7 @@ Shows help message.
 If meshes are missing (.fmt/.ib/.vb files that have been deleted), then the script will automatically insert an empty (invisible) mesh in its place.  Metadata does not need to be altered.
 
 The script only looks for mesh files that are listed in the `mesh_info.json`.  If you want to add a new mesh, you will need to add metadata.  So to add another mesh, add a section to the end of `mesh_info.json` like this:
+
 ```
     {
         "id_referenceonly": 0,
@@ -63,9 +64,11 @@ The script only looks for mesh files that are listed in the `mesh_info.json`.  I
         "submesh": 0,
         "node": -1,
         "flags": 83,
+        "material": "HAND1_VEL_HUM_000_MAT",
         "unknown": 0
     },
 ```
+
 `id_referenceonly` is *NOT* used by the script, the meshes are calculated by entry order starting from zero (JSON convention) e.g. the first entry is always `0`, the third entry always `2`, etc, no matter what you put in that spot.  The import script doesn't even read `id_referenceonly`; it is only there for convenience.  When exporting new meshes from Blender, be sure to adhere to the filename convention of id number with 2 digits, underscore and name.  For example, the above entry should be `00_HAND0_R_VEL_HUM_000_MISHAPE.vb` for the import script to find it.
 
 The combination of `mesh` and `submesh` should probably be unique in the file.  Most of the time `node` is `-1`.  Flags should match the mesh you are using, with the tens digit being `8` if the mesh has weights, and the second digit being the number of UV maps in the mesh.  When figuring out the number of UV maps, it is the presence of the buffer, not whether you use them - so even if the other UV maps are blanks or repeats, they must be accounted for in the flags.  For the models this tool supports, `unknown` is almost always `0`.
@@ -74,15 +77,22 @@ Be sure to add a comma to the } for the section prior if you are using a text ed
 
 **Changing textures and adding materials**
 
-First look inside the .material file for the mesh you want to edit.  For example, if you want to edit the metadata for `00_HAND0_R_VEL_HUM_000_MISHAPE.vb` then it will be inside `00_HAND0_R_VEL_HUM_000_MISHAPE.material`.  If you edit the file in a text editor, you will see the assignment.  It looks like this:
+First look inside mesh_info.json and find the mesh you want to edit.  For example, if you want to edit the metadata for `00_HAND0_R_VEL_HUM_000_MISHAPE.vb` then it will be the first entry and will have `name`: `HAND0_R_VEL_HUM_000_MISHAPE` (JSON numbering starts at zero).  Inside the brackets you will see material.  It looks like this:
 
 ```
-{
-    "material": "HAND1_VEL_HUM_000_MAT"
-}
+    {
+        "id_referenceonly": 0,
+        "name": "HAND0_R_VEL_HUM_000_MISHAPE",
+        "mesh": 2,
+        "submesh": 0,
+        "node": -1,
+        "flags": 83,
+        "material": "HAND1_VEL_HUM_000_MAT",
+        "unknown": 0
+    },
 ```
 
-Go to material_info.json, and go that section.  For example, if "material" in mesh_info was "HAND1_VEL_HUM_000_MAT", then go to the section of material_info.json with the tag ```"name": "HAND1_VEL_HUM_000_MAT"```.  Under textures, you can change the file names.  When changing the texture filenames, do not put the `.totexd_b` extension as the tool will automatically add the extension when making the .TOMDLB_D file.
+Go to material_info.json, and go that section.  For example, if "material" in mesh_info was "HAND1_VEL_HUM_000_MAT" (as in the above example), then go to the section of material_info.json with the tag ```"name": "HAND1_VEL_HUM_000_MAT"```.  Under textures, you can change the file names.  When changing the texture filenames, do not put the `.totexd_b` extension as the tool will automatically add the extension when making the .TOMDLB_D file.
 
 When making mods with new textures, I highly recommend giving them unique names, instead of asking the user to overwrite textures that already exist.  That way, you do not have to worry about when two or more models use the same textures.  Because the game uses a filename hashing system, be sure to check that the new filename does not accidentally overwrite an old name.  Another option is to overwrite unused textures, as Tales of Berseria has many unused assets left over from Tales of Zesteria.
 
