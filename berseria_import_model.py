@@ -96,12 +96,15 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
             vb.extend([{'Buffer':[[1.0, 0.0, 0.0, 0.0]]}, {'Buffer':[[0, 0, 0, 0]]}])
         print("Processing submesh {0}...".format(mesh_filename))
         try:
-            material = read_struct_from_json(tomdlb_file[:-9] + '/{0:02d}_{1}.material'.format(i, safe_filename))
-            material_list.append(material_dict[material['material']])
-        except:
-            print("Unable to read material for {}!  The material file is either missing or invalid.".format(safe_filename))
-            input("Press Enter to quit.")
-            raise
+            material_list.append(material_dict[mesh_blocks_info[i]["material"]])
+        except KeyError: # Try legacy metadata format
+            try:
+                material = read_struct_from_json(tomdlb_file[:-9] + '/{0:02d}_{1}.material'.format(i, safe_filename))
+                material_list.append(material_dict[material['material']])
+            except:
+                print("Unable to read material for {}!  The material assignment is either missing or invalid.".format(safe_filename))
+                input("Press Enter to quit.")
+                raise
         # I don't know what these are, in the sample models they are always 0.  Might be for non-mesh TOMDLB_D's
         sec_0.extend(struct.pack("<4I", 0, 0, 0, 0))
         # Add basic data

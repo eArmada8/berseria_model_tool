@@ -630,9 +630,6 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
                 write_vb(meshes[i]['vb'], '{0}/{1}.vb'.format(base_name, filename), meshes[i]['fmt'])
                 with open("{0}/{1}.vgmap".format(base_name, filename), 'wb') as ff:
                     ff.write(json.dumps(vgmap, indent=4).encode('utf-8'))
-                with open("{0}/{1}.material".format(base_name, filename), 'wb') as ff:
-                    ff.write(json.dumps({'material': material_struct[mesh_blocks_info[i]['material']]['name']},
-                        indent=4).encode('utf-8'))
             primitives.append(primitive)
         if len(primitives) > 0:
             if mesh_node_ids[mesh] in node_list: # One of the new nodes
@@ -656,7 +653,9 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
     # Write modding metadata
     if write_raw_buffers == True and overwrite_buffers == True:
         mesh_struct = [{y:x[y] for y in x if not any(
-            ['offset' in y, 'size' in y, 'material' in y])} for x in mesh_blocks_info]
+            ['offset' in y, 'size' in y])} for x in mesh_blocks_info]
+        for i in range(len(mesh_struct)):
+            mesh_struct[i]['material'] = material_struct[mesh_struct[i]['material']]['name']
         mesh_struct = [{'id_referenceonly': i, **mesh_struct[i]} for i in range(len(mesh_struct))]
         with open("{0}/mesh_info.json".format(base_name), 'wb') as ff:
             ff.write(json.dumps(mesh_struct, indent=4).encode('utf-8'))
