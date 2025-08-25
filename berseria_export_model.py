@@ -631,7 +631,7 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
                 with open("{0}/{1}.vgmap".format(base_name, filename), 'wb') as ff:
                     ff.write(json.dumps(vgmap, indent=4).encode('utf-8'))
                 with open("{0}/{1}.material".format(base_name, filename), 'wb') as ff:
-                    ff.write(json.dumps({'material':gltf_data['materials'][primitive["material"]]['name']},
+                    ff.write(json.dumps({'material': material_struct[mesh_blocks_info[i]['material']]['name']},
                         indent=4).encode('utf-8'))
             primitives.append(primitive)
         if len(primitives) > 0:
