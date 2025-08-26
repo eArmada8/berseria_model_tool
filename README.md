@@ -1,7 +1,9 @@
 # Tales of Berseria mesh toolset
-Scripts to get the mesh data in and out of the .TOMBDLB_D/.TOMDLP_P files from Tales of Berseria.  The meshes are exported as raw buffers in the .fmt/.ib/.vb/.vgmap that are compatible with DarkStarSword Blender import plugin for 3DMigoto.  A glTF file is also exported for purposes of weight painting and texture assignment, but the glTF file is not used for modding.
+Scripts to get the mesh data in and out of the .TOMBDLB_D/.TOMDLP_P files from Tales of Berseria (and Tales of Zestiria).  The meshes are exported as raw buffers in the .fmt/.ib/.vb/.vgmap that are compatible with DarkStarSword Blender import plugin for 3DMigoto.  A glTF file is also exported for purposes of weight painting and texture assignment, but the glTF file is not used for modding.
 
 *NOTE:*  There are multiple mesh types, denoted by the upper four bits of the flag byte (`0x00`: not animated e.g weapons, `0x50` skeletally animated e.g. bodies, `0x70` unsure animation e.g. faces).  While berseria_export_meshes.py is able to get mesh data out of all three, a lot of data is not interpreted for `0x70` meshes and berseria_import_meshes.py cannot rebuild them.
+
+*NOTE:* Tales of Zestiria is supported, but untested.
 
 ## Tutorials:
 

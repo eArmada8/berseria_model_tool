@@ -19,9 +19,18 @@ except ModuleNotFoundError as e:
     input("Press Enter to abort.")
     raise
 
-def read_offset (f, size = 8):
+# Global variable, do not edit
+addr_size = 8
+
+def set_address_size (size):
+    global addr_size
+    if size in [4,8]:
+        addr_size = size
+    return
+
+def read_offset (f):
     start_offset = f.tell()
-    diff_offset, = struct.unpack("<{}".format({2: "H", 4: "I", 8: "Q"}[size]), f.read(size))
+    diff_offset, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
     return(start_offset + diff_offset)
 
 def read_string (f, start_offset):
@@ -47,7 +56,7 @@ def trianglestrip_to_list(ib_list):
 
 def read_opening_dict (f):
     dict_offset = read_offset(f)
-    dict_size, = struct.unpack("<Q", f.read(8))
+    dict_size, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
     opening_dict = []
     return_to_offset = f.tell()
     f.seek(dict_offset)
@@ -65,7 +74,7 @@ def read_section_0 (f, offset):
     section_0_toc = []
     for _ in range(8):
         offset = read_offset(f)
-        num_entries, = struct.unpack("<Q", f.read(8))
+        num_entries, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         section_0_toc.append({'offset': offset, 'num_entries': num_entries})
     #0x38 bytes - dunno what this is
     f.seek(section_0_toc[0]['offset'])
@@ -102,21 +111,27 @@ def read_section_0 (f, offset):
     return(skel_struct)
 
 def read_dlb_skeleton (dlb_file):
+    current_addr_size = addr_size # Store original size so we can restore it at the end
     skel_list = []
     with open(dlb_file, 'rb') as f:
         magic = f.read(4)
         if magic == b'DPDF':
-            f.seek(20,1)
+            unk_int, = struct.unpack("<I", f.read(4))
+            set_address_size(8)
+            if not unk_int == 0:
+                set_address_size(4) # Cannot assume that the skeleton is the same!
+            f.seek({4: 4, 8: 16}[addr_size],1)
             magic = f.read(4)
             if magic == b'BLDM':
                 f.seek(4,1)
                 offset = read_offset(f)
                 f.seek(offset) # Jump to section 0
-                f.seek(24,1)
+                f.seek(0x18,1)
                 offset = read_offset(f)
-                num_entries, = struct.unpack("<Q", f.read(8))
+                num_entries, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
                 f.seek(offset)
                 skel_list.extend(list(struct.unpack("<{}I".format(num_entries), f.read(num_entries * 4))))
+    set_address_size(current_addr_size) # Restore original address size
     return(skel_list)
 
 def find_primary_skeleton (missing_bone_palette_ids):
@@ -148,10 +163,15 @@ def find_primary_skeleton (missing_bone_palette_ids):
 
 # skel_struct will be appended onto the skeleton_file struct, not the other way around
 def combine_skeletons (skeleton_file, skel_struct):
+    current_addr_size = addr_size # Store original size so we can restore it at the end
     with open(skeleton_file, 'rb') as f:
         magic = f.read(4)
         if magic == b'DPDF':
-            f.seek(20,1)
+            unk_int, = struct.unpack("<I", f.read(4))
+            set_address_size(8)
+            if not unk_int == 0:
+                set_address_size(4) # Cannot assume that the skeleton is the same!
+            f.seek({4: 4, 8: 16}[addr_size],1)
             magic = f.read(4)
             if magic == b'BLDM':
                 f.seek(4,1)
@@ -177,12 +197,15 @@ def combine_skeletons (skeleton_file, skel_struct):
                     else:
                         new_skel_struct[i]['matrix'] = new_skel_struct[i]['abs_matrix']
                     new_skel_struct[i]['children'] = [j for j in range(len(new_skel_struct)) if new_skel_struct[j]['parent'] == i]
+                set_address_size(current_addr_size) # Restore original address size
                 return(new_skel_struct)
             else:
                 print("Invalid skeleton file!")
+                set_address_size(current_addr_size) # Restore original address size
                 return skel_struct
         else:
             print("Invalid skeleton file!")
+            set_address_size(current_addr_size) # Restore original address size
             return skel_struct
 
 def find_and_add_external_skeleton (skel_struct, bone_palette_ids):
@@ -339,7 +362,7 @@ def read_section_6 (f, offset, dlp_file):
     section_6_toc = []
     for _ in range(4):
         offset = read_offset(f)
-        num_entries, = struct.unpack("<Q", f.read(8))
+        num_entries, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         section_6_toc.append({'offset': offset, 'num_entries': num_entries})
     #section_6_toc[0] - VEC4 (u32, f32?) - in sample is all zeroes
     #section_6_toc[1] - meshes
@@ -357,7 +380,7 @@ def read_section_6 (f, offset, dlp_file):
                 data["flags"], data["material"], data["unknown"] = struct.unpack("<i4hi", f.read(16))
             data['string_offset'] = read_offset(f)
             data['data_offset'] = read_offset(f)
-            data["data_block_size"], = struct.unpack("<Q", f.read(8))
+            data["data_block_size"], = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
             current_offset = f.tell()
             data["name"] = read_string (f, data['string_offset'])
             meshes.append(read_mesh (f, idx_f, data['data_offset'], data["flags"]))
@@ -372,16 +395,16 @@ def read_section_7 (f, offset):
     section_7_toc = []
     for _ in range(7):
         offset = read_offset(f)
-        num_entries, = struct.unpack("<Q", f.read(8))
+        num_entries, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         section_7_toc.append({'offset': offset, 'num_entries': num_entries})
     set_0 = [] # Materials, including the indices that map to set_1 (textures)
     for i in range(section_7_toc[0]['num_entries']):
-        f.seek(section_7_toc[0]['offset'] + (i * 56))
+        f.seek(section_7_toc[0]['offset'] + (i * (4 * addr_size + 0x18)))
         values = struct.unpack("<12h", f.read(24))
         offset1 = read_offset(f)
-        num_vals1, = struct.unpack("<Q", f.read(8))
+        num_vals1, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         offset2 = read_offset(f)
-        num_vals2, = struct.unpack("<Q", f.read(8))
+        num_vals2, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         end_offset = f.tell()
         f.seek(offset1)
         vals1 = struct.unpack("<{}I".format(num_vals1), f.read(num_vals1 * 4))
@@ -398,11 +421,11 @@ def read_section_7 (f, offset):
         set_1.append(values)
     set_2 = [] # Materials, including material names and alpha
     for i in range(section_7_toc[2]['num_entries']):
-        f.seek(section_7_toc[2]['offset'] + (i * 40))
+        f.seek(section_7_toc[2]['offset'] + (i * (5 * addr_size)))
         offset1 = read_offset(f)
-        num_vals1, = struct.unpack("<Q", f.read(8))
+        num_vals1, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         offset2 = read_offset(f)
-        num_vals2, = struct.unpack("<Q", f.read(8))
+        num_vals2, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         str_offset = read_offset(f)
         f.seek(offset1)
         vals1 = struct.unpack("<{}I".format(num_vals1), f.read(num_vals1 * 4))
@@ -412,9 +435,14 @@ def read_section_7 (f, offset):
         set_2.append({'name': name, 'vals1': vals1, 'vals2': vals2})
     set_6 = [] # Texture names
     for i in range(section_7_toc[6]['num_entries']):
-        f.seek(section_7_toc[6]['offset'] + (i * 24))
-        str_offset = read_offset(f)
-        vals = struct.unpack("<2Q", f.read(16))
+        if addr_size == 8:
+            f.seek(section_7_toc[6]['offset'] + (i * 24))
+            str_offset = read_offset(f)
+            vals = struct.unpack("<2Q", f.read(16))
+        else:
+            f.seek(section_7_toc[6]['offset'] + (i * 8))
+            str_offset = read_offset(f)
+            vals = struct.unpack("<2H", f.read(4))
         tex_name = read_string(f, str_offset)
         set_6.append({'tex_name': tex_name, 'vals': vals})
     material_struct = []
@@ -691,6 +719,9 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
         magic = f.read(4)
         if magic == b'DPDF':
             unk_int, = struct.unpack("<I", f.read(4))
+            if not unk_int == 0:
+                f.seek(4,0)
+                set_address_size(4) # Zestiria
             opening_dict = read_opening_dict (f)
             dlp_file = opening_dict[0]
             magic = f.read(4)

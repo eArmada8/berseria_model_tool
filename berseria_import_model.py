@@ -21,6 +21,9 @@ except ModuleNotFoundError as e:
     input("Press Enter to abort.")
     raise
 
+# Global variables, do not edit
+addr_size = 8
+
 # Input is a list of bytes / bytearrays.
 # Internal block is a first data block not in the table of contents, e.g. opening dict in BLDM
 # Returns the block, as well as the offset of the internal block
@@ -34,7 +37,7 @@ def create_data_block (data_list, internal_block = bytearray(), endian = '<',
     for i in range(len(data_list)-1):
         data_offset.append(len(data_list[i]) + data_offset[i])
     final_offset = [(base_offset + data_offset[i] - ((i)*address_size)) for i in range(len(data_list))]
-    offset_block = struct.pack("{0}{1}{2}".format(endian, len(final_offset), {2:"H", 4:"I", 8:"Q"}[address_size]),
+    offset_block = struct.pack("{0}{1}{2}".format(endian, len(final_offset), {4:"I", 8:"Q"}[address_size]),
         *final_offset)
     data_block = b''.join(data_list)
     if len(data_block) % block_alignment:
@@ -43,7 +46,7 @@ def create_data_block (data_list, internal_block = bytearray(), endian = '<',
 
 def write_string_dict (strings_list):
     enc_strings = [bytearray(x.encode()) + b'\x00' for x in strings_list]
-    return create_data_block(enc_strings, b'', '<', 8, 2, 8) # Data alignment of 2 otherwise default
+    return create_data_block(enc_strings, b'', '<', addr_size, 2, addr_size) # Data alignment of 2 otherwise default
 
 def read_material_data (tomdlb_file, backup_mat_block):
     # Will read data from JSON file, or load original data from the mdl file if JSON is missing
@@ -69,7 +72,7 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
     material_list = []
     sec_0 = bytearray()
     sec_1_header = bytearray()
-    sec_1_header_length = 0x28 * len(mesh_blocks_info)
+    sec_1_header_length = (addr_size * 3 + 0x10) * len(mesh_blocks_info)
     sec_1_data = bytearray()
     uvidx_data = bytearray()
     for i in range(len(mesh_blocks_info)):
@@ -78,7 +81,6 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
         try:
             mesh_filename = tomdlb_file[:-9] + '/{0:02d}_{1}'.format(i, safe_filename)
             fmt = read_fmt(mesh_filename + '.fmt')
-            #ib = find_triangle_strips(read_ib(mesh_filename + '.ib', fmt))
             ib = stripify(read_ib(mesh_filename + '.ib', fmt), stitchstrips = True)[0]
             vb = read_vb(mesh_filename + '.vb', fmt)
             assert ([x['SemanticName'] for x in fmt['elements']]
@@ -114,13 +116,13 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
         data_block_start = len(sec_1_data)
         # Add mesh name
         offset = sec_1_header_length - len(sec_1_header) + len(sec_1_data)
-        sec_1_header.extend(struct.pack("<Q", offset))
+        sec_1_header.extend(struct.pack("<{}".format({4: "I", 8: "Q"}[addr_size]), offset))
         sec_1_data.extend(mesh_blocks_info[i]["name"].encode()+b'\x00')
         if len(sec_1_data) % 4:
             sec_1_data += b'\x00' * (4 - (len(sec_1_data) % 4))
         # Add mesh data
         offset = sec_1_header_length - len(sec_1_header) + len(sec_1_data)
-        sec_1_header.extend(struct.pack("<Q", offset))
+        sec_1_header.extend(struct.pack("<{}".format({4: "I", 8: "Q"}[addr_size]), offset))
         # Standard weighted meshes
         if mesh_blocks_info[i]["flags"] & 0xF0 == 0x50:
             # Split vertices into weight types
@@ -155,7 +157,7 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
             sec_1_data.extend(struct.pack("<I", len(uvidx_data)))
             uvidx_data.extend(new_ib_block)
             sec_1_data.extend(submesh_datablock)
-            sec_1_header.extend(struct.pack("<Q", len(submesh_datablock) + 0xC))
+            sec_1_header.extend(struct.pack("<{}".format({4: "I", 8: "Q"}[addr_size]), len(submesh_datablock) + 0xC))
         # Unweighted meshes
         elif mesh_blocks_info[i]["flags"] & 0xF0 == 0x0:
             uv_block = bytearray()
@@ -173,7 +175,7 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
             sec_1_data.extend(struct.pack("<I", len(uvidx_data)))
             uvidx_data.extend(new_ib_block)
             sec_1_data.extend(struct.pack("<5I", 0, 0, 0, 0, 0))
-            sec_1_header.extend(struct.pack("<Q", 0x20))
+            sec_1_header.extend(struct.pack("<{}".format({4: "I", 8: "Q"}[addr_size]), 0x20))
         # Unsupported mesh type, e.g. 0x70 mesh
         else:
             return False, False
@@ -182,16 +184,16 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
     sec_3 = struct.pack("<2I", len(mesh_blocks_info), len(bone_palette_ids))
     # Build offset header
     block_lengths = [len(sec_0), len(sec_1), len(sec_2), len(sec_3)]
-    block_offsets = [sum(block_lengths[:i], 0x40-(0x10 * i)) if block_lengths[i] > 0 else 0
+    block_offsets = [sum(block_lengths[:i], (addr_size * 8)-((addr_size * 2) * i)) if block_lengths[i] > 0 else 0
         for i in range(len(block_lengths))]
     block_counts = [len(mesh_blocks_info), len(mesh_blocks_info), len(bone_palette_ids), 1]
     block_header = bytearray()
     block_header.extend(struct.pack("<4I", unk0, unk1, 0, 0))
     for i in range(4):
-        block_header.extend(struct.pack("<2Q", block_offsets[i], block_counts[i]))
+        block_header.extend(struct.pack("<2{}".format({4: "I", 8: "Q"}[addr_size]), block_offsets[i], block_counts[i]))
     section_6 = bytearray(block_header + sec_0 + sec_1 + sec_2 + sec_3)
-    if len(section_6) % 8:
-        section_6 += b'\x00' * (8 - (len(section_6) % 8))
+    if len(section_6) % addr_size:
+        section_6 += b'\x00' * (addr_size - (len(section_6) % addr_size))
     return(section_6, uvidx_data)
 
 # I have no idea what the first two integers in the block (unk0 and unk1) are.
@@ -216,17 +218,17 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
             [material_struct[i]['alpha']] +
             material_struct[i]['unk_parameters']['set_2_unk_1'][1])
     # Build section 0 (Material parameters?)
-    set_0_header_len = 0x38 * len(material_struct)
+    set_0_header_len = (addr_size * 4 + 0x18)  * len(material_struct)
     set_0_header = bytearray()
     set_0_data = bytearray()
     for i in range(len(material_struct)):
         set_0_header.extend(struct.pack("<12h", *set_0_base[i]))
         offset = set_0_header_len - len(set_0_header) + len(set_0_data)
-        set_0_header.extend(struct.pack("<2Q", offset, len(material_struct[i]['unk_parameters']['set_0_unk_0'])))
+        set_0_header.extend(struct.pack("<2{}".format({4: "I", 8: "Q"}[addr_size]), offset, len(material_struct[i]['unk_parameters']['set_0_unk_0'])))
         set_0_data.extend(struct.pack("<{}I".format(len(material_struct[i]['unk_parameters']['set_0_unk_0'])),
             *material_struct[i]['unk_parameters']['set_0_unk_0']))
         offset = set_0_header_len - len(set_0_header) + len(set_0_data)
-        set_0_header.extend(struct.pack("<2Q", offset, len(material_struct[i]['unk_parameters']['set_0_unk_1'])))
+        set_0_header.extend(struct.pack("<2{}".format({4: "I", 8: "Q"}[addr_size]), offset, len(material_struct[i]['unk_parameters']['set_0_unk_1'])))
         if len(material_struct[i]['unk_parameters']['set_0_unk_1']) == 0x17:
             set_0_data.extend(struct.pack("<8I4f4If6I".format(len(material_struct[i]['unk_parameters']['set_0_unk_1'])),
                 *material_struct[i]['unk_parameters']['set_0_unk_1']))
@@ -238,58 +240,64 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
     set_1_block = bytearray()
     for i in range(len(set_1)):
         set_1_block.extend(struct.pack("<hi", *set_1[i]))
-    if len(set_1_block) % 8:
-        set_1_block += b'\x00' * (8 - (len(set_1_block) % 8))
+    if len(set_1_block) % addr_size:
+        set_1_block += b'\x00' * (addr_size - (len(set_1_block) % addr_size))
     # Build section 2 (Material name, etc)
-    set_2_header_len = 0x28 * len(material_struct)
+    set_2_header_len = (addr_size * 5) * len(material_struct)
     set_2_header = bytearray()
     set_2_data = bytearray()
     for i in range(len(material_struct)):
         offset = set_2_header_len - len(set_2_header) + len(set_2_data)
-        set_2_header.extend(struct.pack("<2Q", offset, len(material_struct[i]['unk_parameters']['set_2_unk_0'])))
+        set_2_header.extend(struct.pack("<2{}".format({4: "I", 8: "Q"}[addr_size]), offset, len(material_struct[i]['unk_parameters']['set_2_unk_0'])))
         set_2_data.extend(struct.pack("<{}I".format(len(material_struct[i]['unk_parameters']['set_2_unk_0'])),
             *material_struct[i]['unk_parameters']['set_2_unk_0']))
         offset = set_2_header_len - len(set_2_header) + len(set_2_data)
-        set_2_header.extend(struct.pack("<2Q", offset, len(set_2_val2[i])))
+        set_2_header.extend(struct.pack("<2{}".format({4: "I", 8: "Q"}[addr_size]), offset, len(set_2_val2[i])))
         set_2_data.extend(struct.pack("<{}I".format(len(set_2_val2[i])), *set_2_val2[i]))
         offset = set_2_header_len - len(set_2_header) + len(set_2_data)
-        set_2_header.extend(struct.pack("<Q", offset))
+        set_2_header.extend(struct.pack("<{}".format({4: "I", 8: "Q"}[addr_size]), offset))
         set_2_data.extend(material_struct[i]['name'].encode()+b'\x00')
         if len(set_2_data) % 4:
             set_2_data += b'\x00' * (4 - (len(set_2_data) % 4))
     set_2_block = set_2_header + set_2_data
     # Build section 6 (Textures)
-    set_6_header_len = 0x18 * len(all_tex)
+    set_6_header_len = (addr_size + {4: 4, 8: 16}[addr_size]) * len(all_tex)
     set_6_header = bytearray()
     set_6_data = bytearray()
     for i in range(len(all_tex)):
         offset = set_6_header_len - len(set_6_header) + len(set_6_data)
-        set_6_header.extend(struct.pack("<Q", offset))
+        set_6_header.extend(struct.pack("<{}".format({4: "I", 8: "Q"}[addr_size]), offset))
         set_6_data.extend(all_tex[i].encode()+b'\x00')
         if len(set_6_data) % 2:
             set_6_data += b'\x00' * (2 - (len(set_6_data) % 2))
-        set_6_header.extend(struct.pack("<2Q", 12, 0))
-    if len(set_6_data) % 8:
-        set_6_data += b'\x00' * (8 - (len(set_6_data) % 8))
+        set_6_header.extend(struct.pack("<2{}".format({4: "H", 8: "Q"}[addr_size]), 12, 0)) # SHORTS here in 32-bit format
+    if len(set_6_data) % addr_size:
+        set_6_data += b'\x00' * (addr_size - (len(set_6_data) % addr_size))
     set_6_block = set_6_header + set_6_data
     # Build offset header
     block_lengths = [len(set_0_block), len(set_1_block), len(set_2_block), 0, 0, 0, len(set_6_block)]
-    block_offsets = [sum(block_lengths[:i], 0x70-(0x10 * i)) if block_lengths[i] > 0 else 0
+    block_offsets = [sum(block_lengths[:i], (addr_size * 14)-((addr_size * 2) * i)) if block_lengths[i] > 0 else 0
         for i in range(len(block_lengths))]
     block_counts = [len(material_struct), len(set_1), len(material_struct), 0, 0, 0, len(all_tex)]
     block_header = bytearray()
     block_header.extend(struct.pack("<6I", unk0, unk1, 0, 0, 0, 0))
     for i in range(7):
-        block_header.extend(struct.pack("<2Q", block_offsets[i], block_counts[i]))
+        block_header.extend(struct.pack("<2{}".format({4: "I", 8: "Q"}[addr_size]), block_offsets[i], block_counts[i]))
     # Return assembled block
     return(block_header + set_0_block + set_1_block + set_2_block + set_6_block)
 
 def process_tomdlb (tomdlb_file):
+    global addr_size
     print("Processing {}...".format(tomdlb_file))
     with open(tomdlb_file, 'rb') as f:
         magic = f.read(4)
         if magic == b'DPDF':
             unk_int, = struct.unpack("<I", f.read(4))
+            set_address_size(8)
+            if not unk_int == 0:
+                f.seek(4,0)
+                addr_size = 4 # Zesteria, might also be other 32-bit games
+                set_address_size(4)
             opening_dict = read_opening_dict (f)
             dlp_file = opening_dict[0]
             anmb_file = opening_dict[1]
@@ -321,7 +329,7 @@ def process_tomdlb (tomdlb_file):
                 new_opening_dict_strings = [dlp_file, anmb_file] + all_tex
                 new_opening_dict = write_string_dict(new_opening_dict_strings)[0]
                 # Create new internal file (BLDM block)
-                new_bldm_block, dict_offset = create_data_block (data_blocks, internal_block = new_opening_dict)
+                new_bldm_block, dict_offset = create_data_block (data_blocks, new_opening_dict, '<', addr_size, 1, addr_size)
                 # Instead of overwriting backups, it will just tag a number onto the end
                 backup_suffix = ''
                 if os.path.exists(tomdlb_file + '.bak' + backup_suffix):
@@ -333,9 +341,12 @@ def process_tomdlb (tomdlb_file):
                 else:
                     shutil.copy2(tomdlb_file, tomdlb_file + '.bak')
                 with open(tomdlb_file, 'wb') as ff:
-                    ff.write(b'DPDF\x00\x00\x00\x00')
-                    ff.write(struct.pack("<2Q", dict_offset + 0x18, len(new_opening_dict_strings)))
-                    ff.write(b'BLDM\xdc\x00\x00\x00')
+                    ff.write(b'DPDF')
+                    if addr_size == 8:
+                        ff.write(struct.pack("<I", 0))
+                    ff.write(struct.pack("<2{}".format({4: "I", 8: "Q"}[addr_size]), dict_offset + (addr_size * 2 + 8),
+                        len(new_opening_dict_strings)))
+                    ff.write(b'BLDM' + struct.pack("<I", unk_int2))
                     ff.write(new_bldm_block)
                 # Next write TOMDLP_P file
                 backup_suffix = ''
