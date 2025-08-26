@@ -512,17 +512,17 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
     giant_buffer = bytes()
     buffer_view = 0
     # Materials
-    material_dict = {material_struct[i]['name']: {'texture': material_struct[i]['textures'][0], 'alpha': material_struct[i]['alpha']}
-        for i in range(len(material_struct))}
-    texture_list = sorted(list(set([x['texture'] for x in material_dict.values()])))
+    material_dict = [{'name': material_struct[i]['name'], 'texture': material_struct[i]['textures'][0],
+        'alpha': material_struct[i]['alpha']} for i in range(len(material_struct))]
+    texture_list = sorted(list(set([x['texture'] for x in material_dict])))
     gltf_data['images'] = [{'uri':'textures/{}.dds'.format(x)} for x in texture_list]
-    for mat_name in material_dict:
-        material = { 'name': mat_name }
+    for mat in material_dict:
+        material = { 'name': mat['name'] }
         sampler = { 'wrapS': 10497, 'wrapT': 10497 } # I have no idea if this setting exists
-        texture = { 'source': texture_list.index(material_dict[mat_name]['texture']), 'sampler': len(gltf_data['samplers']) }
+        texture = { 'source': texture_list.index(mat['texture']), 'sampler': len(gltf_data['samplers']) }
         material['pbrMetallicRoughness']= { 'baseColorTexture' : { 'index' : len(gltf_data['textures']), },\
             'metallicFactor' : 0.0, 'roughnessFactor' : 1.0 }
-        if material_dict[mat_name]['alpha'] & 1:
+        if mat['alpha'] & 1:
             material['alphaMode'] = 'MASK'
         gltf_data['samplers'].append(sampler)
         gltf_data['textures'].append(texture)
