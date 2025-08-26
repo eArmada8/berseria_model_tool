@@ -322,7 +322,7 @@ def read_mesh (main_f, idx_f, start_offset, flags):
         main_f.seek(norm_offset)
         norms.extend(read_interleaved_floats(main_f, 3, stride, num_vertices))
         main_f.seek(end_offset) # More data after this
-    elif flags & 0xF0 == 0x0:
+    elif flags & 0xF0 in [0x0, 0x40]:
         num_vertices = num_uvs
         vert_offset = idx_f.seek(offset_uvs)
         norm_offset = vert_offset + 12
@@ -331,13 +331,13 @@ def read_mesh (main_f, idx_f, start_offset, flags):
         verts.extend(read_interleaved_floats(idx_f, 3, stride, num_vertices))
         idx_f.seek(norm_offset)
         norms.extend(read_interleaved_floats(idx_f, 3, stride, num_vertices))
-        main_f.seek(20,1)
+        #main_f.seek(20,1)
     uv_maps = []
-    if not flags & 0xF0 == 0x0:
+    if flags & 0xF0 in [0x50, 0x70]:
         for i in range(num_uv_maps):
             idx_f.seek(offset_uvs + 4 + (i * 8))
             uv_maps.append(read_interleaved_floats (idx_f, 2, uv_stride, num_uvs))
-    else:
+    elif not flags & 0xF0 in [0x0, 0x40]:
         for i in range(num_uv_maps):
             idx_f.seek(offset_uvs + 28)
             uv_maps.append(read_interleaved_floats (idx_f, 2, stride, num_uvs))
@@ -350,7 +350,7 @@ def read_mesh (main_f, idx_f, start_offset, flags):
     if flags & 0xF0 == 0x50:
         vb.append({'Buffer': weights})
         vb.append({'Buffer': blend_idx})
-    elif flags & 0xF0 in [0x0, 0x70]:
+    elif flags & 0xF0 in [0x0, 0x40, 0x70]:
         vb.append({'Buffer': [[1.0, 0.0, 0.0, 0.0] for _ in range(len(verts))]})
         vb.append({'Buffer': [[0, 0, 0, 0] for _ in range(len(verts))]})
     return({'fmt': fmt, 'vb': vb, 'ib': trianglestrip_to_list(idx_buffer)})
@@ -568,6 +568,8 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
     for i in range(len(gltf_data['nodes'])):
         if len(gltf_data['nodes'][i]['children']) == 0:
             del(gltf_data['nodes'][i]['children'])
+    if len(gltf_data['nodes']) == 0:
+        gltf_data['nodes'].append({'children': [], 'name': 'root'})
     # Mesh nodes will be attached to the first node since in the original model, they don't really have a home
     node_id_list = [x['id'] for x in skel_struct]
     mesh_node_ids = {x['mesh']:x['name'] for x in mesh_blocks_info}
@@ -667,17 +669,18 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
             gltf_data['nodes'][node_id]['mesh'] = len(gltf_data['meshes'])
             gltf_data['meshes'].append({"primitives": primitives, "name": mesh_node_ids[mesh]})
             # Skinning
-            gltf_data['nodes'][node_id]['skin'] = len(gltf_data['skins'])
-            gltf_data['skins'].append({"inverseBindMatrices": len(gltf_data['accessors']),\
-                "joints": [node_list.index(x) for x in vgmap]})
-            gltf_data['accessors'].append({"bufferView" : len(gltf_data['bufferViews']),\
-                "componentType": 5126,\
-                "count": len(ibms),\
-                "type": "MAT4"})
-            gltf_data['bufferViews'].append({"buffer": 0,\
-                "byteOffset": len(giant_buffer),\
-                "byteLength": len(inv_mtx_buffer)})
-            giant_buffer += inv_mtx_buffer
+            if len(vgmap) > 0:
+                gltf_data['nodes'][node_id]['skin'] = len(gltf_data['skins'])
+                gltf_data['skins'].append({"inverseBindMatrices": len(gltf_data['accessors']),\
+                    "joints": [node_list.index(x) for x in vgmap]})
+                gltf_data['accessors'].append({"bufferView" : len(gltf_data['bufferViews']),\
+                    "componentType": 5126,\
+                    "count": len(ibms),\
+                    "type": "MAT4"})
+                gltf_data['bufferViews'].append({"buffer": 0,\
+                    "byteOffset": len(giant_buffer),\
+                    "byteLength": len(inv_mtx_buffer)})
+                giant_buffer += inv_mtx_buffer
     # Write modding metadata
     if write_raw_buffers == True and overwrite_buffers == True:
         mesh_struct = [{y:x[y] for y in x if not any(
