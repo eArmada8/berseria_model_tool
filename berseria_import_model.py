@@ -88,7 +88,7 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
                 + ['TEXCOORD'] * num_uvs
                 + ['BLENDWEIGHTS', 'BLENDINDICES'])
             assert (int(fmt['stride']) == 44 + (8 * (mesh_blocks_info[i]["flags"] & 0xF)))
-        except FileNotFoundError or AssertionError:
+        except (FileNotFoundError, AssertionError) as e:
             print("Submesh {0} not found or corrupt, generating an empty submesh...".format(mesh_filename))
             # Generate an empty submesh
             fmt = make_fmt(num_uvs, has_weights = True)
@@ -214,9 +214,12 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
             material_struct[i]['unk_parameters']['set_0_base'][2])
         tex_counter += len(material_struct[i]['textures'])
         set_1.extend([[0, tex_dict[x]] for x in material_struct[i]['textures']])
-        set_2_val2.append(material_struct[i]['unk_parameters']['set_2_unk_1'][0] +
-            [material_struct[i]['alpha']] +
-            material_struct[i]['unk_parameters']['set_2_unk_1'][1])
+        val2 = material_struct[i]['unk_parameters']['set_2_unk_1'][0]
+        if 'alpha' in material_struct[i]:
+            val2.append(material_struct[i]['alpha'])
+        if len(material_struct[i]['unk_parameters']['set_2_unk_1']) > 1:
+            val2.extend(material_struct[i]['unk_parameters']['set_2_unk_1'][1])
+        set_2_val2.append(val2)
     # Build section 0 (Material parameters?)
     set_0_header_len = (addr_size * 4 + 0x18)  * len(material_struct)
     set_0_header = bytearray()

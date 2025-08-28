@@ -450,12 +450,17 @@ def read_section_7 (f, offset):
         for i in range(len(set_0)):
             material = {'name': set_2[i]['name']}
             material['textures'] = [set_6[set_1[set_0[i]['base'][6]+j][1]]['tex_name'] for j in range(set_0[i]['base'][4])]
-            material['alpha'] = set_2[i]['vals2'][3] if len(set_2[i]['vals2']) > 3 else 0
+            material['alpha'] = set_2[i]['vals2'][3] if len(set_2[i]['vals2']) > 3 else -1 # Unsigned so never -1
             material['internal_id'] = set_0[i]['base'][0]
-            if len(set_2[i]['vals2']) > 3:
-                material['unk_parameters'] = {'set_0_base': [set_0[i]['base'][1:4], [set_0[i]['base'][5]], set_0[i]['base'][7:]],
-                    'set_0_unk_0': set_0[i]['vals1'], 'set_0_unk_1': set_0[i]['vals2'], 'set_2_unk_0': set_2[i]['vals1'],
-                    'set_2_unk_1': [set_2[i]['vals2'][0:3], set_2[i]['vals2'][4:]]}
+            material['unk_parameters'] = {'set_0_base': [set_0[i]['base'][1:4], [set_0[i]['base'][5]], set_0[i]['base'][7:]],
+                'set_0_unk_0': set_0[i]['vals1'], 'set_0_unk_1': set_0[i]['vals2'], 'set_2_unk_0': set_2[i]['vals1'],
+                'set_2_unk_1': [set_2[i]['vals2'][0:3], set_2[i]['vals2'][4:]]}
+            # Some materials have very short set_2, remove extraneous empty values so import script will not add extra values
+            if material['alpha'] == -1:
+                del(material['alpha'])
+            if len(material['unk_parameters']['set_2_unk_1'][1]) == 0:
+                print("hi")
+                material['unk_parameters']['set_2_unk_1'].pop(1)
             material_struct.append(material)
     return(material_struct)
 
@@ -542,7 +547,8 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
     buffer_view = 0
     # Materials
     material_dict = [{'name': material_struct[i]['name'], 'texture': material_struct[i]['textures'][0],
-        'alpha': material_struct[i]['alpha']} for i in range(len(material_struct))]
+        'alpha': material_struct[i]['alpha'] if 'alpha' in material_struct[i] else 0}
+        for i in range(len(material_struct))]
     texture_list = sorted(list(set([x['texture'] for x in material_dict])))
     gltf_data['images'] = [{'uri':'textures/{}.dds'.format(x)} for x in texture_list]
     for mat in material_dict:
