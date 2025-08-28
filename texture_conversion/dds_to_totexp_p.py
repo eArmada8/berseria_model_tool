@@ -24,7 +24,7 @@ if __name__ == "__main__":
             header['dwSize'], header['dwFlags'], header['dwHeight'], header['dwWidth'],\
                     header['dwPitchOrLinearSize'], header['dwDepth'], header['dwMipMapCount']\
                     = struct.unpack("<7I", img_dat[4:32])
-                tex_type = 0x100 if img_dat[0x54:0x58] == b'\x00\x00\x00\x00' else 0x300 # 1 for uncompressed, 3 for DXT1/DXT5
+            tex_type = 0x100 if img_dat[0x54:0x58] == b'\x00\x00\x00\x00' else 0x300 # 1 for uncompressed, 3 for DXT1/DXT5
             with open(tex_file.split('.dds')[0]+'.TOTEXB_D', 'wb') as f:
                 f.write(b'DPDF\x00\x00\x00\x00')
                 f.write(struct.pack("<2QI4HIQ", 0x20, 1, 0xC8, tex_type, header['dwWidth'], header['dwHeight'], 1, 0, 8))
