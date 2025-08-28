@@ -337,7 +337,7 @@ def read_mesh (main_f, idx_f, start_offset, flags):
         for i in range(num_uv_maps):
             idx_f.seek(offset_uvs + 4 + (i * 8))
             uv_maps.append(read_interleaved_floats (idx_f, 2, uv_stride, num_uvs))
-    elif not flags & 0xF0 in [0x0, 0x40]:
+    elif flags & 0xF0 in [0x0, 0x40]:
         for i in range(num_uv_maps):
             idx_f.seek(offset_uvs + 28)
             uv_maps.append(read_interleaved_floats (idx_f, 2, stride, num_uvs))
@@ -450,13 +450,13 @@ def read_section_7 (f, offset):
         for i in range(len(set_0)):
             material = {'name': set_2[i]['name']}
             material['textures'] = [set_6[set_1[set_0[i]['base'][6]+j][1]]['tex_name'] for j in range(set_0[i]['base'][4])]
-            material_struct.append(material)
             material['alpha'] = set_2[i]['vals2'][3] if len(set_2[i]['vals2']) > 3 else 0
             material['internal_id'] = set_0[i]['base'][0]
             if len(set_2[i]['vals2']) > 3:
                 material['unk_parameters'] = {'set_0_base': [set_0[i]['base'][1:4], [set_0[i]['base'][5]], set_0[i]['base'][7:]],
                     'set_0_unk_0': set_0[i]['vals1'], 'set_0_unk_1': set_0[i]['vals2'], 'set_2_unk_0': set_2[i]['vals1'],
                     'set_2_unk_1': [set_2[i]['vals2'][0:3], set_2[i]['vals2'][4:]]}
+            material_struct.append(material)
     return(material_struct)
 
 def convert_format_for_gltf(dxgi_format):
