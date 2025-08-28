@@ -1,16 +1,14 @@
 # Tales of Berseria mesh toolset
 Scripts to get the mesh data in and out of the .TOMBDLB_D/.TOMDLP_P files from Tales of Berseria (and Tales of Zestiria).  The meshes are exported as raw buffers in the .fmt/.ib/.vb/.vgmap that are compatible with DarkStarSword Blender import plugin for 3DMigoto.  A glTF file is also exported for purposes of weight painting and texture assignment, but the glTF file is not used for modding.
 
-*NOTE:*  There are multiple mesh types, denoted by the upper four bits of the flag byte (`0x00`: not animated e.g weapons, `0x50` skeletally animated e.g. bodies, `0x70` unsure animation e.g. faces).  While berseria_export_meshes.py is able to get mesh data out of all three, a lot of data is not interpreted for `0x70` meshes and berseria_import_meshes.py cannot rebuild them.
-
-*NOTE:* Tales of Zestiria is supported, but untested.
+*NOTE:*  There are multiple mesh types, denoted by the upper four bits of the flag byte (`0x00` and `0x40`: not animated e.g weapons, `0x50` skeletally animated e.g. bodies, `0x70` unsure animation e.g. faces).  While berseria_export_meshes.py is able to get mesh data out of all four, a lot of data is not interpreted for `0x40`/`0x70` meshes and berseria_import_meshes.py cannot rebuild them.
 
 ## Tutorials:
 
 Please see the [wiki](https://github.com/eArmada8/berseria_model_tool/wiki), and the detailed documentation below.
 
 ## Credits:
-I am as always very thankful for the dedicated reverse engineers at the Kiseki modding discord, for their brilliant work, and for sharing that work so freely.  I am also very thankful to DaZombieKiller for [TalesOfTools](https://github.com/DaZombieKiller/TalesOfTools) as well as for sharing lots of knowledge about the Tales of Berseria file structure and modding.  This toolset also utilizes the tstrip module (python file format interface) adapted for [Sega_NN_tools](https://github.com/Argx2121/Sega_NN_tools/) by Argx2121, and I am grateful for its use - it is unmodified and is distributed under its original license.
+I am as always very thankful for the dedicated reverse engineers at the Kiseki modding discord, for their brilliant work, and for sharing that work so freely.  I am also very thankful to DaZombieKiller for [TalesOfTools](https://github.com/DaZombieKiller/TalesOfTools) as well as for sharing lots of knowledge about the Tales of Berseria / Zestiria file structure and modding.  This toolset also utilizes the tstrip module (python file format interface) adapted for [Sega_NN_tools](https://github.com/Argx2121/Sega_NN_tools/) by Argx2121, and I am grateful for its use - it is unmodified and is distributed under its original license.
 
 ## Requirements:
 1. Python 3.10 and newer is required for use of these scripts.  It is free from the Microsoft Store or python.org, for Windows users.  For Linux users, please consult your distro.
@@ -23,6 +21,8 @@ I am as always very thankful for the dedicated reverse engineers at the Kiseki m
 Double click the python script and it will search the current folder for all .TOMDLB_D files that are not skeletons (`BONE` is not in the name) and with its corresponding .TOMDLP_P file.  Additionally, it will output 3 JSON files, one with metadata from the mesh section, one with the data from the materials section, and (for convenience) a list of linked files (*e.g.* textures) used by the MDL.
 
 Additionally it will output a glTF file, by default in the binary .glb format.  Textures should be placed in a `textures` folder.
+
+*NOTE: The export script supports both 64-bit and 32-bit addressing, as well as little endian (PC) and big endian (PS3) encoded assets.  The import script supports both 64-bit and 32-bit addressing, but only little endian (PC) encoding.
 
 **Command line arguments:**
 `berseria_export_model.py [-h] [-t] [-s] [-o] dlb_filename dlp_filename`
@@ -105,5 +105,8 @@ It is not possible to change the skeleton as the skeleton is external.
 ### totexp_p_to_dds.py
 Double click the python script in a folder with .TOTEXP_P files and it will convert them to .dds textures.  The corresponding .TOTEXB_D files are not necessary.
 
-### dds_to_totexp_p.py
-Double click the python script in a folder with .dds files and it will convert them to .TOTEXB_D / .TOTEXP_P textures.  Replace both files at once when modding.
+### dds_to_berseria_totexp_p.py
+Double click the python script in a folder with .dds files and it will convert them to .TOTEXB_D / .TOTEXP_P textures for Tales of Berseria.  Only supports BC1 (DXT1), BC3 (DXT5) and ARGB8 (uncompressed) with mipmaps.  Replace both files at once when modding.
+
+### dds_to_zesteria_totexp_p.py
+The same script as `dds_to_berseria_totexp_p.py`, except it uses 32-bit addressing instead of 64-bit.  Use for making textures for Tales of Zesteria.
