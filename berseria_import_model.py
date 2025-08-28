@@ -213,7 +213,7 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
             [tex_counter] +
             material_struct[i]['unk_parameters']['set_0_base'][2])
         tex_counter += len(material_struct[i]['textures'])
-        set_1.extend([[0, tex_dict[x]] for x in material_struct[i]['textures']])
+        set_1.extend([[0, tex_dict[x], 0] for x in material_struct[i]['textures']])
         val2 = material_struct[i]['unk_parameters']['set_2_unk_1'][0]
         if 'alpha' in material_struct[i]:
             val2.append(material_struct[i]['alpha'])
@@ -242,7 +242,7 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
     # Build section 1 (Texture Pointers)
     set_1_block = bytearray()
     for i in range(len(set_1)):
-        set_1_block.extend(struct.pack("<hi", *set_1[i]))
+        set_1_block.extend(struct.pack("<3h", *set_1[i]))
     if len(set_1_block) % addr_size:
         set_1_block += b'\x00' * (addr_size - (len(set_1_block) % addr_size))
     # Build section 2 (Material name, etc)
