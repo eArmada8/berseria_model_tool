@@ -21,6 +21,7 @@ except ModuleNotFoundError as e:
 
 # Global variable, do not edit
 addr_size = 8
+e = '<'
 
 def set_address_size (size):
     global addr_size
@@ -28,9 +29,15 @@ def set_address_size (size):
         addr_size = size
     return
 
+def set_endianness (endianness):
+    global e
+    if endianness in ['<', '>']:
+        e = endianness
+    return
+
 def read_offset (f):
     start_offset = f.tell()
-    diff_offset, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+    diff_offset, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
     return(start_offset + diff_offset)
 
 def read_string (f, start_offset):
@@ -44,19 +51,27 @@ def read_string (f, start_offset):
 
 def trianglestrip_to_list(ib_list):
     triangles = []
-    for i in range(len(ib_list)-2):
-        if i % 2 == 0:
-            triangles.append([ib_list[i], ib_list[i+1], ib_list[i+2]])
+    split_lists = [[]]
+    # Split ib_list by primitive restart command, some models have this
+    for i in range(len(ib_list)):
+        if not ib_list[i] == -1:
+            split_lists[-1].append(ib_list[i])
         else:
-            triangles.append([ib_list[i], ib_list[i+2], ib_list[i+1]]) #DirectX implementation
-            #triangles.append([ib_list[i+1], ib_list[i], ib_list[i+2]]) #OpenGL implementation
+            split_lists.append([])
+    for i in range(len(split_lists)):
+        for j in range(len(split_lists[i])-2):
+            if j % 2 == 0:
+                triangles.append([split_lists[i][j], split_lists[i][j+1], split_lists[i][j+2]])
+            else:
+                triangles.append([split_lists[i][j], split_lists[i][j+2], split_lists[i][j+1]]) #DirectX implementation
+                #triangles.append([split_lists[i][j+1], split_lists[i][j], split_lists[i][j+2]]) #OpenGL implementation
     # Remove degenerate triangles
     triangles = [x for x in triangles if len(set(x)) == 3]
     return(triangles)
 
 def read_opening_dict (f):
     dict_offset = read_offset(f)
-    dict_size, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+    dict_size, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
     opening_dict = []
     return_to_offset = f.tell()
     f.seek(dict_offset)
@@ -69,30 +84,30 @@ def read_opening_dict (f):
 def read_section_0 (f, offset):
     # Jump to #0
     f.seek(offset)
-    section_0_unk = struct.unpack("<4I", f.read(16))
-    section_0_counts = struct.unpack("<2HI", f.read(8))
+    section_0_unk = struct.unpack("{}4I".format(e), f.read(16))
+    section_0_counts = struct.unpack("{}2HI".format(e), f.read(8))
     section_0_toc = []
     for _ in range(8):
         offset = read_offset(f)
-        num_entries, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+        num_entries, = struct.unpack("{}{}".format(e,{4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         section_0_toc.append({'offset': offset, 'num_entries': num_entries})
     #0x38 bytes - dunno what this is
     f.seek(section_0_toc[0]['offset'])
-    id = struct.unpack("<{}I".format(section_0_toc[0]['num_entries']), f.read(section_0_toc[0]['num_entries']*4))
+    id = struct.unpack("{}{}I".format(e, section_0_toc[0]['num_entries']), f.read(section_0_toc[0]['num_entries']*4))
     f.seek(section_0_toc[1]['offset'])
-    true_parent = struct.unpack("<{}i".format(section_0_toc[1]['num_entries']), f.read(section_0_toc[1]['num_entries']*4))
+    true_parent = struct.unpack("{}{}i".format(e, section_0_toc[1]['num_entries']), f.read(section_0_toc[1]['num_entries']*4))
     f.seek(section_0_toc[2]['offset'])
-    tree_info = [struct.unpack("<4h", f.read(8)) for _ in range(section_0_toc[2]['num_entries'])]
+    tree_info = [struct.unpack("{}4h".format(e), f.read(8)) for _ in range(section_0_toc[2]['num_entries'])]
     f.seek(section_0_toc[3]['offset'])
     name = [read_string(f, read_offset(f)) for _ in range(section_0_toc[3]['num_entries'])]
     f.seek(section_0_toc[4]['offset'])
-    unk_matrix = [struct.unpack("<16f", f.read(64)) for _ in range(section_0_toc[4]['num_entries'])]
+    unk_matrix = [struct.unpack("{}16f".format(e), f.read(64)) for _ in range(section_0_toc[4]['num_entries'])]
     f.seek(section_0_toc[5]['offset'])
-    abs_matrix = [struct.unpack("<16f", f.read(64)) for _ in range(section_0_toc[5]['num_entries'])]
+    abs_matrix = [struct.unpack("{}16f".format(e), f.read(64)) for _ in range(section_0_toc[5]['num_entries'])]
     f.seek(section_0_toc[6]['offset'])
-    inv_matrix = [struct.unpack("<16f", f.read(64)) for _ in range(section_0_toc[6]['num_entries'])]
+    inv_matrix = [struct.unpack("{}16f".format(e), f.read(64)) for _ in range(section_0_toc[6]['num_entries'])]
     f.seek(section_0_toc[7]['offset'])
-    parent_list = struct.unpack("<{}h".format(section_0_toc[7]['num_entries']), f.read(section_0_toc[7]['num_entries']*2))
+    parent_list = struct.unpack("{}{}h".format(e, section_0_toc[7]['num_entries']), f.read(section_0_toc[7]['num_entries']*2))
     #raw_data = [id, true_parent, tree_info, name, unk_matrix, abs_matrix, inv_matrix, parent_list]
     skel_struct = [{'id': id[i], 'true_parent': true_parent[i], 'tree_info': tree_info[i], 'name': name[i], 'abs_matrix': abs_matrix[i],\
     'inv_matrix': inv_matrix[i], 'parent': tree_info[i][2]} for i in range(section_0_toc[0]['num_entries'])]
@@ -112,26 +127,29 @@ def read_section_0 (f, offset):
 
 def read_dlb_skeleton (dlb_file):
     current_addr_size = addr_size # Store original size so we can restore it at the end
+    current_endian = e
     skel_list = []
     with open(dlb_file, 'rb') as f:
         magic = f.read(4)
-        if magic == b'DPDF':
-            unk_int, = struct.unpack("<I", f.read(4))
+        if magic in [b'DPDF', b'FDPD']:
+            set_endianness({b'DPDF': '<', b'FDPD': '>'}[magic])
+            unk_int, = struct.unpack("{}I".format(e), f.read(4))
             set_address_size(8)
             if not unk_int == 0:
                 set_address_size(4) # Cannot assume that the skeleton is the same!
             f.seek({4: 4, 8: 16}[addr_size],1)
             magic = f.read(4)
-            if magic == b'BLDM':
+            if magic in [b'BLDM', b'MDLB']:
                 f.seek(4,1)
                 offset = read_offset(f)
                 f.seek(offset) # Jump to section 0
                 f.seek(0x18,1)
                 offset = read_offset(f)
-                num_entries, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+                num_entries, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
                 f.seek(offset)
-                skel_list.extend(list(struct.unpack("<{}I".format(num_entries), f.read(num_entries * 4))))
+                skel_list.extend(list(struct.unpack("{}{}I".format(e, num_entries), f.read(num_entries * 4))))
     set_address_size(current_addr_size) # Restore original address size
+    set_endianness(current_endian) # Restore original endianness
     return(skel_list)
 
 def find_primary_skeleton (missing_bone_palette_ids):
@@ -164,16 +182,18 @@ def find_primary_skeleton (missing_bone_palette_ids):
 # skel_struct will be appended onto the skeleton_file struct, not the other way around
 def combine_skeletons (skeleton_file, skel_struct):
     current_addr_size = addr_size # Store original size so we can restore it at the end
+    current_endian = e
     with open(skeleton_file, 'rb') as f:
         magic = f.read(4)
-        if magic == b'DPDF':
-            unk_int, = struct.unpack("<I", f.read(4))
+        if magic in [b'DPDF', b'FDPD']:
+            set_endianness({b'DPDF': '<', b'FDPD': '>'}[magic])
+            unk_int, = struct.unpack("{}I".format(e), f.read(4))
             set_address_size(8)
             if not unk_int == 0:
                 set_address_size(4) # Cannot assume that the skeleton is the same!
             f.seek({4: 4, 8: 16}[addr_size],1)
             magic = f.read(4)
-            if magic == b'BLDM':
+            if magic in [b'BLDM', b'MDLB']:
                 f.seek(4,1)
                 offset = read_offset(f)
                 primary_skel_struct = read_section_0(f, offset)
@@ -198,14 +218,17 @@ def combine_skeletons (skeleton_file, skel_struct):
                         new_skel_struct[i]['matrix'] = new_skel_struct[i]['abs_matrix']
                     new_skel_struct[i]['children'] = [j for j in range(len(new_skel_struct)) if new_skel_struct[j]['parent'] == i]
                 set_address_size(current_addr_size) # Restore original address size
+                set_endianness(current_endian) # Restore original endianness
                 return(new_skel_struct)
             else:
                 print("Invalid skeleton file!")
                 set_address_size(current_addr_size) # Restore original address size
+                set_endianness(current_endian) # Restore original endianness
                 return skel_struct
         else:
             print("Invalid skeleton file!")
             set_address_size(current_addr_size) # Restore original address size
+            set_endianness(current_endian) # Restore original endianness
             return skel_struct
 
 def find_and_add_external_skeleton (skel_struct, bone_palette_ids):
@@ -257,9 +280,9 @@ def make_fmt(num_uvs, has_weights = True):
 
 def read_mesh (main_f, idx_f, start_offset, flags):
     def read_floats (f, num):
-        return(list(struct.unpack("<{}f".format(num), f.read(num * 4))))
+        return(list(struct.unpack("{}{}f".format(e, num), f.read(num * 4))))
     def read_bytes (f, num):
-        return(list(struct.unpack("<{}B".format(num), f.read(num))))
+        return(list(struct.unpack("{}{}B".format(e, num), f.read(num))))
     def read_interleaved_floats (f, num, stride, total):
         vecs = []
         padding = stride - (num * 4)
@@ -279,70 +302,77 @@ def read_mesh (main_f, idx_f, start_offset, flags):
             weights = [x+[round(1-sum(x),6)] if len(x) < 4 else x for x in weights]
         return(weights)
     main_f.seek(start_offset)
-    num_uvs, num_idx, offset_uvs, offset_idx = struct.unpack("<2H2I", main_f.read(12))
-    uv_stride = (offset_idx - offset_uvs) // num_uvs
+    num_verts, num_idx, offset_uvs, offset_idx = struct.unpack("{}2H2I".format(e), main_f.read(12))
+    uv_stride = (offset_idx - offset_uvs) // num_verts
     num_uv_maps = flags & 0xF
     #num_uv_maps = (uv_stride - 4) // 8 # 4 byte buffer + VEC2 per map
     verts = []
     norms = []
     if flags & 0xF0 == 0x50:
-        num_vertices = list(struct.unpack("<4I", main_f.read(16)))
         blend_idx = []
         weights = []
-        for i in range(len(num_vertices)):
-            vert_offset = main_f.tell()
-            norm_offset = vert_offset + 12
-            blend_idx_offset = norm_offset + 12
-            weights_offset = blend_idx_offset + 4
-            stride = 28 + (i * 4)
-            end_offset = main_f.tell() + (num_vertices[i] * stride)
-            main_f.seek(vert_offset)
-            verts.extend(read_interleaved_floats(main_f, 3, stride, num_vertices[i]))
-            main_f.seek(norm_offset)
-            norms.extend(read_interleaved_floats(main_f, 3, stride, num_vertices[i]))
-            main_f.seek(blend_idx_offset)
-            blend_idx.extend(read_interleaved_bytes(main_f, 4, stride, num_vertices[i]))
-            if i > 0:
-                main_f.seek(weights_offset)
-                weights.extend(read_interleaved_floats(main_f, i, stride, num_vertices[i]))
-            else:
-                weights.extend([[1.0] for _ in range(num_vertices[i])])
-            main_f.seek(end_offset)
+        num_v_per_wt_grp = list(struct.unpack("{}4I".format(e), main_f.read(16)))
+        if sum(num_v_per_wt_grp) == num_verts:
+            num_vertices_array = [num_v_per_wt_grp]
+        else: # Some builds have arrays of arrays, might be a PS3 thing
+            main_f.seek(-16,1)
+            num_vertices_array = [[]]
+            count, = struct.unpack("{}I".format(e), main_f.read(4))
+            for i in range(count):
+                num_vertices_array.append(list(struct.unpack("{}4H".format(e), main_f.read(8))))
+        for i in range(len(num_vertices_array)):
+            for j in range(len(num_vertices_array[i])):
+                vert_offset = main_f.tell()
+                norm_offset = vert_offset + 12
+                blend_idx_offset = norm_offset + 12
+                weights_offset = blend_idx_offset + 4
+                stride = 28 + (j * 4)
+                end_offset = main_f.tell() + (num_vertices_array[i][j] * stride)
+                main_f.seek(vert_offset)
+                verts.extend(read_interleaved_floats(main_f, 3, stride, num_vertices_array[i][j]))
+                main_f.seek(norm_offset)
+                norms.extend(read_interleaved_floats(main_f, 3, stride, num_vertices_array[i][j]))
+                main_f.seek(blend_idx_offset)
+                blend_idx.extend(read_interleaved_bytes(main_f, 4, stride, num_vertices_array[i][j]))
+                if j > 0:
+                    main_f.seek(weights_offset)
+                    weights.extend(read_interleaved_floats(main_f, j, stride, num_vertices_array[i][j]))
+                else:
+                    weights.extend([[1.0] for _ in range(num_vertices_array[i][j])])
+                main_f.seek(end_offset)
         weights = fix_weights(weights)
     elif flags & 0xF0 == 0x70:
-        num_unk, = struct.unpack("<I", main_f.read(4)) # Dunno what this is, maybe shape morphs?
-        unk_list = list(struct.unpack("<{}I".format(num_unk), main_f.read(4 * num_unk)))
-        num_vertices = num_uvs
+        num_unk, = struct.unpack("{}I".format(e), main_f.read(4)) # Dunno what this is, maybe shape morphs?
+        unk_list = list(struct.unpack("{}{}I".format(e, num_unk), main_f.read(4 * num_unk)))
         vert_offset = main_f.tell()
         norm_offset = vert_offset + 12
         stride = 24
-        end_offset = main_f.tell() + (num_vertices * stride)
+        end_offset = main_f.tell() + (num_verts * stride)
         main_f.seek(vert_offset)
-        verts.extend(read_interleaved_floats(main_f, 3, stride, num_vertices))
+        verts.extend(read_interleaved_floats(main_f, 3, stride, num_verts))
         main_f.seek(norm_offset)
-        norms.extend(read_interleaved_floats(main_f, 3, stride, num_vertices))
+        norms.extend(read_interleaved_floats(main_f, 3, stride, num_verts))
         main_f.seek(end_offset) # More data after this
     elif flags & 0xF0 in [0x0, 0x40]:
-        num_vertices = num_uvs
         vert_offset = idx_f.seek(offset_uvs)
         norm_offset = vert_offset + 12
         stride = 28 + ((flags & 0xF) * 8) # 12 + 12 + 4 extra for UV padding
         idx_f.seek(vert_offset)
-        verts.extend(read_interleaved_floats(idx_f, 3, stride, num_vertices))
+        verts.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
         idx_f.seek(norm_offset)
-        norms.extend(read_interleaved_floats(idx_f, 3, stride, num_vertices))
+        norms.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
         #main_f.seek(20,1)
     uv_maps = []
     if flags & 0xF0 in [0x50, 0x70]:
         for i in range(num_uv_maps):
             idx_f.seek(offset_uvs + 4 + (i * 8))
-            uv_maps.append(read_interleaved_floats (idx_f, 2, uv_stride, num_uvs))
+            uv_maps.append(read_interleaved_floats (idx_f, 2, uv_stride, num_verts))
     elif flags & 0xF0 in [0x0, 0x40]:
         for i in range(num_uv_maps):
             idx_f.seek(offset_uvs + 28)
-            uv_maps.append(read_interleaved_floats (idx_f, 2, stride, num_uvs))
+            uv_maps.append(read_interleaved_floats (idx_f, 2, stride, num_verts))
     idx_f.seek(offset_idx)
-    idx_buffer = list(struct.unpack("<{}H".format(num_idx), idx_f.read(num_idx * 2)))
+    idx_buffer = list(struct.unpack("{}{}h".format(e, num_idx), idx_f.read(num_idx * 2)))
     fmt = make_fmt(len(uv_maps), True)
     vb = [{'Buffer': verts}, {'Buffer': norms}]
     for uv_map in uv_maps:
@@ -358,18 +388,18 @@ def read_mesh (main_f, idx_f, start_offset, flags):
 #Meshes, offset should be toc[6].  Requires dlp filename for uv's and index buffer.
 def read_section_6 (f, offset, dlp_file):
     f.seek(offset)
-    section_6_unk = struct.unpack("<4I", f.read(16))
+    section_6_unk = struct.unpack("{}4I".format(e), f.read(16))
     section_6_toc = []
     for _ in range(4):
         offset = read_offset(f)
-        num_entries, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+        num_entries, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         section_6_toc.append({'offset': offset, 'num_entries': num_entries})
     #section_6_toc[0] - VEC4 (u32, f32?) - in sample is all zeroes
     #section_6_toc[1] - meshes
     #section_6_toc[2] - bone palette
     #section_6_toc[3] - u32 x 2 - # meshes, # bones
     f.seek(section_6_toc[2]['offset'])
-    bone_palette_ids = struct.unpack("<{}I".format(section_6_toc[2]['num_entries']), f.read(4 * section_6_toc[2]['num_entries']))
+    bone_palette_ids = struct.unpack("{}{}I".format(e, section_6_toc[2]['num_entries']), f.read(4 * section_6_toc[2]['num_entries']))
     mesh_blocks_info = []
     meshes = []
     f.seek(section_6_toc[1]['offset'])
@@ -377,10 +407,10 @@ def read_section_6 (f, offset, dlp_file):
         for i in range(section_6_toc[1]['num_entries']):
             data = {'current_block_offset': f.tell(), 'name': ''}
             data["mesh"], data["submesh"], data["node"], \
-                data["flags"], data["material"], data["unknown"] = struct.unpack("<i4hi", f.read(16))
+                data["flags"], data["material"], data["unknown"] = struct.unpack("{}i4hi".format(e), f.read(16))
             data['string_offset'] = read_offset(f)
             data['data_offset'] = read_offset(f)
-            data["data_block_size"], = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+            data["data_block_size"], = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
             current_offset = f.tell()
             data["name"] = read_string (f, data['string_offset'])
             meshes.append(read_mesh (f, idx_f, data['data_offset'], data["flags"]))
@@ -391,44 +421,44 @@ def read_section_6 (f, offset, dlp_file):
 #Materials, offset should be toc[7]
 def read_section_7 (f, offset):
     f.seek(offset)
-    section_7_unk = struct.unpack("<6I", f.read(24))
+    section_7_unk = struct.unpack("{}6I".format(e), f.read(24))
     section_7_toc = []
     for _ in range(7):
         offset = read_offset(f)
-        num_entries, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+        num_entries, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         section_7_toc.append({'offset': offset, 'num_entries': num_entries})
     set_0 = [] # Materials, including the indices that map to set_1 (textures)
     for i in range(section_7_toc[0]['num_entries']):
         f.seek(section_7_toc[0]['offset'] + (i * (4 * addr_size + 0x18)))
-        values = struct.unpack("<12h", f.read(24))
+        values = struct.unpack("{}12h".format(e), f.read(24))
         offset1 = read_offset(f)
-        num_vals1, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+        num_vals1, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         offset2 = read_offset(f)
-        num_vals2, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+        num_vals2, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         end_offset = f.tell()
         f.seek(offset1)
-        vals1 = struct.unpack("<{}I".format(num_vals1), f.read(num_vals1 * 4))
+        vals1 = struct.unpack("{}{}I".format(e, num_vals1), f.read(num_vals1 * 4))
         f.seek(offset2)
         if num_vals2 == 0x17:
-            vals2 = struct.unpack("<8I4f4If6I", f.read(92))
+            vals2 = struct.unpack("{}8I4f4If6I".format(e), f.read(92))
         else:
-            vals2 = struct.unpack("<{}I".format(num_vals2), f.read(num_vals2 * 4))
+            vals2 = struct.unpack("{}{}I".format(e, num_vals2), f.read(num_vals2 * 4))
         set_0.append({'base': values, 'vals1': vals1, 'vals2': vals2})
     set_1 = [] # Texture assignments, each is a tuple where the second number points to set_6
     for i in range(section_7_toc[1]['num_entries']):
         f.seek(section_7_toc[1]['offset'] + (i * 6))
-        values = struct.unpack("<hi", f.read(6))
+        values = struct.unpack("{}3h".format(e), f.read(6))
         set_1.append(values)
     set_2 = [] # Materials, including material names and alpha
     for i in range(section_7_toc[2]['num_entries']):
         f.seek(section_7_toc[2]['offset'] + (i * (5 * addr_size)))
         offset1 = read_offset(f)
-        num_vals1, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+        num_vals1, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         offset2 = read_offset(f)
-        num_vals2, = struct.unpack("<{}".format({4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+        num_vals2, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         str_offset = read_offset(f)
         f.seek(offset1)
-        vals1 = struct.unpack("<{}I".format(num_vals1), f.read(num_vals1 * 4))
+        vals1 = struct.unpack("{}{}I".format(e, num_vals1), f.read(num_vals1 * 4))
         f.seek(offset2)
         vals2 = struct.unpack("<{}I".format(num_vals2), f.read(num_vals2 * 4))
         name = read_string(f, str_offset)
@@ -438,11 +468,11 @@ def read_section_7 (f, offset):
         if addr_size == 8:
             f.seek(section_7_toc[6]['offset'] + (i * 24))
             str_offset = read_offset(f)
-            vals = struct.unpack("<2Q", f.read(16))
+            vals = struct.unpack("{}2Q".format(e), f.read(16))
         else:
             f.seek(section_7_toc[6]['offset'] + (i * 8))
             str_offset = read_offset(f)
-            vals = struct.unpack("<2H", f.read(4))
+            vals = struct.unpack("{}2H".format(e), f.read(4))
         tex_name = read_string(f, str_offset)
         set_6.append({'tex_name': tex_name, 'vals': vals})
     material_struct = []
@@ -727,16 +757,18 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
     print("Processing {}...".format(dlb_file))
     with open(dlb_file, 'rb') as f:
         magic = f.read(4)
-        if magic == b'DPDF':
-            unk_int, = struct.unpack("<I", f.read(4))
+        if magic in [b'DPDF', b'FDPD']:
+            if magic == b'FDPD':
+                set_endianness('>')
+            unk_int, = struct.unpack("{}I".format(e), f.read(4))
             if not unk_int == 0:
                 f.seek(4,0)
                 set_address_size(4) # Zestiria
             opening_dict = read_opening_dict (f)
             dlp_file = opening_dict[0]
             magic = f.read(4)
-            if magic == b'BLDM':
-                unk_int2, = struct.unpack("<I", f.read(4))
+            if magic in [b'BLDM', b'MDLB']:
+                unk_int2, = struct.unpack("{}I".format(e), f.read(4))
                 toc = [read_offset(f) for _ in range(12)]
                 #toc[0] - Nodes.  1 - (mesh) 0x16c, 0x82, mostly zeros (6x zero len sections) (skel) 0x10 header, 6 sections.  2 - 16 zero bytes, 3 - 0x16c, 0x82, mostly zeros.  
                 #4 - starts with 0x16c, 0x82, lots of floats.  5 - 0x20 bytes, all zeros
