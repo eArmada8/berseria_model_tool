@@ -388,6 +388,11 @@ def read_mesh (main_f, idx_f, start_offset, flags):
         vb.append({'Buffer': [[0, 0, 0, 0] for _ in range(len(verts))]})
     return({'fmt': fmt, 'vb': vb, 'ib': trianglestrip_to_list(idx_buffer)})
 
+#This function is purely for flipping endianness
+def read_generic_int_section (f, offset, length):
+    f.seek(offset)
+    return(list(struct.unpack("{}{}I".format(e, length // 4), f.read(length))))
+
 #Dunno, offset should be toc[4].
 def read_section_4 (f, offset):
     f.seek(offset)
@@ -486,7 +491,7 @@ def read_section_7 (f, offset):
         f.seek(offset1)
         vals1 = struct.unpack("{}{}I".format(e, num_vals1), f.read(num_vals1 * 4))
         f.seek(offset2)
-        vals2 = struct.unpack("<{}I".format(num_vals2), f.read(num_vals2 * 4))
+        vals2 = struct.unpack("{}{}I".format(e, num_vals2), f.read(num_vals2 * 4))
         name = read_string(f, str_offset)
         set_2.append({'name': name, 'vals1': vals1, 'vals2': vals2})
     set_6 = [] # Texture names
