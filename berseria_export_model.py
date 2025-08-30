@@ -85,7 +85,7 @@ def read_section_0 (f, offset):
     # Jump to #0
     f.seek(offset)
     section_0_unk = struct.unpack("{}4I".format(e), f.read(16))
-    section_0_counts = struct.unpack("{}2HI".format(e), f.read(8))
+    section_0_counts = struct.unpack("{}4H".format(e), f.read(8))
     section_0_toc = []
     for _ in range(8):
         offset = read_offset(f)
