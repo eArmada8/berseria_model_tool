@@ -157,7 +157,10 @@ def find_primary_skeleton (missing_bone_palette_ids):
     dlb_files = glob.glob('*.TOMDLB_D')
     if len(dlb_files) > 10:
         print("This may take a long time...")
-    matches = [x for x in dlb_files if all([y in read_dlb_skeleton(x) for y in missing_bone_palette_ids])]
+    palettes = {}
+    for i in range(len(dlb_files)):
+        palettes[dlb_files[i]] = read_dlb_skeleton(dlb_files[i])
+    matches = [x for x in dlb_files if all([y in palettes[x] for y in missing_bone_palette_ids])]
     match = ''
     if len(matches) > 1:
         print("Multiple matches found, please choose one.")
