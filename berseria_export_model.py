@@ -84,8 +84,7 @@ def read_opening_dict (f):
 def read_section_0 (f, offset):
     # Jump to #0
     f.seek(offset)
-    section_0_unk = struct.unpack("{}4I".format(e), f.read(16))
-    section_0_counts = struct.unpack("{}4H".format(e), f.read(8))
+    section_0_header = struct.unpack("{}4I4H".format(e), f.read(24))
     section_0_toc = []
     for _ in range(8):
         offset = read_offset(f)
@@ -109,7 +108,7 @@ def read_section_0 (f, offset):
     inv_matrix = [struct.unpack("{}16f".format(e), f.read(64)) for _ in range(section_0_toc[6]['num_entries'])]
     f.seek(section_0_toc[7]['offset'])
     parent_list = struct.unpack("{}{}h".format(e, section_0_toc[7]['num_entries']), f.read(section_0_toc[7]['num_entries']*2))
-    raw_data = [unk_block, id, true_parent, tree_info, name, unk_matrix, abs_matrix, inv_matrix, parent_list]
+    raw_data = [section_0_header, unk_block, id, true_parent, tree_info, name, unk_matrix, abs_matrix, inv_matrix, parent_list]
     skel_struct = [{'id': id[i], 'true_parent': true_parent[i], 'tree_info': tree_info[i], 'name': name[i], 'abs_matrix': abs_matrix[i],\
     'inv_matrix': inv_matrix[i], 'parent': tree_info[i][2]} for i in range(section_0_toc[0]['num_entries'])]
     for i in range(len(skel_struct)):
