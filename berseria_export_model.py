@@ -91,7 +91,8 @@ def read_section_0 (f, offset):
         offset = read_offset(f)
         num_entries, = struct.unpack("{}{}".format(e,{4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         section_0_toc.append({'offset': offset, 'num_entries': num_entries})
-    #0x38 bytes - dunno what this is
+    unk_block = list(struct.unpack("{}2{}".format(e,{4: "I", 8: "Q"}[addr_size]), f.read(addr_size * 2)))
+    unk_block.extend(struct.unpack("{}4Hf2i5f".format(e), f.read(40)))
     f.seek(section_0_toc[0]['offset'])
     id = struct.unpack("{}{}I".format(e, section_0_toc[0]['num_entries']), f.read(section_0_toc[0]['num_entries']*4))
     f.seek(section_0_toc[1]['offset'])
@@ -108,7 +109,7 @@ def read_section_0 (f, offset):
     inv_matrix = [struct.unpack("{}16f".format(e), f.read(64)) for _ in range(section_0_toc[6]['num_entries'])]
     f.seek(section_0_toc[7]['offset'])
     parent_list = struct.unpack("{}{}h".format(e, section_0_toc[7]['num_entries']), f.read(section_0_toc[7]['num_entries']*2))
-    #raw_data = [id, true_parent, tree_info, name, unk_matrix, abs_matrix, inv_matrix, parent_list]
+    raw_data = [unk_block, id, true_parent, tree_info, name, unk_matrix, abs_matrix, inv_matrix, parent_list]
     skel_struct = [{'id': id[i], 'true_parent': true_parent[i], 'tree_info': tree_info[i], 'name': name[i], 'abs_matrix': abs_matrix[i],\
     'inv_matrix': inv_matrix[i], 'parent': tree_info[i][2]} for i in range(section_0_toc[0]['num_entries'])]
     for i in range(len(skel_struct)):
@@ -123,7 +124,7 @@ def read_section_0 (f, offset):
         else:
             skel_struct[i]['matrix'] = skel_struct[i]['abs_matrix']
         skel_struct[i]['children'] = [j for j in range(len(skel_struct)) if skel_struct[j]['parent'] == i]
-    return(skel_struct)
+    return(skel_struct, raw_data)
 
 def read_dlb_skeleton (dlb_file):
     current_addr_size = addr_size # Store original size so we can restore it at the end
@@ -199,7 +200,7 @@ def combine_skeletons (skeleton_file, skel_struct):
             if magic in [b'BLDM', b'MDLB']:
                 f.seek(4,1)
                 offset = read_offset(f)
-                primary_skel_struct = read_section_0(f, offset)
+                primary_skel_struct, _ = read_section_0(f, offset)
                 new_skel_struct = primary_skel_struct + skel_struct
                 #Reassign parent
                 new_indices = [x['id'] for x in new_skel_struct]
@@ -388,6 +389,29 @@ def read_mesh (main_f, idx_f, start_offset, flags):
         vb.append({'Buffer': [[0, 0, 0, 0] for _ in range(len(verts))]})
     return({'fmt': fmt, 'vb': vb, 'ib': trianglestrip_to_list(idx_buffer)})
 
+#Dunno, offset should be toc[4].
+def read_section_4 (f, offset):
+    f.seek(offset)
+    section_4_unk = struct.unpack("{}2I".format(e), f.read(8))
+    counts = struct.unpack("{}2H".format(e), f.read(4))
+    if addr_size == 8:
+        f.seek(4,1) # Padding
+    offset = read_offset(f)
+    count, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+    data = [list(struct.unpack("{}4h25f".format(e), f.read(0x6c))) for _ in range(count)]
+    return(data)
+
+#Dunno, offset should be toc[5].
+def read_section_5 (f, offset):
+    f.seek(offset)
+    offset1 = read_offset(f)
+    count1, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+    offset2 = read_offset(f)
+    count2, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+    data1 = [list(struct.unpack("{}I6f2I".format(e), f.read(36))) for _ in range(count1)]
+    data2 = [list(struct.unpack("{}9f".format(e), f.read(36))) for _ in range(count2)]
+    return([data1, data2])
+
 #Meshes, offset should be toc[6].  Requires dlp filename for uv's and index buffer.
 def read_section_6 (f, offset, dlp_file):
     f.seek(offset)
@@ -496,6 +520,19 @@ def read_section_7 (f, offset):
                 material['unk_parameters']['set_2_unk_1'].pop(1)
             material_struct.append(material)
     return(material_struct)
+
+#Dunno, offset should be toc[11].
+def read_section_11 (f, offset):
+    f.seek(offset)
+    offset1 = read_offset(f)
+    count1, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+    offset2 = read_offset(f)
+    count2, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+    f.seek(offset1) # Skip 0x10 zero bytes for 8-byte addressing, 0x0c zero bytes for 4-byte - maybe a blank address?
+    # data1 does not look like u64, except when looking at endianness, dunno why
+    data1 = [struct.unpack("{}Q".format(e), f.read(8))[0] for _ in range(count1)]
+    data2 = [struct.unpack("{}f".format(e), f.read(4))[0] for _ in range(count2)]
+    return([data1, data2])
 
 def convert_format_for_gltf(dxgi_format):
     dxgi_format = dxgi_format.split('DXGI_FORMAT_')[-1]
@@ -774,10 +811,11 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                 unk_int2, = struct.unpack("{}I".format(e), f.read(4))
                 toc = [read_offset(f) for _ in range(12)]
                 #toc[0] - Nodes.  1 - (mesh) 0x16c, 0x82, mostly zeros (6x zero len sections) (skel) 0x10 header, 6 sections.  2 - 16 zero bytes, 3 - 0x16c, 0x82, mostly zeros.  
-                #4 - starts with 0x16c, 0x82, lots of floats.  5 - 0x20 bytes, all zeros
+                #4 - starts with 0x16c, 0x82, lots of floats.
+                #5 - offset1, count1, offset2, count2, 0x24 * count1 (u32, f32 *6, u32 *2), 0x24 * count2 (all f)
                 #6 - meshes.  7 - materials.  8,9,10,11 - dunno
                 if os.path.exists(dlp_file) or os.path.exists(dlp_file.upper()): # TLTool uses uppercase extension
-                    skel_struct = read_section_0(f, toc[0])
+                    skel_struct, _ = read_section_0(f, toc[0])
                     meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlp_file)
                     # Attempt to incorporate an external skeleton (skipped if skeleton already complete)
                     skel_struct = find_and_add_external_skeleton (skel_struct, bone_palette_ids)
