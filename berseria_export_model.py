@@ -84,7 +84,7 @@ def read_opening_dict (f):
 def read_section_0 (f, offset):
     # Jump to #0
     f.seek(offset)
-    section_0_header = struct.unpack("{}4I4H".format(e), f.read(24))
+    section_0_header = struct.unpack("{}3I6H".format(e), f.read(24))
     section_0_toc = []
     for _ in range(8):
         offset = read_offset(f)
