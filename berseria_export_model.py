@@ -101,7 +101,7 @@ def read_section_0 (f, offset):
     f.seek(section_0_toc[3]['offset'])
     name = [read_string(f, read_offset(f)) for _ in range(section_0_toc[3]['num_entries'])]
     f.seek(section_0_toc[4]['offset'])
-    unk_matrix = [struct.unpack("{}16f".format(e), f.read(64)) for _ in range(section_0_toc[4]['num_entries'])]
+    unk_matrix = [[struct.unpack("{}16f".format(e), f.read(64)) for _ in range(2)] for _ in range(section_0_toc[4]['num_entries'])]
     f.seek(section_0_toc[5]['offset'])
     abs_matrix = [struct.unpack("{}16f".format(e), f.read(64)) for _ in range(section_0_toc[5]['num_entries'])]
     f.seek(section_0_toc[6]['offset'])
