@@ -22,7 +22,7 @@ Double click the python script and it will search the current folder for all .TO
 
 Additionally it will output a glTF file, by default in the binary .glb format.  Textures should be placed in a `textures` folder.
 
-*NOTE: The export script supports both 64-bit and 32-bit addressing, as well as little endian (PC) and big endian (PS3) encoded assets.  The import script supports both 64-bit and 32-bit addressing, but only little endian (PC) encoding.
+*NOTE: The export script supports both 64-bit and 32-bit addressing, as well as little endian (PC) and big endian (PS3) encoded assets.  The import script supports both 64-bit and 32-bit addressing, but only little endian (PC) encoding.*
 
 **Command line arguments:**
 `berseria_export_model.py [-h] [-t] [-s] [-o] dlb_filename dlp_filename`
@@ -48,6 +48,9 @@ It will make a backup of the originals, then overwrite the originals.  It will n
 
 **Command line arguments:**
 `berseria_import_model.py [-h] tomdlb_filename`
+
+`-s, --swap_endian`
+This flag will instruct the script to rebuild a PS3 file as a PC file by changing big endian encoding to little endian.  This is tested for PS3->PC only.  (It is possible that PC->PS3 will work, but it is unlikely because this script cannot recreate the vertex arrays seen only in PS3 assets.)
 
 `-h, --help`
 Shows help message.
