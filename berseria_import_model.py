@@ -164,7 +164,8 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
                 == ['POSITION', 'NORMAL']
                 + ['TEXCOORD'] * num_uvs
                 + ['BLENDWEIGHTS', 'BLENDINDICES'])
-            assert (int(fmt['stride']) == 44 + (8 * (mesh_blocks_info[i]["flags"] & 0xF)))
+            stride_semantic = 'vb0 stride' if 'vb0 stride' in fmt else 'stride'
+            assert (int(fmt[stride_semantic]) == 44 + (8 * (mesh_blocks_info[i]["flags"] & 0xF)))
         except (FileNotFoundError, AssertionError) as err:
             print("Submesh {0} not found or corrupt, generating an empty submesh...".format(mesh_filename))
             # Generate an empty submesh
