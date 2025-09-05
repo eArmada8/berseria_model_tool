@@ -174,7 +174,7 @@ def find_primary_skeleton (missing_bone_palette_ids):
                 match = matches[int(raw_input)-1]
             else:
                 print("Invalid entry!")
-    else:
+    elif len(matches) == 1:
         match = matches[0]
     if match == '':
         print("No matches found!")
@@ -239,8 +239,12 @@ def find_and_add_external_skeleton (skel_struct, bone_palette_ids):
     if not all([y in [x['id'] for x in skel_struct] for y in bone_palette_ids]):
         missing_bone_palette_ids = [y for y in bone_palette_ids if not y in [x['id'] for x in skel_struct]]
         primary_skeleton_file = find_primary_skeleton (missing_bone_palette_ids)
-        skel_struct = combine_skeletons (primary_skeleton_file, skel_struct)
-    return(skel_struct)
+        if os.path.exists(primary_skeleton_file):
+            return(combine_skeletons (primary_skeleton_file, skel_struct))
+        else:
+            return([])
+    else:
+        return(skel_struct)
 
 def make_fmt(num_uvs, has_weights = True):
     fmt = {'stride': '0', 'topology': 'trianglelist', 'format':\
@@ -662,9 +666,13 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
     mesh_block_tree = {x:[i for i in range(len(mesh_blocks_info)) if mesh_blocks_info[i]['mesh'] == x] for x in mesh_node_ids}
     node_list = [x['name'] for x in gltf_data['nodes']]
     # Skin matrices
-    vgmap_nodes = [node_list.index(x) for x in list(vgmap.keys())]
-    ibms = [skel_struct[j]['inv_matrix'] for j in vgmap_nodes]
-    inv_mtx_buffer = b''.join([struct.pack("<16f", *x) for x in ibms])
+    skinning_possible = True
+    try:
+        vgmap_nodes = [node_list.index(x) for x in list(vgmap.keys())]
+        ibms = [skel_struct[j]['inv_matrix'] for j in vgmap_nodes]
+        inv_mtx_buffer = b''.join([struct.pack("<16f", *x) for x in ibms])
+    except ValueError:
+        skinning_possible = False
     base_name = dlb_file.split('.TOMDLB_D')[0]
     # Meshes
     if write_raw_buffers == True:
@@ -750,7 +758,7 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
             gltf_data['nodes'][node_id]['mesh'] = len(gltf_data['meshes'])
             gltf_data['meshes'].append({"primitives": primitives, "name": mesh_node_ids[mesh]})
             # Skinning
-            if len(vgmap) > 0:
+            if len(vgmap) > 0 and skinning_possible == True:
                 gltf_data['nodes'][node_id]['skin'] = len(gltf_data['skins'])
                 gltf_data['skins'].append({"inverseBindMatrices": len(gltf_data['accessors']),\
                     "joints": [node_list.index(x) for x in vgmap]})
@@ -823,6 +831,7 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                     meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlp_file)
                     # Attempt to incorporate an external skeleton (skipped if skeleton already complete)
                     skel_struct = find_and_add_external_skeleton (skel_struct, bone_palette_ids)
+                    vgmap = {'bone_{}'.format(bone_palette_ids[i]):i for i in range(len(bone_palette_ids))}
                     if all([y in [x['id'] for x in skel_struct] for y in bone_palette_ids]):
                         skel_index = {skel_struct[i]['id']:i for i in range(len(skel_struct))}
                         vgmap = {skel_struct[skel_index[bone_palette_ids[i]]]['name']:i for i in range(len(bone_palette_ids))}
