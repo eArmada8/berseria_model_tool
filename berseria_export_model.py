@@ -349,8 +349,8 @@ def read_mesh (main_f, idx_f, start_offset, flags):
                 main_f.seek(end_offset)
         weights = fix_weights(weights)
     elif flags & 0xF0 == 0x70:
-        num_unk, = struct.unpack("{}I".format(e), main_f.read(4)) # Dunno what this is, maybe shape morphs?
-        unk_list = list(struct.unpack("{}{}I".format(e, num_unk), main_f.read(4 * num_unk)))
+        num_unk = struct.unpack("{}2H".format(e), main_f.read(4)) # Dunno what this is, maybe shape morphs?
+        unk_list = list(struct.unpack("{}{}I".format(e, num_unk[0]), main_f.read(4 * num_unk[0])))
         vert_offset = main_f.tell()
         norm_offset = vert_offset + 12
         stride = 24
