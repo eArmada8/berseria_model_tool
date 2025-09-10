@@ -376,7 +376,7 @@ def read_mesh (main_f, idx_f, start_offset, flags):
             uv_maps.append(read_interleaved_floats (idx_f, 2, uv_stride, num_verts))
     elif flags & 0xF0 in [0x0, 0x40]:
         for i in range(num_uv_maps):
-            idx_f.seek(offset_uvs + 28)
+            idx_f.seek(offset_uvs + 28 + (i * 8))
             uv_maps.append(read_interleaved_floats (idx_f, 2, stride, num_verts))
     idx_f.seek(offset_idx)
     idx_buffer = list(struct.unpack("{}{}h".format(e, num_idx), idx_f.read(num_idx * 2)))
