@@ -726,6 +726,8 @@ def write_gltf(base_name, skel_struct, vgmap, mesh_blocks_info, meshes, material
     # Mesh nodes will be attached to the first node since in the original model, they don't really have a home
     node_id_list = [x['id'] for x in skel_struct]
     mesh_node_ids = {x['mesh']:x['name'] for x in mesh_blocks_info}
+    if not 'children' in gltf_data['nodes'][0]:
+        gltf_data['nodes'][0]['children'] = []
     for mesh_node_id in mesh_node_ids:
         if not mesh_node_id in node_id_list:
             g_node = {'name': mesh_node_ids[mesh_node_id]}
