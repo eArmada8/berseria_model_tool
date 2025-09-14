@@ -246,41 +246,71 @@ def find_and_add_external_skeleton (skel_struct, bone_palette_ids):
     else:
         return(skel_struct)
 
-def make_fmt(num_uvs, has_weights = True):
+def make_fmt(num_uvs, semantics_present = {'NORMAL': True, 'TANGENT': False, 'BINORMAL': False,
+        'COLOR': False, 'BLENDWEIGHTS': True, 'BLENDINDICES': True}):
     fmt = {'stride': '0', 'topology': 'trianglelist', 'format':\
         "DXGI_FORMAT_R16_UINT", 'elements': []}
     element_id, stride = 0, 0
     semantic_index = {'TEXCOORD': 0} # Counters for multiple indicies
     elements = []
-    for i in range(2 + num_uvs + (2 if has_weights else 0)):
+    for i in range(7 + num_uvs):
             # I think order matters in this dict, so we will define the entire structure with default values
             element = {'id': '{0}'.format(element_id), 'SemanticName': '', 'SemanticIndex': '0',\
                 'Format': '', 'InputSlot': '0', 'AlignedByteOffset': str(stride),\
                 'InputSlotClass': 'per-vertex', 'InstanceDataStepRate': '0'}
+            semantic_present = False
             if i == 0:
                 element['SemanticName'] = 'POSITION'
                 element['Format'] = 'R32G32B32_FLOAT'
+                element_id += 1
                 stride += 12
-            elif i == 1:
+                semantic_present = True
+            elif i == 1 and semantics_present['NORMAL']:
                 element['SemanticName'] = 'NORMAL'
                 element['Format'] = 'R32G32B32_FLOAT'
+                element_id += 1
                 stride += 12
-            elif i == 4+num_uvs-2:
+                semantic_present = True
+            elif i == 2 and semantics_present['TANGENT']:
+                element['SemanticName'] = 'TANGENT'
+                element['Format'] = 'R32G32B32_FLOAT'
+                element_id += 1
+                stride += 12
+                semantic_present = True
+            elif i == 3 and semantics_present['BINORMAL']:
+                element['SemanticName'] = 'BINORMAL'
+                element['Format'] = 'R32G32B32_FLOAT'
+                element_id += 1
+                stride += 12
+                semantic_present = True
+            elif i == 4 and semantics_present['COLOR']:
+                element['SemanticName'] = 'COLOR'
+                element['Format'] = 'R8G8B8A8_UNORM'
+                element_id += 1
+                stride += 4
+                semantic_present = True
+            elif i == 7+num_uvs-2 and semantics_present['BLENDWEIGHTS']:
                 element['SemanticName'] = 'BLENDWEIGHTS'
                 element['Format'] = 'R32G32B32A32_FLOAT'
+                element_id += 1
                 stride += 16
-            elif i == 4+num_uvs-1:
+                semantic_present = True
+            elif i == 7+num_uvs-1 and semantics_present['BLENDINDICES']:
                 element['SemanticName'] = 'BLENDINDICES'
                 element['Format'] = 'R8G8B8A8_UINT'
+                element_id += 1
                 stride += 4
-            else:
+                semantic_present = True
+            elif i > 4 and i < (5 + num_uvs):
                 element['SemanticName'] = 'TEXCOORD'
                 element['SemanticIndex'] = str(semantic_index['TEXCOORD'])
                 element['Format'] = 'R32G32_FLOAT'
                 semantic_index['TEXCOORD'] += 1
+                element_id += 1
                 stride += 8
-            element_id += 1
-            elements.append(element)
+                semantic_present = True
+            if semantic_present == True:
+                elements.append(element)
     fmt['stride'] = str(stride)
     fmt['elements'] = elements
     return(fmt)
@@ -302,6 +332,15 @@ def read_mesh (main_f, idx_f, start_offset, flags):
         padding = stride - (num)
         for i in range(total):
             vecs.append(read_bytes(f, num))
+            f.seek(padding, 1)
+        return(vecs)
+    def read_interleaved_ufloats (f, num, stride, total): # Unsigned normalized byte floats
+        vecs = []
+        padding = stride - (num)
+        float_max = ((2**8)-1)
+        for i in range(total):
+            vals = read_bytes(f, num)
+            vecs.append([x / float_max for x in vals])
             f.seek(padding, 1)
         return(vecs)
     def fix_weights (weights):
@@ -368,7 +407,26 @@ def read_mesh (main_f, idx_f, start_offset, flags):
         verts.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
         idx_f.seek(norm_offset)
         norms.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
-        #main_f.seek(20,1)
+    elif flags & 0xF0 == 0xC0:
+        tangents = []
+        binormals = []
+        colors = []
+        vert_offset = idx_f.seek(offset_uvs)
+        norm_offset = vert_offset + 12
+        tan_offset = norm_offset + 12
+        binorm_offset = tan_offset + 12
+        color_offset = binorm_offset + 12
+        stride = 52 + ((flags & 0xF) * 8) # 12 + 12 + 4 extra for UV padding
+        idx_f.seek(vert_offset)
+        verts.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
+        idx_f.seek(norm_offset)
+        norms.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
+        idx_f.seek(tan_offset)
+        tangents.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
+        idx_f.seek(binorm_offset)
+        binormals.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
+        idx_f.seek(color_offset)
+        colors.extend(read_interleaved_ufloats(idx_f, 4, stride, num_verts))
     uv_maps = []
     if flags & 0xF0 in [0x50, 0x70]:
         for i in range(num_uv_maps):
@@ -380,14 +438,22 @@ def read_mesh (main_f, idx_f, start_offset, flags):
             uv_maps.append(read_interleaved_floats (idx_f, 2, stride, num_verts))
     idx_f.seek(offset_idx)
     idx_buffer = list(struct.unpack("{}{}h".format(e, num_idx), idx_f.read(num_idx * 2)))
-    fmt = make_fmt(len(uv_maps), True)
+    if not flags & 0xF0 in [0xC0]:
+        fmt = make_fmt(len(uv_maps))
+    elif flags & 0xF0 == 0xC0:
+        fmt = make_fmt(len(uv_maps), semantics_present = {'NORMAL': True, 'TANGENT': True, 'BINORMAL': True,
+            'COLOR': True, 'BLENDWEIGHTS': True, 'BLENDINDICES': True})
     vb = [{'Buffer': verts}, {'Buffer': norms}]
+    if flags & 0xF0 == 0xC0:
+        vb.append({'Buffer': tangents})
+        vb.append({'Buffer': binormals})
+        vb.append({'Buffer': colors})
     for uv_map in uv_maps:
         vb.append({'Buffer': uv_map})
     if flags & 0xF0 == 0x50:
         vb.append({'Buffer': weights})
         vb.append({'Buffer': blend_idx})
-    elif flags & 0xF0 in [0x0, 0x40, 0x70]:
+    elif flags & 0xF0 in [0x0, 0x40, 0x70, 0xC0]:
         vb.append({'Buffer': [[1.0, 0.0, 0.0, 0.0] for _ in range(len(verts))]})
         vb.append({'Buffer': [[0, 0, 0, 0] for _ in range(len(verts))]})
     return({'fmt': fmt, 'vb': vb, 'ib': trianglestrip_to_list(idx_buffer)})
