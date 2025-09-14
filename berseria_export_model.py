@@ -605,8 +605,8 @@ def fix_strides(submesh):
         offset += submesh['vb'][i]['stride']
     return(submesh)
 
-def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_struct,\
-        opening_dict, overwrite = False, write_raw_buffers = True, write_binary_gltf = True):
+def write_gltf(base_name, skel_struct, vgmap, mesh_blocks_info, meshes, material_struct,\
+        overwrite = False, write_binary_gltf = True):
     gltf_data = {}
     gltf_data['asset'] = { 'version': '2.0' }
     gltf_data['accessors'] = []
@@ -675,17 +675,7 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
         inv_mtx_buffer = b''.join([struct.pack("<16f", *x) for x in ibms])
     except ValueError:
         skinning_possible = False
-    base_name = dlb_file.split('.TOMDLB_D')[0]
     # Meshes
-    if write_raw_buffers == True:
-        overwrite_buffers = copy.deepcopy(overwrite)
-        if os.path.exists(base_name) and (os.path.isdir(base_name)) and (overwrite_buffers == False):
-            if str(input(base_name + " folder exists! Overwrite? (y/N) ")).lower()[0:1] == 'y':
-                overwrite_buffers = True
-        if (overwrite_buffers == True) or not os.path.exists(base_name):
-            if not os.path.exists(base_name):
-                os.mkdir(base_name)
-            overwrite_buffers = True
     for mesh in mesh_block_tree: #Mesh
         primitives = []
         for j in range(len(mesh_block_tree[mesh])): #Submesh
@@ -744,13 +734,6 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
             del(ib_stream)
             primitive["mode"] = 4 #TRIANGLES
             primitive["material"] = mesh_blocks_info[i]['material']
-            if write_raw_buffers == True and overwrite_buffers == True:
-                filename = '{0:02d}_{1}'.format(i, mesh_node_ids[mesh])
-                write_fmt(meshes[i]['fmt'], '{0}/{1}.fmt'.format(base_name, filename))
-                write_ib(meshes[i]['ib'], '{0}/{1}.ib'.format(base_name, filename), meshes[i]['fmt'])
-                write_vb(meshes[i]['vb'], '{0}/{1}.vb'.format(base_name, filename), meshes[i]['fmt'])
-                with open("{0}/{1}.vgmap".format(base_name, filename), 'wb') as ff:
-                    ff.write(json.dumps(vgmap, indent=4).encode('utf-8'))
             primitives.append(primitive)
         if len(primitives) > 0:
             if mesh_node_ids[mesh] in node_list: # One of the new nodes
@@ -772,19 +755,6 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
                     "byteOffset": len(giant_buffer),\
                     "byteLength": len(inv_mtx_buffer)})
                 giant_buffer += inv_mtx_buffer
-    # Write modding metadata
-    if write_raw_buffers == True and overwrite_buffers == True:
-        mesh_struct = [{y:x[y] for y in x if not any(
-            ['offset' in y, 'size' in y])} for x in mesh_blocks_info]
-        for i in range(len(mesh_struct)):
-            mesh_struct[i]['material'] = material_struct[mesh_struct[i]['material']]['name']
-        mesh_struct = [{'id_referenceonly': i, **mesh_struct[i]} for i in range(len(mesh_struct))]
-        with open("{0}/mesh_info.json".format(base_name), 'wb') as ff:
-            ff.write(json.dumps(mesh_struct, indent=4).encode('utf-8'))
-        with open("{0}/material_info.json".format(base_name), 'wb') as ff:
-            ff.write(json.dumps(material_struct, indent=4).encode('utf-8'))
-        with open("{0}/linked_files.json".format(base_name), 'wb') as ff:
-            ff.write(json.dumps(opening_dict, indent=4).encode('utf-8'))
     # Write GLB
     gltf_data['buffers'].append({"byteLength": len(giant_buffer)})
     if (os.path.exists(base_name + '.gltf') or os.path.exists(base_name + '.glb')) and (overwrite == False):
@@ -809,6 +779,7 @@ def write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_
 
 def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_binary_gltf = True):
     print("Processing {}...".format(dlb_file))
+    base_name = dlb_file.split('.TOMDLB_D')[0]
     with open(dlb_file, 'rb') as f:
         magic = f.read(4)
         if magic in [b'DPDF', b'FDPD']:
@@ -838,8 +809,31 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                         skel_index = {skel_struct[i]['id']:i for i in range(len(skel_struct))}
                         vgmap = {skel_struct[skel_index[bone_palette_ids[i]]]['name']:i for i in range(len(bone_palette_ids))}
                     material_struct = read_section_7(f, toc[7])
-                    write_gltf(dlb_file, skel_struct, vgmap, mesh_blocks_info, meshes, material_struct, opening_dict,\
-                        overwrite = overwrite, write_raw_buffers = write_raw_buffers, write_binary_gltf = write_binary_gltf)
+                    gltf_overwrite = copy.deepcopy(overwrite)
+                    if write_raw_buffers == True:
+                        if os.path.exists(base_name) and (os.path.isdir(base_name)) and (overwrite == False):
+                            if str(input(base_name + " folder exists! Overwrite? (y/N) ")).lower()[0:1] == 'y':
+                                overwrite = True
+                        if (overwrite == True) or not os.path.exists(base_name):
+                            if not os.path.exists(base_name):
+                                os.mkdir(base_name)
+                            for i in range(len(meshes)):
+                                filename = '{0:02d}_{1}'.format(i, mesh_blocks_info[i]['name'])
+                                write_fmt(meshes[i]['fmt'], '{0}/{1}.fmt'.format(base_name, filename))
+                                write_ib(meshes[i]['ib'], '{0}/{1}.ib'.format(base_name, filename), meshes[i]['fmt'], '<')
+                                write_vb(meshes[i]['vb'], '{0}/{1}.vb'.format(base_name, filename), meshes[i]['fmt'], '<')
+                                open('{0}/{1}.vgmap'.format(base_name, filename), 'wb').write(json.dumps(vgmap,indent=4).encode())
+                            mesh_struct = [{y:x[y] for y in x if not any(
+                                ['offset' in y, 'num' in y])} for x in mesh_blocks_info]
+                            for i in range(len(mesh_struct)):
+                                mesh_struct[i]['material'] = material_struct[mesh_struct[i]['material']]['name']
+                            mesh_struct = [{'id_referenceonly': i, **mesh_struct[i]} for i in range(len(mesh_struct))]
+                            write_struct_to_json(mesh_struct, base_name + '/mesh_info')
+                            write_struct_to_json(material_struct, base_name + '/material_info')
+                            write_struct_to_json(opening_dict, base_name + '/linked_files')
+                            #write_struct_to_json(skel_struct, base_name + '/skeleton_info')
+                    write_gltf(base_name, skel_struct, vgmap, mesh_blocks_info, meshes, material_struct,\
+                        overwrite = gltf_overwrite, write_binary_gltf = write_binary_gltf)
                 else:
                     print("Skipping {0} as {1} not present...".format(dlb_file, dlp_file))
     return
