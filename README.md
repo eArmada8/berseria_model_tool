@@ -20,6 +20,8 @@ I am as always very thankful for the dedicated reverse engineers at the Kiseki m
 ### berseria_export_model.py
 Double click the python script and it will search the current folder for all .TOMDLB_D files that are not skeletons (`BONE` is not in the name) and with its corresponding .TOMDLP_P file.  Additionally, it will output 3 JSON files, one with metadata from the mesh section, one with the data from the materials section, and (for convenience) a list of linked files (*e.g.* textures) used by the MDL.
 
+*Note:* When used without command line arguments, the script will attempt to combine all models into a single .glb - editing the configuration variable `combine_models_into_single_gltf` at the top of the script will revert the script to processing models sequentially and outputting one .glb per model.  Raw buffers are still separated by model for game modding.
+
 Additionally it will output a glTF file, by default in the binary .glb format.  Textures should be placed in a `textures` folder.
 
 *NOTE: The export script supports both 64-bit and 32-bit addressing, as well as little endian (PC) and big endian (PS3) encoded assets.  The import script supports both 64-bit and 32-bit addressing, but only little endian (PC) encoding.*
