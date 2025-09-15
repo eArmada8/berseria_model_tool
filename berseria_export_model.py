@@ -590,7 +590,6 @@ def read_section_7 (f, offset):
             if material['alpha'] == -1:
                 del(material['alpha'])
             if len(material['unk_parameters']['set_2_unk_1'][1]) == 0:
-                print("hi")
                 material['unk_parameters']['set_2_unk_1'].pop(1)
             material_struct.append(material)
     return(material_struct)
