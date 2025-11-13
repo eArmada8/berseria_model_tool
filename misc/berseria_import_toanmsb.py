@@ -20,6 +20,7 @@ except ModuleNotFoundError as e:
 # Global variable, do not edit
 addr_size = 8
 e = '<'
+file_version = 1
 
 def write_offset (header_size, header_block, data_block):
     offset = header_size - len(header_block) + len(data_block)
@@ -28,7 +29,7 @@ def write_offset (header_size, header_block, data_block):
 
 def create_toanmsb (anim_data):
     header_size = (12 + (4 if addr_size == 8 else 0) +
-                   (addr_size * 5) + (20 if addr_size == 8 else 0))
+                   (addr_size * 5) + ((addr_size * 2 + 4) if file_version == 1 else 0))
     data_block = bytearray()
     header_block = bytearray(struct.pack("{}I2f".format(e), *anim_data['header'][:3]))
     if addr_size == 8:
@@ -39,15 +40,15 @@ def create_toanmsb (anim_data):
     header_block.extend(bytearray(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), count1b)))
     data_block.extend(struct.pack("{}{}{}".format(e, (count1b), {4: "I", 8: "Q"}[addr_size]), *anim_data['hash_table']))
     temp_block = bytearray()
-    if addr_size == 8:
-        temp_block.extend(struct.pack("{}I".format(e), 0)) # 64-bit alignment
+    if file_version == 1:
+        temp_block.extend(struct.pack("{}I".format(e), 0)) # Dunno
     for i in range(count1a):
         temp_block.extend(struct.pack("{}Q2I".format(e), *anim_data['target_table'][i]))
     write_offset(len(data_block) + addr_size, data_block, temp_block) #offset2b
     data_block.extend(temp_block)
     write_offset(header_size, header_block, data_block) #offset2
     header_block.extend(bytearray(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), count2)))
-    if addr_size == 8:
+    if file_version == 1:
         header_block.extend(struct.pack("{}2{}f".format(e, {4: "I", 8: "Q"}[addr_size]), *anim_data['header2']))
     header_block.extend(data_block)
     data_block = bytearray()
@@ -104,12 +105,15 @@ def create_toanmsb (anim_data):
     return(new_file)
 
 def write_toanmsb (anim_json_file, overwrite = False):
-    global addr_size, e
+    global addr_size, e, file_version
     try:
         anim_data = json.loads(open(anim_json_file,'rb').read())
-        assert anim_data['file_type']['address_size'] in [4,8] and anim_data['file_type']['endianness'] in ['<','>']
+        assert anim_data['file_type']['address_size'] in [4,8] 
         addr_size = anim_data['file_type']['address_size']
+        assert anim_data['file_type']['endianness'] in ['<','>']
         e = anim_data['file_type']['endianness']
+        assert anim_data['file_type']['version'] in [0,1]
+        file_version = anim_data['file_type']['version']
     except:
         input("File {} is not present or readable!  Press Enter to skip.".format(anim_json_file))
         return False

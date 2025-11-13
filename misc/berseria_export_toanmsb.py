@@ -20,6 +20,7 @@ except ModuleNotFoundError as e:
 # Global variable, do not edit
 addr_size = 8
 e = '<'
+file_version = 1
 
 def set_address_size (size):
     global addr_size
@@ -33,28 +34,37 @@ def set_endianness (endianness):
         e = endianness
     return
 
+def set_file_version (version):
+    global file_version
+    if version in [0,1]:
+        file_version = version
+    return
+
 def read_offset (f):
     start_offset = f.tell()
     diff_offset, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
     return(start_offset + diff_offset)
 
 def read_tosamsb (animbin_file):
-    global addr_size, e
+    global addr_size, e, file_version
     data = {}
     with open(animbin_file, 'rb') as f:
         print("Processing {}...".format(animbin_file))
         explore = struct.unpack("<4I", f.read(16))
-        if explore[0] == 0 and explore[1] > 0:
+        if explore[1] > 0:
             if explore[1] < 0x10000000:
                 set_endianness('>')
             if explore[3] > 0:
-                set_address_size(4) # Zestiria
+                set_address_size(4)
         f.seek(0)
         data['file_type'] = {'address_size': addr_size, 'endianness': e}
         data['header'] = list(struct.unpack("{}I2f".format(e), f.read(12)))
         if addr_size == 8:
             data['header'].append(struct.unpack("{}I".format(e), f.read(4))[0]) # Probably 64-bit alignment
         offset1 = read_offset(f) # Offset to the first data block (tables)
+        if offset1 == 0x20:
+            set_file_version(0)
+        data['file_type']['version'] = file_version
         count1a, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size)) # Number of data blocks
         count1b, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size)) # Number of hashes
         if count1a == 0:
@@ -62,18 +72,18 @@ def read_tosamsb (animbin_file):
             return
         offset2 = read_offset(f) # Offset to the second data block (actual animation data)
         count2, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size)) # Number of data blocks, same as count1a
-        if addr_size == 8:
+        if file_version == 1:
             data['header2'] = struct.unpack("{}2{}f".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size * 2 + 4)) # Berseria only??
         try:
-            assert offset1 + ((count1b + 1) * addr_size) + (count1a * 16) + (4 if addr_size == 8 else 0) == offset2
+            assert offset1 + ((count1b + 1) * addr_size) + (count1a * 16) + (4 if file_version == 1 else 0) == offset2
         except AssertionError:
             print("Error, {} not in the expected binary format!  Skipping...".format(animbin_file))
             return
         # Hash table
         data['hash_table'] = struct.unpack("{}{}{}".format(e, (count1b), {4: "I", 8: "Q"}[addr_size]), f.read(addr_size * (count1b)))
         offset2b = read_offset(f) # same as offset2
-        if addr_size == 8:
-            f.seek(4,1) # 64-bit alignment
+        if file_version == 1:
+            f.seek(4,1) # Dunno
         # Animation target data
         data['target_table'] = []
         for _ in range(count1a):
