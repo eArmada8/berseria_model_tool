@@ -12,7 +12,7 @@ I am as always very thankful for the dedicated reverse engineers at the Kiseki m
 
 ## Requirements:
 1. Python 3.10 and newer is required for use of these scripts.  It is free from the Microsoft Store or python.org, for Windows users.  For Linux users, please consult your distro.
-2. The numpy module for python is needed.  Install by typing "python3 -m pip install numpy" in the command line / shell.  (The struct, json, glob, copy, os, sys, and argparse modules are also required, but these are all already included in most basic python installations.)
+2. The numpy and pyquaternion modules for python are needed.  Install by typing "python3 -m pip install numpy pyquaternion" in the command line / shell.  (The struct, json, math, glob, copy, os, sys, and argparse modules are also required, but these are all already included in most basic python installations.)
 3. The output can be imported into Blender using DarkStarSword's amazing plugin: https://github.com/DarkStarSword/3d-fixes/blob/master/blender_3dmigoto.py (tested on commit [5fd206c](https://raw.githubusercontent.com/DarkStarSword/3d-fixes/5fd206c52fb8c510727d1d3e4caeb95dac807fb2/blender_3dmigoto.py))
 4. berseria_export_model.py is dependent on lib_fmtibvb.py, which must be in the same folder.  berseria_import_model.py is dependent on berseria_export_model.py, lib_fmtibvb.py and the pyffi_tstrip module, all of which must be in the same folder.
 
