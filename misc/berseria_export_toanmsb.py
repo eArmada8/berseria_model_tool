@@ -80,14 +80,19 @@ def read_tosamsb (animbin_file):
             print("Error, {} not in the expected binary format!  Skipping...".format(animbin_file))
             return
         # Hash table
-        data['hash_table'] = struct.unpack("{}{}{}".format(e, (count1b), {4: "I", 8: "Q"}[addr_size]), f.read(addr_size * (count1b)))
+        data['hash_table'] = [] # Will be rebuilt when offsets known
+        temp_hash_table = [read_offset(f) for _ in range(count1b)]
         offset2b = read_offset(f) # same as offset2
         if file_version == 1:
             f.seek(4,1) # Dunno
         # Animation target data
         data['target_table'] = []
+        target_indices = {}
         for _ in range(count1a):
+            target_indices[f.tell()] = len(target_indices)
             data['target_table'].append(struct.unpack("{}Q2I".format(e), f.read(16)))
+        target_indices[f.tell()] = len(target_indices)
+        data['hash_table'] = [target_indices[x] for x in temp_hash_table]
         try:
             assert f.tell() == offset2 == offset2b
         except AssertionError:

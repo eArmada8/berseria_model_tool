@@ -38,7 +38,14 @@ def create_toanmsb (anim_data):
     count1a, count1b, count2 = len(anim_data['target_table']), len(anim_data['hash_table']), len(anim_data['data_stream'])
     header_block.extend(bytearray(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), count1a)))
     header_block.extend(bytearray(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), count1b)))
-    data_block.extend(struct.pack("{}{}{}".format(e, (count1b), {4: "I", 8: "Q"}[addr_size]), *anim_data['hash_table']))
+    try:
+        assert max(anim_data['hash_table']) < count1a + 1
+    except:
+        input("Invalid hashes!  Press Enter to quit.")
+        raise
+    offset_table = [((count1b - i) * addr_size) + (anim_data['hash_table'][i] * 16) + addr_size
+        + (4 if file_version == 1 else 0) for i in range(len(anim_data['hash_table']))]
+    data_block.extend(struct.pack("{}{}{}".format(e, (count1b), {4: "I", 8: "Q"}[addr_size]), *offset_table))
     temp_block = bytearray()
     if file_version == 1:
         temp_block.extend(struct.pack("{}I".format(e), 0)) # Dunno
