@@ -41,6 +41,28 @@ Shows help message.
 `-o, --overwrite`
 Overwrite existing files without prompting.
 
+### berseria_export_animation.py
+Double click the python script to run and it will attempt to convert the TOANMB animation into glTF (in .glb format).  The glb files can be directly imported into Blender, but Bone Dir must be set to "Blender (best for re-importing)" upon import or the skeleton will be altered irreversibly, preventing the animation from being linked to a model.  (The model should also use the same Bone Dir setting.)  This tool only supports translation, rotation and scale animation channels.  *If you run this tool on an animation that exclusively utilizes the shader varying or uv scrolling channels, you will end up with an empty .glb.  You can examine the unsupported channels in json format using the --dumpanidata command.*
+
+*NOTE: A compatible skeleton file must be in the folder.  The script will only export animation channels targeted to the skeletal nodes.  You can still use the --dumpanidata command without a skeleton.*
+
+It will search the current folder for TOANMB/TOANMSB files and convert them all, unless you use command line options.
+
+**Command line arguments:**
+`berseria_export_animation.py [-h] [-o] [-t] [-d] animbin_file`
+
+`-h, --help`
+Shows help message.
+
+`-o, --overwrite`
+Overwrite existing files without prompting.
+
+`-t, --textformat`
+Output .gltf/.bin format instead of .glb format.
+
+`-d, --dumpanidata`
+Dump all animation data (including unused channels and unknown channel types) and the skeleton into .json files.
+
 ### berseria_import_model.py
 Double click the python script and it will search the current folder for all .TOMDLB_D / .TOMDLP_P files with exported folders, and import the meshes in the folder back into the .TOMDLB_D / .TOMDLP_P files.  Additionally, it will parse the 2 JSON files (mesh metadata, materials) if available and use that information to rebuild the mesh and materials sections.  This script requires a working .TOMDLB_D file already be present as it does not reconstruct the entire file; only the known relevant sections.  The remaining parts of the file (including the skeleton) are copied unaltered from the intact .TOMDLB_D file.
 
