@@ -598,8 +598,21 @@ def read_section_7 (f, offset):
             material_struct.append(material)
     return(material_struct)
 
-#Dunno, offset should be toc[11].
-def read_section_11 (f, offset):
+#Something to do with animation, offset should be toc[11]. By default the data is not decoded (unneeded).
+def read_section_11 (f, offset, decode_data = False):
+    def decode_target_flag (flag):
+        return({'type': flag & 0xFFFFFFFF, 'target': flag >> 32 & 0xFFFF, 'unknown': flag >> 48})
+    def decode_block_11 (data1, data2):
+        decoded = [decode_target_flag(x) for x in data1]
+        count = 0
+        for i in range(len(decoded)):
+            vec_len = decoded[i]['type'] & 0x7
+            decoded[i]['vector'] = []
+            for _ in range(vec_len):
+                decoded[i]['vector'].append(data2[count])
+                count += 1
+            decoded[i]
+        return(decoded)
     f.seek(offset)
     offset1 = read_offset(f)
     count1, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
@@ -609,7 +622,10 @@ def read_section_11 (f, offset):
     # data1 does not look like u64, except when looking at endianness, dunno why
     data1 = [struct.unpack("{}Q".format(e), f.read(8))[0] for _ in range(count1)]
     data2 = [struct.unpack("{}f".format(e), f.read(4))[0] for _ in range(count2)]
-    return([data1, data2])
+    if decode_data == True:
+        return(decode_block_11(data1, data2))
+    else:
+        return([data1, data2])
 
 def convert_format_for_gltf(dxgi_format):
     dxgi_format = dxgi_format.split('DXGI_FORMAT_')[-1]
