@@ -467,8 +467,8 @@ def read_generic_int_section (f, offset, length):
     f.seek(offset)
     return(list(struct.unpack("{}{}I".format(e, length // 4), f.read(length))))
 
-#Dunno, offset should be toc[4].
-def read_section_4 (f, offset):
+#Physics parameters, offset should be toc[4].
+def read_section_4 (f, offset, decode_data = False):
     f.seek(offset)
     section_4_unk = struct.unpack("{}2I".format(e), f.read(8))
     counts = struct.unpack("{}2H".format(e), f.read(4))
@@ -477,7 +477,17 @@ def read_section_4 (f, offset):
     offset = read_offset(f)
     count, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
     data = [list(struct.unpack("{}4h25f".format(e), f.read(0x6c))) for _ in range(count)]
-    return(data)
+    if decode_data == True:
+        decoded = []
+        for i in range(len(data)):
+            decoded.append({'flag': data[i][0], 'target_node': data[i][1], 'group': data[i][2], 'unk_correction': data[i][3],
+                'elasticity_x': data[i][4], 'elasticity_y': data[i][5], 'air_resist': data[i][6], 'gravity': data[i][7],
+                'weight': data[i][8], 'friction': data[i][9], 'size_of_collision': data[i][10], 'unk0': data[i][11],
+                'unk1': data[i][12], 'unk2': data[i][13], 'unk3': data[i][14], 'maybe_wind': data[i][15],
+                'child_pos': data[i][16:19], 'child_len': data[i][19], 'dynamic_mtx': data[i][20:29]})
+        return(decoded)
+    else:
+        return(data)
 
 #Dunno, offset should be toc[5].
 def read_section_5 (f, offset):
