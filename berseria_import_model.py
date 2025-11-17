@@ -153,7 +153,7 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
     sec_1_data = bytearray()
     uvidx_data = bytearray()
     for i in range(len(mesh_blocks_info)):
-        safe_filename = "".join([x if x not in "\/:*?<>|" else "_" for x in mesh_blocks_info[i]["name"]])
+        safe_filename = "".join([x if x not in "\\/:*?<>|" else "_" for x in mesh_blocks_info[i]["name"]])
         num_uvs = (mesh_blocks_info[i]["flags"] & 0xF)
         try:
             mesh_filename = tomdlb_file[:-9] + '/{0:02d}_{1}'.format(i, safe_filename)
