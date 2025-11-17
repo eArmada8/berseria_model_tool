@@ -418,7 +418,11 @@ def process_tosamsb (animbin_file, overwrite = False, write_glb = True, dump_ext
     ani_data = read_tosamsb (animbin_file)
     if dump_extra_animation_data == True:
         open(basename + "_ani_data.json", 'wb').write(json.dumps(ani_data, indent = 4).encode())
-    skel_struct = combine_skeletons (find_primary_skeleton([]),[])
+    try:
+        skel_struct = combine_skeletons (find_primary_skeleton([]),[])
+    except FileNotFoundError:
+        input("No compatible skeleton file found!  Press Enter to quit.")
+        raise
     if (os.path.exists(basename + '.gltf') or os.path.exists(basename + '.glb')) and (overwrite == False):
         if str(input(basename + ".glb/.gltf exists! Overwrite? (y/N) ")).lower()[0:1] == 'y':
             overwrite = True
