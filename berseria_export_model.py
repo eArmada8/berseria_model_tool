@@ -489,16 +489,24 @@ def read_section_4 (f, offset, decode_data = False):
     else:
         return(data)
 
-#Dunno, offset should be toc[5].
-def read_section_5 (f, offset):
+#Collision meshes, offset should be toc[5].
+def read_section_5 (f, offset, decode_data = False):
     f.seek(offset)
     offset1 = read_offset(f)
     count1, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
     offset2 = read_offset(f)
     count2, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
-    data1 = [list(struct.unpack("{}I6f2I".format(e), f.read(36))) for _ in range(count1)]
+    data1 = [list(struct.unpack("{}2H6f2I".format(e), f.read(36))) for _ in range(count1)]
     data2 = [list(struct.unpack("{}9f".format(e), f.read(36))) for _ in range(count2)]
-    return([data1, data2])
+    if decode_data == True:
+        triangles = [[x[0:3], x[3:6], x[6:9]] for x in data2]
+        decoded = []
+        for i in range(len(data1)):
+            decoded.append({'unk': data1[i][0], 'group': data1[i][1], 'min': data1[i][2:5], 'max': data1[i][5:8],
+                'index': data1[i][8], 'num_triangles': data1[i][9], 'triangles': triangles[data1[i][8]:data1[i][8]+data1[i][9]]})
+        return(decoded)
+    else:
+        return([data1, data2])
 
 #Meshes, offset should be toc[6].  Requires dlp filename for uv's and index buffer.
 def read_section_6 (f, offset, dlp_file):

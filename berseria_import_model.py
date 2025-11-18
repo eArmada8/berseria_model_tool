@@ -122,7 +122,7 @@ def create_section_5 (raw_sec5_struct):
         data = bytearray()
         for j in range(len(raw_sec5_struct[i])):
             if i == 0:
-                data.extend(struct.pack("{}I6f2I".format(e), *raw_sec5_struct[i][j]))
+                data.extend(struct.pack("{}2H6f2I".format(e), *raw_sec5_struct[i][j]))
             else:
                 data.extend(struct.pack("{}9f".format(e), *raw_sec5_struct[i][j]))
         if count > 0:
