@@ -502,7 +502,7 @@ def read_section_5 (f, offset, decode_data = False):
         triangles = [[x[0:3], x[3:6], x[6:9]] for x in data2]
         decoded = []
         for i in range(len(data1)):
-            decoded.append({'unk': data1[i][0], 'group': data1[i][1], 'min': data1[i][2:5], 'max': data1[i][5:8],
+            decoded.append({'target_node': data1[i][0], 'group': data1[i][1], 'min': data1[i][2:5], 'max': data1[i][5:8],
                 'index': data1[i][8], 'num_triangles': data1[i][9], 'triangles': triangles[data1[i][8]:data1[i][8]+data1[i][9]]})
         return(decoded)
     else:
