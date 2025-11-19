@@ -553,7 +553,7 @@ def read_section_7 (f, offset):
     set_0 = [] # Materials, including the indices that map to set_1 (textures)
     for i in range(section_7_toc[0]['num_entries']):
         f.seek(section_7_toc[0]['offset'] + (i * (4 * addr_size + 0x18)))
-        values = struct.unpack("{}12h".format(e), f.read(24))
+        values = struct.unpack("{}I10h".format(e), f.read(24))
         offset1 = read_offset(f)
         num_vals1, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         offset2 = read_offset(f)
@@ -602,10 +602,10 @@ def read_section_7 (f, offset):
     if len(set_0) == len(set_2):
         for i in range(len(set_0)):
             material = {'name': set_2[i]['name']}
-            material['textures'] = [set_6[set_1[set_0[i]['base'][6]+j][1]]['tex_name'] for j in range(set_0[i]['base'][4])]
+            material['textures'] = [set_6[set_1[set_0[i]['base'][5]+j][1]]['tex_name'] for j in range(set_0[i]['base'][3])]
             material['alpha'] = set_2[i]['vals2'][3] if len(set_2[i]['vals2']) > 3 else -1 # Unsigned so never -1
             material['internal_id'] = set_0[i]['base'][0]
-            material['unk_parameters'] = {'set_0_base': [set_0[i]['base'][1:4], [set_0[i]['base'][5]], set_0[i]['base'][7:]],
+            material['unk_parameters'] = {'set_0_base': [set_0[i]['base'][1:3], [set_0[i]['base'][4]], set_0[i]['base'][6:]],
                 'set_0_unk_0': set_0[i]['vals1'], 'set_0_unk_1': set_0[i]['vals2'], 'set_2_unk_0': set_2[i]['vals1'],
                 'set_2_unk_1': [set_2[i]['vals2'][0:3], set_2[i]['vals2'][4:]]}
             # Some materials have very short set_2, remove extraneous empty values so import script will not add extra values

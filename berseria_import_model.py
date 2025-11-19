@@ -303,7 +303,7 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
     set_0_header = bytearray()
     set_0_data = bytearray()
     for i in range(len(material_struct)):
-        set_0_header.extend(struct.pack("{}12h".format(e), *set_0_base[i]))
+        set_0_header.extend(struct.pack("{}I10h".format(e), *set_0_base[i]))
         offset = set_0_header_len - len(set_0_header) + len(set_0_data)
         set_0_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset, len(material_struct[i]['unk_parameters']['set_0_unk_0'])))
         set_0_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['unk_parameters']['set_0_unk_0'])),
