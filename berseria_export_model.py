@@ -550,7 +550,7 @@ def read_section_7 (f, offset):
         offset = read_offset(f)
         num_entries, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         section_7_toc.append({'offset': offset, 'num_entries': num_entries})
-    set_0_names = ['id','mat_variation_flags','mat_alpha_flags','num_uv','ani_mat_id','tex0',
+    set_0_names = ['material_id','mat_variation_flags','mat_alpha_flags','num_uv','ani_mat_id','tex0',
         'shader','render_type','unk0','unk1','unk2']
     set_0_params = ['fog','shadow_target','projection_target','local_z_pass','water_reflect',
         'flow','stencil_order','outline','highlight_target', 'invisible']
@@ -615,8 +615,6 @@ def read_section_7 (f, offset):
         for i in range(len(set_0)):
             material = {'name': set_2[i]['name']}
             material['textures'] = [set_6[set_1[set_0[i]['base']['tex0']+j][1]]['tex_name'] for j in range(set_0[i]['base']['num_uv'])]
-            material['alpha'] = set_0[i]['base']['mat_alpha_flags']
-            material['internal_id'] = set_0[i]['base']['id']
             material['parameters'] = {'mat_info': set_0[i]['base'],
                 'mat_params': set_0[i]['vals1'], 'shader_params': set_0[i]['vals2'], 'set_2_unk_0': set_2[i]['vals1'],
                 'set_2_unk_1': set_2[i]['vals2']}
@@ -736,7 +734,7 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
     # Materials
     material_dict = [{'name': material_struct[i]['name'],
         'texture': material_struct[i]['textures'][0] if len(material_struct[i]['textures']) > 0 else '',
-        'alpha': material_struct[i]['alpha']}
+        'alpha': material_struct[i]['parameters']['mat_info']['mat_alpha_flags']}
         for i in range(len(material_struct))]
     texture_list = sorted(list(set([x['texture'] for x in material_dict if not x['texture'] == ''])))
     gltf_data['images'] = [{'uri':'textures/{}.dds'.format(x)} for x in texture_list]
