@@ -284,20 +284,11 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
     set_1 = []
     set_2_val2 = []
     for i in range(len(material_struct)):
-        set_0_base.append([material_struct[i]['internal_id']] +
-            material_struct[i]['unk_parameters']['set_0_base'][0] +
-            [len(material_struct[i]['textures'])] +
-            material_struct[i]['unk_parameters']['set_0_base'][1] +
-            [tex_counter] +
-            material_struct[i]['unk_parameters']['set_0_base'][2])
+        s0vals = list(material_struct[i]['parameters']['mat_info'].values())
+        s0vals[3], s0vals[5] = len(material_struct[i]['textures']), tex_counter
+        set_0_base.append(s0vals)
         tex_counter += len(material_struct[i]['textures'])
         set_1.extend([[0, tex_dict[x], 0] for x in material_struct[i]['textures']])
-        val2 = material_struct[i]['unk_parameters']['set_2_unk_1'][0]
-        if 'alpha' in material_struct[i]:
-            val2.append(material_struct[i]['alpha'])
-        if len(material_struct[i]['unk_parameters']['set_2_unk_1']) > 1:
-            val2.extend(material_struct[i]['unk_parameters']['set_2_unk_1'][1])
-        set_2_val2.append(val2)
     # Build section 0 (Material parameters?)
     set_0_header_len = (addr_size * 4 + 0x18)  * len(material_struct)
     set_0_header = bytearray()
@@ -305,17 +296,17 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
     for i in range(len(material_struct)):
         set_0_header.extend(struct.pack("{}I10h".format(e), *set_0_base[i]))
         offset = set_0_header_len - len(set_0_header) + len(set_0_data)
-        set_0_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset, len(material_struct[i]['unk_parameters']['set_0_unk_0'])))
-        set_0_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['unk_parameters']['set_0_unk_0'])),
-            *material_struct[i]['unk_parameters']['set_0_unk_0']))
+        set_0_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset, len(material_struct[i]['parameters']['mat_params'])))
+        set_0_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['parameters']['mat_params'])),
+            *list(material_struct[i]['parameters']['mat_params'].values())))
         offset = set_0_header_len - len(set_0_header) + len(set_0_data)
-        set_0_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset, len(material_struct[i]['unk_parameters']['set_0_unk_1'])))
-        if len(material_struct[i]['unk_parameters']['set_0_unk_1']) == 0x17:
-            set_0_data.extend(struct.pack("{}8I4f4If6I".format(e, len(material_struct[i]['unk_parameters']['set_0_unk_1'])),
-                *material_struct[i]['unk_parameters']['set_0_unk_1']))
+        set_0_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset, len(material_struct[i]['parameters']['shader_params'])))
+        if len(material_struct[i]['parameters']['shader_params']) == 0x17:
+            set_0_data.extend(struct.pack("{}8I4f4If6I".format(e, len(material_struct[i]['parameters']['shader_params'])),
+                *list(material_struct[i]['parameters']['shader_params'].values())))
         else:
-            set_0_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['unk_parameters']['set_0_unk_1'])),
-                *material_struct[i]['unk_parameters']['set_0_unk_1']))
+            set_0_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['parameters']['shader_params'])),
+                *list(material_struct[i]['parameters']['shader_params'].values())))
     set_0_block = set_0_header + set_0_data
     # Build section 1 (Texture Pointers)
     set_1_block = bytearray()
@@ -329,12 +320,14 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
     set_2_data = bytearray()
     for i in range(len(material_struct)):
         offset = set_2_header_len - len(set_2_header) + len(set_2_data)
-        set_2_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset, len(material_struct[i]['unk_parameters']['set_2_unk_0'])))
-        set_2_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['unk_parameters']['set_2_unk_0'])),
-            *material_struct[i]['unk_parameters']['set_2_unk_0']))
+        set_2_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset, len(material_struct[i]['parameters']['set_2_unk_0'])))
+        set_2_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['parameters']['set_2_unk_0'])),
+            *material_struct[i]['parameters']['set_2_unk_0']))
         offset = set_2_header_len - len(set_2_header) + len(set_2_data)
-        set_2_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset, len(set_2_val2[i])))
-        set_2_data.extend(struct.pack("{}{}I".format(e, len(set_2_val2[i])), *set_2_val2[i]))
+        set_2_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset,
+            len(material_struct[i]['parameters']['set_2_unk_1'])))
+        set_2_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['parameters']['set_2_unk_1'])),
+            *material_struct[i]['parameters']['set_2_unk_1']))
         offset = set_2_header_len - len(set_2_header) + len(set_2_data)
         set_2_header.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset))
         set_2_data.extend(material_struct[i]['name'].encode()+b'\x00')
