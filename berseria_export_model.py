@@ -468,7 +468,7 @@ def read_generic_int_section (f, offset, length):
     return(list(struct.unpack("{}{}I".format(e, length // 4), f.read(length))))
 
 #Physics parameters, offset should be toc[4].
-def read_section_4 (f, offset, decode_data = False):
+def read_section_4 (f, offset):
     f.seek(offset)
     section_4_unk = struct.unpack("{}2I".format(e), f.read(8))
     counts = struct.unpack("{}2H".format(e), f.read(4))
@@ -477,17 +477,15 @@ def read_section_4 (f, offset, decode_data = False):
     offset = read_offset(f)
     count, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
     data = [list(struct.unpack("{}4h25f".format(e), f.read(0x6c))) for _ in range(count)]
-    if decode_data == True:
-        decoded = []
-        for i in range(len(data)):
-            decoded.append({'flag': data[i][0], 'target_node': data[i][1], 'group': data[i][2], 'unk_correction': data[i][3],
-                'elasticity_x': data[i][4], 'elasticity_y': data[i][5], 'air_resist': data[i][6], 'gravity': data[i][7],
-                'weight': data[i][8], 'friction': data[i][9], 'size_of_collision': data[i][10], 'unk0': data[i][11],
-                'unk1': data[i][12], 'unk2': data[i][13], 'unk3': data[i][14], 'maybe_wind': data[i][15],
-                'child_pos': data[i][16:19], 'child_len': data[i][19], 'dynamic_mtx': data[i][20:29]})
-        return(decoded)
-    else:
-        return(data)
+    param_names = ['flag', 'target_node', 'group', 'unk_correction', 'elasticity_x', 'elasticity_y',
+        'air_resist', 'gravity', 'weight', 'friction', 'size_of_collision', 'unk0', 'unk1', 'unk2', 'unk3',
+        'maybe_wind', 'child_pos_x', 'child_pos_y', 'child_pos_z', 'child_len', 'dynamic_mtx_00',
+        'dynamic_mtx_01', 'dynamic_mtx_02', 'dynamic_mtx_10', 'dynamic_mtx_11', 'dynamic_mtx_12',
+        'dynamic_mtx_20', 'dynamic_mtx_21', 'dynamic_mtx_22']
+    decoded = []
+    for i in range(len(data)):
+        decoded.append(dict(zip(param_names, data[i])))
+    return(decoded)
 
 #Collision meshes, offset should be toc[5].
 def read_section_5 (f, offset, decode_data = False):
@@ -920,7 +918,7 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                 #6 - meshes.  7 - materials.  8,9,10,11 - dunno
                 if os.path.exists(dlp_file) or os.path.exists(dlp_file.upper()): # TLTool uses uppercase extension
                     skel_struct, raw_skel_data = read_section_0(f, toc[0])
-                    physics_params = read_section_4 (f, toc[4], decode_data = True)
+                    physics_params = read_section_4 (f, toc[4])
                     collision_data = read_section_5 (f, toc[5], decode_data = True)
                     meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlp_file)
                     # Attempt to incorporate an external skeleton (skipped if skeleton already complete)
@@ -950,13 +948,14 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                                 ['offset' in y, 'num' in y])} for x in mesh_blocks_info]
                             for i in range(len(mesh_struct)):
                                 mesh_struct[i]['material'] = material_struct[mesh_struct[i]['material']]['name']
+                            write_struct_to_json(physics_params, base_name + '/physics_info')
                             local_bone_dict = [(raw_skel_data[2][i], raw_skel_data[5][i]) for i in range(len(raw_skel_data[2]))]
                             for i in range(len(physics_params)):
                                 physics_params[i]['target_node'] = local_bone_dict[physics_params[i]['target_node']][1]
                             mesh_struct = [{'id_referenceonly': i, **mesh_struct[i]} for i in range(len(mesh_struct))]
                             #write_struct_to_json(raw_skel_data, base_name + '/skeleton_info')
                             write_struct_to_json(mesh_struct, base_name + '/mesh_info')
-                            #write_struct_to_json(physics_params, base_name + '/physics_info')
+                            write_struct_to_json(physics_params, base_name + '/physics_info')
                             #write_struct_to_json(collision_data, base_name + '/collision_info')
                             write_struct_to_json(material_struct, base_name + '/material_info')
                             write_struct_to_json(opening_dict, base_name + '/linked_files')

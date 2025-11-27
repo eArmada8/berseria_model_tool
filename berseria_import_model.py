@@ -49,6 +49,19 @@ def write_string_dict (strings_list):
     enc_strings = [bytearray(x.encode()) + b'\x00' for x in strings_list]
     return create_data_block(enc_strings, b'', addr_size, 2, addr_size) # Data alignment of 2 otherwise default
 
+def read_physics_data (tomdlb_file, backup_phys_block, raw_skel_data):
+    # Will read data from JSON file, or load original data from the mdl file if JSON is missing
+    try:
+        physics_params = read_struct_from_json(tomdlb_file[:-9] + "/physics_info.json")
+        local_bone_dict = {raw_skel_data[5][i]:i for i in range(len(raw_skel_data[2]))}
+        for i in range(len(physics_params)):
+            physics_params[i]['target_node'] = local_bone_dict[physics_params[i]['target_node']]
+    except:
+        print("{0}/physics_info.json missing or unreadable, reading data from {0}.TOMBDLB_D instead...".format(tomdlb_file[-9:]))
+        with io.BytesIO(backup_phys_block) as ff:
+            physics_params = read_section_4 (ff, 0)
+    return physics_params
+
 def read_material_data (tomdlb_file, backup_mat_block):
     # Will read data from JSON file, or load original data from the mdl file if JSON is missing
     try:
@@ -63,6 +76,7 @@ def read_material_data (tomdlb_file, backup_mat_block):
 def write_generic_int_section (int_list):
     return(struct.pack("{}{}I".format(e, len(int_list)), *int_list))
 
+#Hierarchy
 def create_section_0 (raw_skel_struct):
     header_block = bytearray()
     data_block = bytearray()
@@ -98,7 +112,9 @@ def create_section_0 (raw_skel_struct):
             data_block.extend(b'\x00' * 8)
     return(struct.pack("{}3I6H".format(e), *raw_skel_struct[0]) + header_block + data_block)
 
-def create_section_4 (raw_sec4_struct, unk0 = 0, unk1 = 0):
+#Physics
+def create_section_4 (physics_params, unk0 = 0, unk1 = 0):
+    raw_sec4_struct = [list(x.values()) for x in physics_params] # Remove dict keys
     data_block = bytearray()
     data_block.extend(struct.pack("{}2I2H".format(e), unk0, unk1, len(raw_sec4_struct), len(raw_sec4_struct)))
     if addr_size == 8:
@@ -113,6 +129,7 @@ def create_section_4 (raw_sec4_struct, unk0 = 0, unk1 = 0):
         data_block.extend(b'\x00' * (addr_size - (len(data_block) % addr_size)))
     return(data_block)
 
+#Collision
 def create_section_5 (raw_sec5_struct):
     header_block = bytearray()
     data_block = bytearray()
@@ -135,6 +152,7 @@ def create_section_5 (raw_sec5_struct):
             data_block.extend(b'\x00' * (addr_size - (len(data_block) % addr_size)))
     return(header_block + data_block)
 
+#Meshes
 def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct, unk0 = 0, unk1 = 0):
     # We will need some information from the original block regardless, so we will read it
     with io.BytesIO(backup_mesh_block) as ff:
@@ -274,8 +292,7 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
         section_6 += b'\x00' * (addr_size - (len(section_6) % addr_size))
     return(section_6, uvidx_data)
 
-# I have no idea what the first two integers in the block (unk0 and unk1) are.
-# They do not seem to matter, the game will still load the model if they are set to 0.
+#Materials
 def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
     all_tex = sorted(list(set([x for y in [z['textures'] for z in material_struct] for x in y])))
     tex_dict = {all_tex[i]:i for i in range(len(all_tex))}
@@ -360,6 +377,7 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
     # Return assembled block
     return(block_header + set_0_block + set_1_block + set_2_block + set_6_block)
 
+#Animation defaults?
 def create_section_11 (raw_sec11_struct):
     header_block = bytearray()
     data_block = bytearray()
@@ -410,28 +428,32 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                         data_blocks.append(f.read())
                     else:
                         data_blocks.append(f.read(toc[i+1] - toc[i]))
+                skel_struct, raw_skel_data = read_section_0(f, toc[0])
+                physics_params = read_physics_data (tomdlb_file, data_blocks[4], raw_skel_data)
+                material_struct = read_material_data (tomdlb_file, data_blocks[7])
                 # Read material information (needed for both building mesh and material blocks)
                 material_struct = read_material_data (tomdlb_file, data_blocks[7])
-                sec4_unk = struct.unpack("{}2I".format(e), data_blocks[4][0:8]) # Date stamp?
+                phys_unk = struct.unpack("{}2I".format(e), data_blocks[4][0:8]) # Date stamp?
                 mesh_unk = struct.unpack("{}2I".format(e), data_blocks[6][0:8]) # Date stamp?
                 mat_unk = struct.unpack("{}2I".format(e), data_blocks[7][0:8]) # Same as above
                 if swap_endian == True:
                     # Changing e will change endianness for this script *only*; do not call set_endianness()!
                     e = {'>': '<', '<': '>'}[e] # Write mode
-                    data_blocks[0] = create_section_0(read_section_0(f, toc[0])[1])
-                    data_blocks[4] = create_section_4 (read_section_4 (f, toc[4]), sec4_unk[0], sec4_unk[1])
-                    data_blocks[5] = create_section_5 (read_section_5 (f, toc[5]))
-                    data_blocks[11] = create_section_11 (read_section_11 (f, toc[11]))
+                    data_blocks[0] = create_section_0(raw_skel_data)
+                    data_blocks[5] = create_section_5(read_section_5 (f, toc[5]))
+                    data_blocks[11] = create_section_11(read_section_11 (f, toc[11]))
                     for i in [1,2,3,8,9,10]:
                         data_blocks[i] = write_generic_int_section(read_generic_int_section(f, toc[i], (toc[i+1]-toc[i])))
+                # Create new physics block
+                data_blocks[4] = create_section_4(physics_params, phys_unk[0], phys_unk[1])
                 # Create new mesh block
-                data_blocks[6], dlp_block = create_section_6 (tomdlb_file, data_blocks[6],
+                data_blocks[6], dlp_block = create_section_6(tomdlb_file, data_blocks[6],
                     dlp_file, material_struct, mesh_unk[0], mesh_unk[1])
                 if dlp_block == False: # Rebuild failed, due to unsupported mesh type
                     print("Unsupported mesh detected, skipping {}...".format(tomdlb_file))
                     return False
                 # Create new material block
-                data_blocks[7] = create_section_7 (material_struct, mat_unk[0], mat_unk[1])
+                data_blocks[7] = create_section_7(material_struct, mat_unk[0], mat_unk[1])
                 # Create new opening dictionary
                 all_tex = sorted(list(set([x+'.totexb_d' for y in [z['textures'] for z in material_struct] for x in y])))
                 new_opening_dict_strings = [dlp_file, anmb_file] + all_tex
