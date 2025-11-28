@@ -95,7 +95,7 @@ def read_section_0 (f, offset):
         num_entries, = struct.unpack("{}{}".format(e,{4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         section_0_toc.append({'offset': offset, 'num_entries': num_entries})
     unk_block = list(struct.unpack("{}2{}".format(e,{4: "I", 8: "Q"}[addr_size]), f.read(addr_size * 2)))
-    unk_block.extend(struct.unpack("{}4Hf2i5f".format(e), f.read(40)))
+    unk_block.extend(struct.unpack("{}4Hfi6f".format(e), f.read(40)))
     f.seek(section_0_toc[0]['offset'])
     id = struct.unpack("{}{}I".format(e, section_0_toc[0]['num_entries']), f.read(section_0_toc[0]['num_entries']*4))
     f.seek(section_0_toc[1]['offset'])
