@@ -20,7 +20,7 @@ I am as always very thankful for the dedicated reverse engineers at the Kiseki m
 ### berseria_export_model.py
 Double click the python script and it will search the current folder for all .TOMDLB_D files that are not skeletons (`BONE` is not in the name) and with its corresponding .TOMDLP_P file.  Additionally, it will output 3 JSON files, one with metadata from the mesh section, one with the data from the materials section, and (for convenience) a list of linked files (*e.g.* textures) used by the MDL.
 
-*Note:* When used without command line arguments, the script will attempt to combine all models into a single .glb - editing the configuration variable `combine_models_into_single_gltf` at the top of the script will revert the script to processing models sequentially and outputting one .glb per model.  Raw buffers are still separated by model for game modding.
+*Note:* When used without command line arguments, the script will attempt to combine all models into a single .glb - editing the configuration variable `combine_models_into_single_gltf` at the top of the script will revert the script to processing models sequentially and outputting one .glb per model.  Raw buffers are still separated by model for game modding.  The script will also output a `{MODEL NAME}_full_skeleton.json` file when used in combined model format, to be used with berseria_export_animation.py.
 
 Additionally it will output a glTF file, by default in the binary .glb format.  Textures should be placed in a `textures` folder.
 
@@ -44,7 +44,7 @@ Overwrite existing files without prompting.
 ### berseria_export_animation.py
 Double click the python script to run and it will attempt to convert the TOANMB animation into glTF (in .glb format).  The glb files can be directly imported into Blender, but Bone Dir must be set to "Blender (best for re-importing)" upon import or the skeleton will be altered irreversibly, preventing the animation from being linked to a model.  (The model should also use the same Bone Dir setting.)  This tool only supports translation, rotation and scale animation channels.  *If you run this tool on an animation that exclusively utilizes the shader varying or uv scrolling channels, you will end up with an empty .glb.  You can examine the unsupported channels in json format using the --dumpanidata command.*
 
-*NOTE: A compatible skeleton file must be in the folder.  The script will only export animation channels targeted to the skeletal nodes.  You can still use the --dumpanidata command without a skeleton.*
+*NOTE:* A compatible skeleton file must be in the folder, either in the form of a dumped skeleton (the `{MODEL NAME}_full_skeleton.json` file outputted by berseria_export_model.py) or the same binary skeleton file (.TOMDLB_D) used by berseria_export_model.py; dumped skeleton files are prioritized over binary skeleton files.  The script will only export animation channels targeted to the skeletal nodes; therefore utilizing dumped skeletons will produce a more complete animation as the model-specific physics bones will also be incorporated.  You can still use the --dumpanidata command without a skeleton to obtain all animation data in JSON format.
 
 It will search the current folder for TOANMB/TOANMSB files and convert them all, unless you use command line options.
 

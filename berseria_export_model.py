@@ -97,7 +97,7 @@ def read_section_0 (f, offset):
     unk_block = list(struct.unpack("{}2{}".format(e,{4: "I", 8: "Q"}[addr_size]), f.read(addr_size * 2)))
     unk_block.extend(struct.unpack("{}4Hfi6f".format(e), f.read(40)))
     f.seek(section_0_toc[0]['offset'])
-    id = struct.unpack("{}{}I".format(e, section_0_toc[0]['num_entries']), f.read(section_0_toc[0]['num_entries']*4))
+    id_ = struct.unpack("{}{}I".format(e, section_0_toc[0]['num_entries']), f.read(section_0_toc[0]['num_entries']*4))
     f.seek(section_0_toc[1]['offset'])
     true_parent = struct.unpack("{}{}i".format(e, section_0_toc[1]['num_entries']), f.read(section_0_toc[1]['num_entries']*4))
     f.seek(section_0_toc[2]['offset'])
@@ -112,9 +112,10 @@ def read_section_0 (f, offset):
     inv_matrix = [struct.unpack("{}16f".format(e), f.read(64)) for _ in range(section_0_toc[6]['num_entries'])]
     f.seek(section_0_toc[7]['offset'])
     parent_list = struct.unpack("{}{}h".format(e, section_0_toc[7]['num_entries']), f.read(section_0_toc[7]['num_entries']*2))
-    raw_data = [section_0_header, unk_block, id, true_parent, tree_info, name, unk_matrix, abs_matrix, inv_matrix, parent_list]
-    skel_struct = [{'id': id[i], 'true_parent': true_parent[i], 'tree_info': tree_info[i], 'name': name[i], 'abs_matrix': abs_matrix[i],\
-    'inv_matrix': inv_matrix[i], 'parent': tree_info[i][2]} for i in range(section_0_toc[0]['num_entries'])]
+    raw_data = [section_0_header, unk_block, id_, true_parent, tree_info, name, unk_matrix, abs_matrix, inv_matrix, parent_list]
+    skel_struct = [{'id': id_[i], 'ani_id': id_[i] & 0xFFFF, 'ani_group': id_[i] >> 16, 'true_parent': true_parent[i],
+        'tree_info': tree_info[i], 'name': name[i], 'abs_matrix': abs_matrix[i], 'inv_matrix': inv_matrix[i],
+        'parent': tree_info[i][2]} for i in range(section_0_toc[0]['num_entries'])]
     for i in range(len(skel_struct)):
         if skel_struct[i]['parent'] in range(len(skel_struct)):
             abs_mtx = [skel_struct[i]['abs_matrix'][0:4], skel_struct[i]['abs_matrix'][4:8],\
@@ -1040,6 +1041,7 @@ def process_dlbs_combined (dlb_files, overwrite = False, write_binary_gltf = Tru
         base_name = common_name[:-1] if common_name[-1] == '_' else common_name
     else:
         base_name = base_name + '_combined'
+    write_struct_to_json(skel_struct, base_name + '_full_skeleton')
     write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, material_struct,\
         overwrite = gltf_overwrite, write_binary_gltf = write_binary_gltf)
     return

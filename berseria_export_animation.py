@@ -330,8 +330,8 @@ def write_glTF (ani_data, skel_struct, basename, write_glb = True):
         gltf_data['nodes'].append({'children': [], 'name': 'root'})
     # Animations
     node_dict = {gltf_data['nodes'][j]['name']:j for j in range(len(gltf_data['nodes']))}
-    bone_id_to_name = {x['id']:x['name'] for x in skel_struct}
-    valid_bones = [skel_struct[i]['id'] for i in range(len(skel_struct)) if skel_struct[i]['name'] in node_dict]
+    bone_id_to_name = {x['ani_id']:x['name'] for x in skel_struct}
+    valid_bones = [skel_struct[i]['ani_id'] for i in range(len(skel_struct)) if skel_struct[i]['name'] in node_dict]
     ani_list = [x for x in ani_data['decoded_target_table'] if x['target'] in valid_bones and x['type'] in [0x00003, 0x10014, 0x20003]]
     for i in range(len(ani_list)):
         vec_channel = ani_data['data_stream'][ani_list[i]['vec_index']]
@@ -419,7 +419,26 @@ def process_tosamsb (animbin_file, overwrite = False, write_glb = True, dump_ext
     if dump_extra_animation_data == True:
         open(basename + "_ani_data.json", 'wb').write(json.dumps(ani_data, indent = 4).encode())
     try:
-        skel_struct = combine_skeletons (find_primary_skeleton([]),[])
+        full_skels = [os.path.basename(x) for x in glob.glob('*full_skeleton.json')]
+        if len(full_skels) > 1:
+            match = ''
+            print("Multiple skeleton json files found, please choose one.")
+            for i in range(len(full_skels)):
+                print("{0}. {1}".format(i+1, full_skels[i]))
+            while match == '':
+                raw_input = input("Use which skeleton? ")
+                if raw_input.isnumeric() and int(raw_input)-1 in range(len(full_skels)):
+                    match = full_skels[int(raw_input)-1]
+                else:
+                    print("Invalid entry!")
+        elif len(full_skels) == 1:
+            match = full_skels[0]
+        else:
+            match = ''
+        if not match == '':
+            skel_struct = read_struct_from_json(match)
+        else:
+            skel_struct = combine_skeletons (find_primary_skeleton([]),[])
     except FileNotFoundError:
         input("No compatible skeleton file found!  Press Enter to quit.")
         raise
