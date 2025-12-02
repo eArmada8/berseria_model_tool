@@ -321,6 +321,9 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
         if len(material_struct[i]['parameters']['shader_params']) == 0x17:
             set_0_data.extend(struct.pack("{}8I4f4If6I".format(e, len(material_struct[i]['parameters']['shader_params'])),
                 *list(material_struct[i]['parameters']['shader_params'].values())))
+        elif len(material_struct[i]['parameters']['shader_params']) == 0x11:
+            set_0_data.extend(struct.pack("{}8I4f4If".format(e, len(material_struct[i]['parameters']['shader_params'])),
+                *list(material_struct[i]['parameters']['shader_params'].values())))
         else:
             set_0_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['parameters']['shader_params'])),
                 *list(material_struct[i]['parameters']['shader_params'].values())))

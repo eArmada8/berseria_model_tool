@@ -572,6 +572,8 @@ def read_section_7 (f, offset):
         f.seek(offset2)
         if num_vals2 == 0x17:
             vals2 = struct.unpack("{}8I4f4If6I".format(e), f.read(92))
+        elif num_vals2 == 0x11:
+            vals2 = struct.unpack("{}8I4f4If".format(e), f.read(68))
         else:
             vals2 = struct.unpack("{}{}I".format(e, num_vals2), f.read(num_vals2 * 4))
         param_names_2 = ['unk{0:02d}'.format(j) for j in range(num_vals2)]
