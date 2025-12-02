@@ -95,7 +95,7 @@ def read_section_0 (f, offset):
         num_entries, = struct.unpack("{}{}".format(e,{4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         section_0_toc.append({'offset': offset, 'num_entries': num_entries})
     unk_block = list(struct.unpack("{}2{}".format(e,{4: "I", 8: "Q"}[addr_size]), f.read(addr_size * 2)))
-    unk_block.extend(struct.unpack("{}4Hf2i5f".format(e), f.read(40)))
+    unk_block.extend(struct.unpack("{}4Hfi6f".format(e), f.read(40)))
     f.seek(section_0_toc[0]['offset'])
     id = struct.unpack("{}{}I".format(e, section_0_toc[0]['num_entries']), f.read(section_0_toc[0]['num_entries']*4))
     f.seek(section_0_toc[1]['offset'])
@@ -468,7 +468,7 @@ def read_generic_int_section (f, offset, length):
     return(list(struct.unpack("{}{}I".format(e, length // 4), f.read(length))))
 
 #Physics parameters, offset should be toc[4].
-def read_section_4 (f, offset, decode_data = False):
+def read_section_4 (f, offset):
     f.seek(offset)
     section_4_unk = struct.unpack("{}2I".format(e), f.read(8))
     counts = struct.unpack("{}2H".format(e), f.read(4))
@@ -477,17 +477,15 @@ def read_section_4 (f, offset, decode_data = False):
     offset = read_offset(f)
     count, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
     data = [list(struct.unpack("{}4h25f".format(e), f.read(0x6c))) for _ in range(count)]
-    if decode_data == True:
-        decoded = []
-        for i in range(len(data)):
-            decoded.append({'flag': data[i][0], 'target_node': data[i][1], 'group': data[i][2], 'unk_correction': data[i][3],
-                'elasticity_x': data[i][4], 'elasticity_y': data[i][5], 'air_resist': data[i][6], 'gravity': data[i][7],
-                'weight': data[i][8], 'friction': data[i][9], 'size_of_collision': data[i][10], 'unk0': data[i][11],
-                'unk1': data[i][12], 'unk2': data[i][13], 'unk3': data[i][14], 'maybe_wind': data[i][15],
-                'child_pos': data[i][16:19], 'child_len': data[i][19], 'dynamic_mtx': data[i][20:29]})
-        return(decoded)
-    else:
-        return(data)
+    param_names = ['flag', 'target_node', 'group', 'unk_correction', 'elasticity_x', 'elasticity_y',
+        'air_resist', 'gravity', 'weight', 'friction', 'size_of_collision', 'unk0', 'unk1', 'unk2', 'unk3',
+        'maybe_wind', 'child_pos_x', 'child_pos_y', 'child_pos_z', 'child_len', 'dynamic_mtx_00',
+        'dynamic_mtx_01', 'dynamic_mtx_02', 'dynamic_mtx_10', 'dynamic_mtx_11', 'dynamic_mtx_12',
+        'dynamic_mtx_20', 'dynamic_mtx_21', 'dynamic_mtx_22']
+    decoded = []
+    for i in range(len(data)):
+        decoded.append(dict(zip(param_names, data[i])))
+    return(decoded)
 
 #Collision meshes, offset should be toc[5].
 def read_section_5 (f, offset, decode_data = False):
@@ -550,29 +548,41 @@ def read_section_7 (f, offset):
         offset = read_offset(f)
         num_entries, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         section_7_toc.append({'offset': offset, 'num_entries': num_entries})
+    set_0_names = ['material_id','mat_variation_flags','mat_alpha_flags','num_uv','ani_mat_id','tex0',
+        'shader','render_type','unk0','unk1','unk2']
+    set_0_params = ['fog','shadow_target','projection_target','local_z_pass','water_reflect',
+        'flow','stencil_order','outline','highlight_target', 'invisible']
+    set_0_shader_params = ['unk00','unk01','unk02','unk03','unk04','unk05','mat_type','use_specular_tex',
+        'specular_red','specular_green','specular_blue','specular_power']
     set_0 = [] # Materials, including the indices that map to set_1 (textures)
     for i in range(section_7_toc[0]['num_entries']):
         f.seek(section_7_toc[0]['offset'] + (i * (4 * addr_size + 0x18)))
-        values = struct.unpack("{}I10h".format(e), f.read(24))
+        values = dict(zip(set_0_names, struct.unpack("{}I10h".format(e), f.read(24))))
         offset1 = read_offset(f)
         num_vals1, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         offset2 = read_offset(f)
         num_vals2, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
         end_offset = f.tell()
         f.seek(offset1)
-        vals1 = struct.unpack("{}{}I".format(e, num_vals1), f.read(num_vals1 * 4))
+        param_names_1 = ['unk{0:02d}'.format(j) for j in range(num_vals1)]
+        if num_vals1 == 11:
+            param_names_1[0:len(set_0_params)] = set_0_params
+        vals1 = dict(zip(param_names_1, struct.unpack("{}{}I".format(e, num_vals1), f.read(num_vals1 * 4))))
         f.seek(offset2)
         if num_vals2 == 0x17:
             vals2 = struct.unpack("{}8I4f4If6I".format(e), f.read(92))
         else:
             vals2 = struct.unpack("{}{}I".format(e, num_vals2), f.read(num_vals2 * 4))
-        set_0.append({'base': values, 'vals1': vals1, 'vals2': vals2})
+        param_names_2 = ['unk{0:02d}'.format(j) for j in range(num_vals2)]
+        if num_vals2 > len(set_0_shader_params):
+            param_names_2[0:len(set_0_shader_params)] = set_0_shader_params
+        set_0.append({'base': values, 'vals1': vals1, 'vals2': dict(zip(param_names_2, vals2))})
     set_1 = [] # Texture assignments, each is a tuple where the second number points to set_6
     for i in range(section_7_toc[1]['num_entries']):
         f.seek(section_7_toc[1]['offset'] + (i * 6))
         values = struct.unpack("{}3h".format(e), f.read(6))
         set_1.append(values)
-    set_2 = [] # Materials, including material names and alpha
+    set_2 = [] # Materials, including material names (and alpha)
     for i in range(section_7_toc[2]['num_entries']):
         f.seek(section_7_toc[2]['offset'] + (i * (5 * addr_size)))
         offset1 = read_offset(f)
@@ -602,17 +612,10 @@ def read_section_7 (f, offset):
     if len(set_0) == len(set_2):
         for i in range(len(set_0)):
             material = {'name': set_2[i]['name']}
-            material['textures'] = [set_6[set_1[set_0[i]['base'][5]+j][1]]['tex_name'] for j in range(set_0[i]['base'][3])]
-            material['alpha'] = set_2[i]['vals2'][3] if len(set_2[i]['vals2']) > 3 else -1 # Unsigned so never -1
-            material['internal_id'] = set_0[i]['base'][0]
-            material['unk_parameters'] = {'set_0_base': [set_0[i]['base'][1:3], [set_0[i]['base'][4]], set_0[i]['base'][6:]],
-                'set_0_unk_0': set_0[i]['vals1'], 'set_0_unk_1': set_0[i]['vals2'], 'set_2_unk_0': set_2[i]['vals1'],
-                'set_2_unk_1': [set_2[i]['vals2'][0:3], set_2[i]['vals2'][4:]]}
-            # Some materials have very short set_2, remove extraneous empty values so import script will not add extra values
-            if material['alpha'] == -1:
-                del(material['alpha'])
-            if len(material['unk_parameters']['set_2_unk_1'][1]) == 0:
-                material['unk_parameters']['set_2_unk_1'].pop(1)
+            material['textures'] = [set_6[set_1[set_0[i]['base']['tex0']+j][1]]['tex_name'] for j in range(set_0[i]['base']['num_uv'])]
+            material['parameters'] = {'mat_info': set_0[i]['base'],
+                'mat_params': set_0[i]['vals1'], 'shader_params': set_0[i]['vals2'], 'set_2_unk_0': set_2[i]['vals1'],
+                'set_2_unk_1': set_2[i]['vals2']}
             material_struct.append(material)
     return(material_struct)
 
@@ -729,7 +732,7 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
     # Materials
     material_dict = [{'name': material_struct[i]['name'],
         'texture': material_struct[i]['textures'][0] if len(material_struct[i]['textures']) > 0 else '',
-        'alpha': material_struct[i]['alpha'] if 'alpha' in material_struct[i] else 0}
+        'alpha': material_struct[i]['parameters']['mat_info']['mat_alpha_flags']}
         for i in range(len(material_struct))]
     texture_list = sorted(list(set([x['texture'] for x in material_dict if not x['texture'] == ''])))
     gltf_data['images'] = [{'uri':'textures/{}.dds'.format(x)} for x in texture_list]
@@ -742,8 +745,10 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
             material['pbrMetallicRoughness']['baseColorTexture'] = { 'index' : len(gltf_data['textures']), }
             gltf_data['samplers'].append(sampler)
             gltf_data['textures'].append(texture)
-        if mat['alpha'] & 1:
+        if mat['alpha'] & 64:
             material['alphaMode'] = 'MASK'
+        elif mat['alpha'] & 128:
+            material['alphaMode'] = 'BLEND'
         gltf_data['materials'].append(material)
     material_list = [x['name'] for x in gltf_data['materials']]
     missing_textures = [x['uri'] for x in gltf_data['images'] if not os.path.exists(x['uri'])]
@@ -912,7 +917,9 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                 #5 - offset1, count1, offset2, count2, 0x24 * count1 (u32, f32 *6, u32 *2), 0x24 * count2 (all f)
                 #6 - meshes.  7 - materials.  8,9,10,11 - dunno
                 if os.path.exists(dlp_file) or os.path.exists(dlp_file.upper()): # TLTool uses uppercase extension
-                    skel_struct, _ = read_section_0(f, toc[0])
+                    skel_struct, raw_skel_data = read_section_0(f, toc[0])
+                    physics_params = read_section_4 (f, toc[4])
+                    collision_data = read_section_5 (f, toc[5], decode_data = True)
                     meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlp_file)
                     # Attempt to incorporate an external skeleton (skipped if skeleton already complete)
                     skel_struct = find_and_add_external_skeleton (skel_struct, bone_palette_ids)
@@ -941,8 +948,15 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                                 ['offset' in y, 'num' in y])} for x in mesh_blocks_info]
                             for i in range(len(mesh_struct)):
                                 mesh_struct[i]['material'] = material_struct[mesh_struct[i]['material']]['name']
+                            write_struct_to_json(physics_params, base_name + '/physics_info')
+                            local_bone_dict = [(raw_skel_data[2][i], raw_skel_data[5][i]) for i in range(len(raw_skel_data[2]))]
+                            for i in range(len(physics_params)):
+                                physics_params[i]['target_node'] = local_bone_dict[physics_params[i]['target_node']][1]
                             mesh_struct = [{'id_referenceonly': i, **mesh_struct[i]} for i in range(len(mesh_struct))]
+                            #write_struct_to_json(raw_skel_data, base_name + '/skeleton_info')
                             write_struct_to_json(mesh_struct, base_name + '/mesh_info')
+                            write_struct_to_json(physics_params, base_name + '/physics_info')
+                            #write_struct_to_json(collision_data, base_name + '/collision_info')
                             write_struct_to_json(material_struct, base_name + '/material_info')
                             write_struct_to_json(opening_dict, base_name + '/linked_files')
                             #write_struct_to_json(skel_struct, base_name + '/skeleton_info')
