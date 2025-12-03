@@ -187,7 +187,7 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
         except (FileNotFoundError, AssertionError) as err:
             print("Submesh {0} not found or corrupt, generating an empty submesh...".format(mesh_filename))
             # Generate an empty submesh
-            fmt = make_fmt(num_uvs, has_weights = True)
+            fmt = make_fmt(num_uvs)
             ib = [0,0,0]
             vb = [{'Buffer':[[0.0, 0.0, 0.0]]}, {'Buffer':[[0.0, 0.0, 0.0]]}]
             vb.extend([{'Buffer':[[0.0, 0.0]]} for _ in range(num_uvs)])
