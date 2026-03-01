@@ -257,26 +257,40 @@ def read_tosamsb (animbin_file):
         if offset1 == 0x20:
             set_file_version(0)
         data['file_type']['version'] = file_version
+        hash_table_present = True
+        if file_version == 0:
+            temp_offset = f.tell()
+            explore = struct.unpack("<4I", f.read(16))
+            if explore[3] == 0:
+                hash_table_present = False
+            f.seek(temp_offset)
         count1a, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size)) # Number of data blocks
-        count1b, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size)) # Number of hashes
+        if hash_table_present == True:
+            count1b, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size)) # Number of hashes
         if count1a == 0:
             print("Empty file, skipping...")
             return
         offset2 = read_offset(f) # Offset to the second data block (actual animation data)
         count2, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size)) # Number of data blocks, same as count1a
+        if hash_table_present == False:
+            f.seek(4,1) # Padding
         if file_version == 1:
             data['header2'] = struct.unpack("{}2{}f".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size * 2 + 4)) # Berseria only??
         try:
-            assert offset1 + ((count1b + 1) * addr_size) + (count1a * 16) + (4 if file_version == 1 else 0) == offset2
+            if hash_table_present == True:
+                assert offset1 + ((count1b + 1) * addr_size) + (count1a * 16) + (4 if file_version == 1 else 0) == offset2
+            else:
+                assert offset1 + (count1a * 16) + (4 if file_version == 1 else 0) == offset2
         except AssertionError:
             print("Error, {} not in the expected binary format!  Skipping...".format(animbin_file))
             return
         # Hash table
-        data['hash_table'] = [] # Will be rebuilt when offsets known
-        temp_hash_table = [read_offset(f) for _ in range(count1b)]
-        offset2b = read_offset(f) # same as offset2
-        if file_version == 1:
-            f.seek(4,1) # Dunno
+        if hash_table_present == True:
+            data['hash_table'] = [] # Will be rebuilt when offsets known
+            temp_hash_table = [read_offset(f) for _ in range(count1b)]
+            offset2b = read_offset(f) # same as offset2
+            if file_version == 1:
+                f.seek(4,1) # Dunno
         # Animation target data
         data['target_table'] = []
         data['decoded_target_table'] = []
@@ -288,9 +302,13 @@ def read_tosamsb (animbin_file):
             decode['vec_index'] = data['target_table'][-1][1]
             data['decoded_target_table'].append(decode)
         target_indices[f.tell()] = len(target_indices)
-        data['hash_table'] = [target_indices[x] for x in temp_hash_table]
+        if hash_table_present == True:
+            data['hash_table'] = [target_indices[x] for x in temp_hash_table]
         try:
-            assert f.tell() == offset2 == offset2b
+            if hash_table_present == True:
+                assert f.tell() == offset2 == offset2b
+            else:
+                assert f.tell() == offset2
         except AssertionError:
             print("Error, offsets do not match!  Will attempt to proceed.")
             pass
