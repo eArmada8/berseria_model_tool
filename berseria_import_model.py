@@ -293,19 +293,24 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
     return(section_6, uvidx_data)
 
 #Materials
-def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
+def create_section_7 (material_struct, unk0 = 0, unk1 = 0, symphonia_mode = False):
     all_tex = sorted(list(set([x for y in [z['textures'] for z in material_struct] for x in y])))
     tex_dict = {all_tex[i]:i for i in range(len(all_tex))}
     tex_counter = 0
     set_0_base = []
     set_1 = []
     set_2_val2 = []
+    set_3 = []
+    set_4 = [] # Also set 5
     for i in range(len(material_struct)):
         s0vals = list(material_struct[i]['parameters']['mat_info'].values())
         s0vals[3], s0vals[5] = len(material_struct[i]['textures']), tex_counter
         set_0_base.append(s0vals)
         tex_counter += len(material_struct[i]['textures'])
         set_1.extend([[0, tex_dict[x], 0] for x in material_struct[i]['textures']])
+        if symphonia_mode == True:
+            set_3.append(i)
+            set_4.extend([i for _ in range(len(material_struct[i]['textures']))])
     # Build section 0 (Material parameters?)
     set_0_header_len = (addr_size * 4 + 0x18)  * len(material_struct)
     set_0_header = bytearray()
@@ -354,6 +359,18 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
         if len(set_2_data) % 4:
             set_2_data += b'\x00' * (4 - (len(set_2_data) % 4))
     set_2_block = set_2_header + set_2_data
+    # Build section 3
+    set_3_block = bytearray()
+    set_3_block.extend(struct.pack("{}{}h".format(e, len(set_3)), *set_3))
+    while len(set_3_block) % addr_size > 0:
+        set_3_block.extend(struct.pack("{}h".format(e), 0))
+    # Build section 4
+    set_4_block = bytearray()
+    set_4_block.extend(struct.pack("{}{}h".format(e, len(set_4)), *set_4))
+    while len(set_4_block) % addr_size > 0:
+        set_4_block.extend(struct.pack("{}h".format(e), 0))
+    # Build section 5
+    set_5_block = set_4_block
     # Build section 6 (Textures)
     set_6_header_len = (addr_size + {4: 4, 8: 16}[addr_size]) * len(all_tex)
     set_6_header = bytearray()
@@ -369,16 +386,20 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
         set_6_data += b'\x00' * (addr_size - (len(set_6_data) % addr_size))
     set_6_block = set_6_header + set_6_data
     # Build offset header
-    block_lengths = [len(set_0_block), len(set_1_block), len(set_2_block), 0, 0, 0, len(set_6_block)]
+    count_3, count_4, count_5 = len(set_3), len(set_4), len(set_4)
+    header_counts = [count_3*4, count_3, count_4*5, count_4*3, count_4, count_4, count_4, count_4]
+    block_lengths = [len(set_0_block), len(set_1_block), len(set_2_block),
+        len(set_3_block), len(set_4_block), len(set_5_block), len(set_6_block)]
     block_offsets = [sum(block_lengths[:i], (addr_size * 14)-((addr_size * 2) * i)) if block_lengths[i] > 0 else 0
         for i in range(len(block_lengths))]
-    block_counts = [len(material_struct), len(set_1), len(material_struct), 0, 0, 0, len(all_tex)]
+    block_counts = [len(material_struct), len(set_1), len(material_struct), count_3, count_4, count_5, len(all_tex)]
     block_header = bytearray()
-    block_header.extend(struct.pack("{}6I".format(e), unk0, unk1, 0, 0, 0, 0))
+    block_header.extend(struct.pack("{}2I8H".format(e), unk0, unk1, *header_counts))
     for i in range(7):
         block_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), block_offsets[i], block_counts[i]))
     # Return assembled block
-    return(block_header + set_0_block + set_1_block + set_2_block + set_6_block)
+    return(block_header + set_0_block + set_1_block + set_2_block + set_3_block
+        + set_4_block + set_5_block + set_6_block)
 
 #Animation defaults?
 def create_section_11 (raw_sec11_struct):
@@ -433,12 +454,12 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                         data_blocks.append(f.read(toc[i+1] - toc[i]))
                 skel_struct, raw_skel_data = read_section_0(f, toc[0])
                 physics_params = read_physics_data (tomdlb_file, data_blocks[4], raw_skel_data)
-                material_struct = read_material_data (tomdlb_file, data_blocks[7])
                 # Read material information (needed for both building mesh and material blocks)
                 material_struct = read_material_data (tomdlb_file, data_blocks[7])
                 phys_unk = struct.unpack("{}2I".format(e), data_blocks[4][0:8]) # Date stamp?
                 mesh_unk = struct.unpack("{}2I".format(e), data_blocks[6][0:8]) # Date stamp?
-                mat_unk = struct.unpack("{}2I".format(e), data_blocks[7][0:8]) # Same as above
+                mat_unk = struct.unpack("{}2I8H".format(e), data_blocks[7][0:24]) # Same as above
+                symphonia_mode = True if sum(mat_unk[2:]) > 0 else False
                 if swap_endian == True:
                     # Changing e will change endianness for this script *only*; do not call set_endianness()!
                     e = {'>': '<', '<': '>'}[e] # Write mode
@@ -448,7 +469,8 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                     for i in [1,2,3,8,9,10]:
                         data_blocks[i] = write_generic_int_section(read_generic_int_section(f, toc[i], (toc[i+1]-toc[i])))
                 # Create new physics block
-                data_blocks[4] = create_section_4(physics_params, phys_unk[0], phys_unk[1])
+                if symphonia_mode == False:
+                    data_blocks[4] = create_section_4(physics_params, phys_unk[0], phys_unk[1])
                 # Create new mesh block
                 data_blocks[6], dlp_block = create_section_6(tomdlb_file, data_blocks[6],
                     dlp_file, material_struct, mesh_unk[0], mesh_unk[1])
@@ -456,7 +478,7 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                     print("Unsupported mesh detected, skipping {}...".format(tomdlb_file))
                     return False
                 # Create new material block
-                data_blocks[7] = create_section_7(material_struct, mat_unk[0], mat_unk[1])
+                data_blocks[7] = create_section_7(material_struct, mat_unk[0], mat_unk[1], symphonia_mode)
                 # Create new opening dictionary
                 all_tex = sorted(list(set([x+'.totexb_d' for y in [z['textures'] for z in material_struct] for x in y])))
                 new_opening_dict_strings = [dlp_file, anmb_file] + all_tex

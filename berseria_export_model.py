@@ -543,7 +543,7 @@ def read_section_6 (f, offset, dlp_file):
 #Materials, offset should be toc[7]
 def read_section_7 (f, offset):
     f.seek(offset)
-    section_7_unk = struct.unpack("{}6I".format(e), f.read(24))
+    section_7_unk = struct.unpack("{}2I8H".format(e), f.read(24))
     section_7_toc = []
     for _ in range(7):
         offset = read_offset(f)
@@ -599,6 +599,21 @@ def read_section_7 (f, offset):
         vals2 = struct.unpack("{}{}I".format(e, num_vals2), f.read(num_vals2 * 4))
         name = read_string(f, str_offset)
         set_2.append({'name': name, 'vals1': vals1, 'vals2': vals2})
+    set_3 = [] # Used by Symphonia only, index of materials
+    if section_7_toc[3]['num_entries'] > 0:
+        f.seek(section_7_toc[3]['offset'])
+        set_3 = list(struct.unpack("{}{}H".format(e, section_7_toc[3]['num_entries']),
+            f.read(section_7_toc[3]['num_entries'] * 2)))
+    set_4 = [] # Used by Symphonia only, each value index of material
+    if section_7_toc[4]['num_entries'] > 0:
+        f.seek(section_7_toc[4]['offset'])
+        set_4 = list(struct.unpack("{}{}H".format(e, section_7_toc[4]['num_entries']),
+            f.read(section_7_toc[4]['num_entries'] * 2)))
+    set_5 = [] # Used by Symphonia only, index of materials
+    if section_7_toc[5]['num_entries'] > 0:
+        f.seek(section_7_toc[5]['offset'])
+        set_5 = list(struct.unpack("{}{}H".format(e, section_7_toc[5]['num_entries']),
+            f.read(section_7_toc[5]['num_entries'] * 2)))
     set_6 = [] # Texture names
     for i in range(section_7_toc[6]['num_entries']):
         if addr_size == 8:
@@ -616,9 +631,17 @@ def read_section_7 (f, offset):
         for i in range(len(set_0)):
             material = {'name': set_2[i]['name']}
             material['textures'] = [set_6[set_1[set_0[i]['base']['tex0']+j][1]]['tex_name'] for j in range(set_0[i]['base']['num_uv'])]
+            if len(set_4) > 0 or len(set_5) > 0:
+                material['texture_params'] = {}
+                if set_0[i]['base']['num_uv'] > 0 and (set_0[i]['base']['tex0'] + set_0[i]['base']['num_uv']) < len(set_4) + 1:
+                    material['texture_params']['set_4'] = set_4[set_0[i]['base']['tex0']:set_0[i]['base']['tex0']+set_0[i]['base']['num_uv']]
+                if set_0[i]['base']['num_uv'] > 0 and (set_0[i]['base']['tex0'] + set_0[i]['base']['num_uv']) < len(set_5) + 1:
+                    material['texture_params']['set_5'] = set_5[set_0[i]['base']['tex0']:set_0[i]['base']['tex0']+set_0[i]['base']['num_uv']]
             material['parameters'] = {'mat_info': set_0[i]['base'],
                 'mat_params': set_0[i]['vals1'], 'shader_params': set_0[i]['vals2'], 'set_2_unk_0': set_2[i]['vals1'],
                 'set_2_unk_1': set_2[i]['vals2']}
+            if i < len(set_3):
+                material['parameters']['set_3'] = set_3[i]
             material_struct.append(material)
     return(material_struct)
 
