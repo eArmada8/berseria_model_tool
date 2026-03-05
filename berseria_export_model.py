@@ -965,11 +965,12 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                             if not os.path.exists(base_name):
                                 os.mkdir(base_name)
                             for i in range(len(meshes)):
-                                filename = '{0:02d}_{1}'.format(i, mesh_blocks_info[i]['name'])
-                                write_fmt(meshes[i]['fmt'], '{0}/{1}.fmt'.format(base_name, filename))
-                                write_ib(meshes[i]['ib'], '{0}/{1}.ib'.format(base_name, filename), meshes[i]['fmt'], '<')
-                                write_vb(meshes[i]['vb'], '{0}/{1}.vb'.format(base_name, filename), meshes[i]['fmt'], '<')
-                                open('{0}/{1}.vgmap'.format(base_name, filename), 'wb').write(json.dumps(vgmap,indent=4).encode())
+                                if len(meshes[i]['ib']) > 0:
+                                    filename = '{0:02d}_{1}'.format(i, mesh_blocks_info[i]['name'])
+                                    write_fmt(meshes[i]['fmt'], '{0}/{1}.fmt'.format(base_name, filename))
+                                    write_ib(meshes[i]['ib'], '{0}/{1}.ib'.format(base_name, filename), meshes[i]['fmt'], '<')
+                                    write_vb(meshes[i]['vb'], '{0}/{1}.vb'.format(base_name, filename), meshes[i]['fmt'], '<')
+                                    open('{0}/{1}.vgmap'.format(base_name, filename), 'wb').write(json.dumps(vgmap,indent=4).encode())
                             mesh_struct = [{y:x[y] for y in x if not any(
                                 ['offset' in y, 'num' in y])} for x in mesh_blocks_info]
                             for i in range(len(mesh_struct)):
