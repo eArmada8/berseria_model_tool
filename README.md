@@ -1,5 +1,5 @@
 # Tales of Berseria mesh toolset
-Scripts to get the mesh data in and out of the .TOMBDLB_D/.TOMDLP_P files from Tales of Berseria (and Tales of Zestiria).  The meshes are exported as raw buffers in the .fmt/.ib/.vb/.vgmap that are compatible with DarkStarSword Blender import plugin for 3DMigoto.  A glTF file is also exported for purposes of weight painting and texture assignment, but the glTF file is not used for modding.
+Scripts to get the mesh data in and out of the .TOMBDLB_D/.TOMDLP_P files from Tales of Berseria, Tales of Zestiria and Tales of Symphonia (PC).  The meshes are exported as raw buffers in the .fmt/.ib/.vb/.vgmap that are compatible with DarkStarSword Blender import plugin for 3DMigoto.  A glTF file is also exported for purposes of weight painting and texture assignment, but the glTF file is not used for modding.
 
 *NOTE:*  There are multiple mesh types, denoted by the upper four bits of the flag byte (`0x00` and `0x40`: not animated e.g weapons, `0x50` skeletally animated e.g. bodies, `0x70` unsure animation e.g. faces).  While berseria_export_meshes.py is able to get mesh data out of all four, a lot of data is not interpreted for `0x40`/`0x70` meshes and berseria_import_meshes.py cannot rebuild them.
 
@@ -8,7 +8,7 @@ Scripts to get the mesh data in and out of the .TOMBDLB_D/.TOMDLP_P files from T
 Please see the [wiki](https://github.com/eArmada8/berseria_model_tool/wiki), and the detailed documentation below.
 
 ## Credits:
-I am as always very thankful for the dedicated reverse engineers at the Kiseki modding discord, for their brilliant work, and for sharing that work so freely.  I am also very thankful to DaZombieKiller for [TalesOfTools](https://github.com/DaZombieKiller/TalesOfTools/) as well as for sharing lots of knowledge about the Tales of Berseria / Zestiria file structure and modding.  I am also thankful to Nenkai for sharing [extensive research](https://github.com/Nenkai/TLAnimDCT/) about the animation format.  This toolset also utilizes the tstrip module (python file format interface) adapted for [Sega_NN_tools](https://github.com/Argx2121/Sega_NN_tools/) by Argx2121, and I am grateful for its use - it is unmodified and is distributed under its original license.
+I am as always very thankful for the dedicated reverse engineers at the Tales of ABCDE modding discord and the Kiseki modding discord, for their brilliant work, and for sharing that work so freely.  I am also very thankful to DaZombieKiller for [TalesOfTools](https://github.com/DaZombieKiller/TalesOfTools/) as well as for sharing lots of knowledge about the Tales of Berseria / Zestiria file structure and modding.  I am also thankful to Nenkai for sharing [extensive research](https://github.com/Nenkai/TLAnimDCT/) about the animation format.  This toolset also utilizes the tstrip module (python file format interface) adapted for [Sega_NN_tools](https://github.com/Argx2121/Sega_NN_tools/) by Argx2121, and I am grateful for its use - it is unmodified and is distributed under its original license.
 
 ## Requirements:
 1. Python 3.10 and newer is required for use of these scripts.  It is free from the Microsoft Store or python.org, for Windows users.  For Linux users, please consult your distro.
@@ -81,6 +81,8 @@ Shows help message.
 
 **Adding and deleting meshes**
 
+*NOTE: Currently, changing this section does not work as expected for Tales of Symphonia (PC)*
+
 If meshes are missing (.fmt/.ib/.vb files that have been deleted), then the script will automatically insert an empty (invisible) mesh in its place.  Metadata does not need to be altered.
 
 The script only looks for mesh files that are listed in the `mesh_info.json`.  If you want to add a new mesh, you will need to add metadata.  So to add another mesh, add a section to the end of `mesh_info.json` like this:
@@ -105,6 +107,8 @@ The combination of `mesh` and `submesh` should probably be unique in the file.  
 Be sure to add a comma to the } for the section prior if you are using a text editor, or better yet use a dedicated JSON editor.  I actually recommend editing JSON in a dedicated editor, because python is not forgiving if you make mistakes with the JSON structure.  (Try https://jsoneditoronline.org)  Also, be sure to point material to a real section in material_info.json.  You might want to create a new section, or use an existing one.
 
 **Changing textures and adding materials**
+
+*NOTE: Currently, changing this section does not work as expected for Tales of Symphonia (PC)*
 
 First look inside mesh_info.json and find the mesh you want to edit.  For example, if you want to edit the metadata for `00_HAND0_R_VEL_HUM_000_MISHAPE.vb` then it will be the first entry and will have `name`: `HAND0_R_VEL_HUM_000_MISHAPE` (JSON numbering starts at zero).  Inside the brackets you will see material.  It looks like this:
 
@@ -135,5 +139,5 @@ Double click the python script in a folder with .TOTEXP_P files and it will conv
 ### dds_to_berseria_totexp_p.py
 Double click the python script in a folder with .dds files and it will convert them to .TOTEXB_D / .TOTEXP_P textures for Tales of Berseria.  Only supports BC1 (DXT1), BC3 (DXT5) and ARGB8 (uncompressed) with mipmaps.  Replace both files at once when modding.
 
-### dds_to_zesteria_totexp_p.py
-The same script as `dds_to_berseria_totexp_p.py`, except it uses 32-bit addressing instead of 64-bit.  Use for making textures for Tales of Zesteria.
+### dds_to_zestiria_totexp_p.py
+The same script as `dds_to_berseria_totexp_p.py`, except it uses 32-bit addressing instead of 64-bit.  Use for making textures for Tales of Zesteria and Tales of Symphonia (PC).
