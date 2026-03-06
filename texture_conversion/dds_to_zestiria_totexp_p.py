@@ -27,9 +27,7 @@ if __name__ == "__main__":
             tex_type = 0x100 if img_dat[0x54:0x58] == b'\x00\x00\x00\x00' else 0x300 # 1 for uncompressed, 3 for DXT1/DXT5
             with open(tex_file.split('.dds')[0]+'.TOTEXB_D', 'wb') as f:
                 f.write(b'DPDF')
-                # I do not know why the header width/height is 50% of the actual dimensions
-                # Maybe the game does not actually use these values?
-                f.write(struct.pack("<3I4H2I", 0x18, 1, 0xC8, tex_type, header['dwWidth']//2, header['dwHeight']//2, 1, 0, 4))
+                f.write(struct.pack("<3I4H2I", 0x18, 1, 0xC8, tex_type, header['dwWidth'], header['dwHeight'], 1, 0, 4))
                 f.write((tex_file.split('.dds')[0]+'.totexp_p').encode()+b'\x00')
             with open(tex_file.split('.dds')[0]+'.TOTEXP_P', 'wb') as f:
                 f.write(struct.pack("<I", len(img_dat)) + img_dat)
