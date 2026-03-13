@@ -81,7 +81,7 @@ def create_section_0 (raw_skel_struct):
     header_block = bytearray()
     data_block = bytearray()
     header_size = (addr_size * 16)
-    data_block.extend(struct.pack("{}2{}4Hf2i5f".format(e, {4: "I", 8: "Q"}[addr_size]), *raw_skel_struct[1]))
+    data_block.extend(struct.pack("{}2{}4Hfi6f".format(e, {4: "I", 8: "Q"}[addr_size]), *raw_skel_struct[1]))
     for i in range(2,10):
         count = len(raw_skel_struct[i])
         if i == 2:
