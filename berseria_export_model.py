@@ -44,6 +44,11 @@ def read_offset (f):
     diff_offset, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
     return(start_offset + diff_offset)
 
+def read_offset_and_count (f):
+    offset = read_offset (f)
+    offset_count, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+    return(offset, offset_count)
+
 def read_string (f, start_offset):
     current_loc = f.tell()
     f.seek(start_offset)
@@ -74,8 +79,7 @@ def trianglestrip_to_list(ib_list):
     return(triangles)
 
 def read_opening_dict (f):
-    dict_offset = read_offset(f)
-    dict_size, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+    dict_offset, dict_size = read_offset_and_count(f)
     opening_dict = []
     return_to_offset = f.tell()
     f.seek(dict_offset)
@@ -91,8 +95,7 @@ def read_section_0 (f, offset):
     section_0_header = struct.unpack("{}3I6H".format(e), f.read(24))
     section_0_toc = []
     for _ in range(8):
-        offset = read_offset(f)
-        num_entries, = struct.unpack("{}{}".format(e,{4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+        offset, num_entries = read_offset_and_count(f)
         section_0_toc.append({'offset': offset, 'num_entries': num_entries})
     unk_block = list(struct.unpack("{}2{}".format(e,{4: "I", 8: "Q"}[addr_size]), f.read(addr_size * 2)))
     unk_block.extend(struct.unpack("{}4Hfi6f".format(e), f.read(40)))
@@ -149,8 +152,7 @@ def read_dlb_skeleton (dlb_file):
                 offset = read_offset(f)
                 f.seek(offset) # Jump to section 0
                 f.seek(0x18,1)
-                offset = read_offset(f)
-                num_entries, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+                offset, num_entries = read_offset_and_count(f)
                 f.seek(offset)
                 skel_list.extend(list(struct.unpack("{}{}I".format(e, num_entries), f.read(num_entries * 4))))
     set_address_size(current_addr_size) # Restore original address size
@@ -475,8 +477,7 @@ def read_section_4 (f, offset):
     counts = struct.unpack("{}2H".format(e), f.read(4))
     if addr_size == 8:
         f.seek(4,1) # Padding
-    offset = read_offset(f)
-    count, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+    offset, count = read_offset_and_count(f)
     data = [list(struct.unpack("{}4h25f".format(e), f.read(0x6c))) for _ in range(count)]
     param_names = ['flag', 'target_node', 'group', 'unk_correction', 'elasticity_x', 'elasticity_y',
         'air_resist', 'gravity', 'weight', 'friction', 'size_of_collision', 'unk0', 'unk1', 'unk2', 'unk3',
@@ -491,10 +492,8 @@ def read_section_4 (f, offset):
 #Collision meshes, offset should be toc[5].
 def read_section_5 (f, offset, decode_data = False):
     f.seek(offset)
-    offset1 = read_offset(f)
-    count1, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
-    offset2 = read_offset(f)
-    count2, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+    offset1, count1 = read_offset_and_count(f)
+    offset2, count2 = read_offset_and_count(f)
     data1 = [list(struct.unpack("{}2H6f2I".format(e), f.read(36))) for _ in range(count1)]
     data2 = [list(struct.unpack("{}9f".format(e), f.read(36))) for _ in range(count2)]
     if decode_data == True:
@@ -513,8 +512,7 @@ def read_section_6 (f, offset, dlp_file):
     section_6_unk = struct.unpack("{}4I".format(e), f.read(16))
     section_6_toc = []
     for _ in range(4):
-        offset = read_offset(f)
-        num_entries, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+        offset, num_entries = read_offset_and_count(f)
         section_6_toc.append({'offset': offset, 'num_entries': num_entries})
     #section_6_toc[0] - VEC4 (u32, f32?) - in sample is all zeroes
     #section_6_toc[1] - meshes
@@ -531,8 +529,7 @@ def read_section_6 (f, offset, dlp_file):
             data["mesh"], data["submesh"], data["node"], \
                 data["flags"], data["material"], data["unknown"] = struct.unpack("{}i4hi".format(e), f.read(16))
             data['string_offset'] = read_offset(f)
-            data['data_offset'] = read_offset(f)
-            data["data_block_size"], = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+            data['data_offset'], data["data_block_size"] = read_offset_and_count(f)
             current_offset = f.tell()
             data["name"] = read_string (f, data['string_offset'])
             meshes.append(read_mesh (f, idx_f, data['data_offset'], data["flags"]))
@@ -546,8 +543,7 @@ def read_section_7 (f, offset):
     section_7_unk = struct.unpack("{}2I8H".format(e), f.read(24))
     section_7_toc = []
     for _ in range(7):
-        offset = read_offset(f)
-        num_entries, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+        offset, num_entries = read_offset_and_count(f)
         section_7_toc.append({'offset': offset, 'num_entries': num_entries})
     set_0_names = ['material_id','mat_variation_flags','mat_alpha_flags','num_uv','ani_mat_id','tex0',
         'shader','render_type','unk0','unk1','unk2']
@@ -559,10 +555,8 @@ def read_section_7 (f, offset):
     for i in range(section_7_toc[0]['num_entries']):
         f.seek(section_7_toc[0]['offset'] + (i * (4 * addr_size + 0x18)))
         values = dict(zip(set_0_names, struct.unpack("{}I10h".format(e), f.read(24))))
-        offset1 = read_offset(f)
-        num_vals1, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
-        offset2 = read_offset(f)
-        num_vals2, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+        offset1, num_vals1 = read_offset_and_count(f)
+        offset2, num_vals2 = read_offset_and_count(f)
         end_offset = f.tell()
         f.seek(offset1)
         param_names_1 = ['unk{0:02d}'.format(j) for j in range(num_vals1)]
@@ -588,10 +582,8 @@ def read_section_7 (f, offset):
     set_2 = [] # Materials, including material names (and alpha)
     for i in range(section_7_toc[2]['num_entries']):
         f.seek(section_7_toc[2]['offset'] + (i * (5 * addr_size)))
-        offset1 = read_offset(f)
-        num_vals1, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
-        offset2 = read_offset(f)
-        num_vals2, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+        offset1, num_vals1 = read_offset_and_count(f)
+        offset2, num_vals2 = read_offset_and_count(f)
         str_offset = read_offset(f)
         f.seek(offset1)
         vals1 = struct.unpack("{}{}I".format(e, num_vals1), f.read(num_vals1 * 4))
@@ -661,10 +653,8 @@ def read_section_11 (f, offset, decode_data = False):
             decoded[i]
         return(decoded)
     f.seek(offset)
-    offset1 = read_offset(f)
-    count1, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
-    offset2 = read_offset(f)
-    count2, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size))
+    offset1, count1 = read_offset_and_count(f)
+    offset2, count2 = read_offset_and_count(f)
     f.seek(offset1) # Skip 0x10 zero bytes for 8-byte addressing, 0x0c zero bytes for 4-byte - maybe a blank address?
     # data1 does not look like u64, except when looking at endianness, dunno why
     data1 = [struct.unpack("{}Q".format(e), f.read(8))[0] for _ in range(count1)]
