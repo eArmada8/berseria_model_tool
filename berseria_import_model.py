@@ -294,7 +294,7 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
     return(section_6, uvidx_data)
 
 #Materials
-def create_section_7 (material_struct, unk0 = 0, unk1 = 0, symphonia_mode = False):
+def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
     all_tex = sorted(list(set([x for y in [z['textures'] for z in material_struct] for x in y])))
     tex_dict = {all_tex[i]:i for i in range(len(all_tex))}
     tex_counter = 0
@@ -302,16 +302,20 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0, symphonia_mode = Fals
     set_1 = []
     set_2_val2 = []
     set_3 = []
-    set_4 = [] # Also set 5
+    set_4 = []
+    set_5 = []
     for i in range(len(material_struct)):
         s0vals = list(material_struct[i]['parameters']['mat_info'].values())
         s0vals[3], s0vals[5] = len(material_struct[i]['textures']), tex_counter
         set_0_base.append(s0vals)
         tex_counter += len(material_struct[i]['textures'])
         set_1.extend([[0, tex_dict[x], 0] for x in material_struct[i]['textures']])
-        if symphonia_mode == True:
+        if 'set_3' in material_struct[i]['parameters']:
             set_3.append(i)
+        if 'texture_params' in material_struct[i] and 'set_4' in material_struct[i]['texture_params']:
             set_4.extend([i for _ in range(len(material_struct[i]['textures']))])
+        if 'texture_params' in material_struct[i] and 'set_5' in material_struct[i]['texture_params']:
+            set_5.extend([i for _ in range(len(material_struct[i]['textures']))])
     # Build section 0 (Material parameters?)
     set_0_header_len = (addr_size * 4 + 0x18)  * len(material_struct)
     set_0_header = bytearray()
@@ -371,7 +375,10 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0, symphonia_mode = Fals
     while len(set_4_block) % addr_size > 0:
         set_4_block.extend(struct.pack("{}h".format(e), 0))
     # Build section 5
-    set_5_block = set_4_block
+    set_5_block = bytearray()
+    set_5_block.extend(struct.pack("{}{}h".format(e, len(set_5)), *set_5))
+    while len(set_5_block) % addr_size > 0:
+        set_5_block.extend(struct.pack("{}h".format(e), 0))
     # Build section 6 (Textures)
     set_6_header_len = (addr_size + {4: 4, 8: 16}[addr_size]) * len(all_tex)
     set_6_header = bytearray()
@@ -387,8 +394,11 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0, symphonia_mode = Fals
         set_6_data += b'\x00' * (addr_size - (len(set_6_data) % addr_size))
     set_6_block = set_6_header + set_6_data
     # Build offset header
-    count_3, count_4, count_5 = len(set_3), len(set_4), len(set_4)
-    header_counts = [count_3*4, count_3, count_4*5, count_4*3, count_4, count_4, count_4, count_4]
+    count_3, count_4, count_5 = len(set_3), len(set_4), len(set_5)
+    header_counts = [count_3*4, count_3,  # Color animation counts (# RGBA floats, # animation targets)
+                    count_4*5, count_4*3, # UV scroll animation counts (# 5x floats, # animation targets)
+                    count_5, count_5,     # Sprite sheet animation counts (# 1x floats, # animation targets)
+                    count_4, count_5]     # count_4 and count_5 again
     block_lengths = [len(set_0_block), len(set_1_block), len(set_2_block),
         len(set_3_block), len(set_4_block), len(set_5_block), len(set_6_block)]
     block_offsets = [sum(block_lengths[:i], (addr_size * 14)-((addr_size * 2) * i)) if block_lengths[i] > 0 else 0
@@ -479,7 +489,7 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                     print("Unsupported mesh detected, skipping {}...".format(tomdlb_file))
                     return False
                 # Create new material block
-                data_blocks[7] = create_section_7(material_struct, mat_unk[0], mat_unk[1], symphonia_mode)
+                data_blocks[7] = create_section_7(material_struct, mat_unk[0], mat_unk[1])
                 # Create new opening dictionary
                 all_tex = sorted(list(set([x+'.totexb_d' for y in [z['textures'] for z in material_struct] for x in y])))
                 new_opening_dict_strings = [dlp_file, anmb_file] + all_tex
