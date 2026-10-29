@@ -545,12 +545,13 @@ def read_section_7 (f, offset):
     for _ in range(7):
         offset, num_entries = read_offset_and_count(f)
         section_7_toc.append({'offset': offset, 'num_entries': num_entries})
-    set_0_names = ['material_id','mat_variation_flags','mat_alpha_flags','num_uv','ani_mat_id','tex0',
-        'shader','render_type','unk0','unk1','unk2']
+    set_0_names = ['material_id','mat_render_flags','mat_alpha_flags','num_tex_layers','ani_color_slot','first_tex_layer',
+        'ani_uv_scroll_slot','ani_sprite_sheet_slot','shader_type','render_pass','unused']
     set_0_params = ['fog','shadow_target','projection_target','local_z_pass','water_reflect',
-        'flow','stencil_order','outline','highlight_target', 'invisible']
-    set_0_shader_params = ['unk00','unk01','unk02','unk03','unk04','unk05','mat_type','use_specular_tex',
-        'specular_red','specular_green','specular_blue','specular_power']
+        'glow','stencil_order','outline','highlight_target','invisible','casts_shadow']
+    set_0_shader_params = ['toon_ramp_row','toon_ramp_select','rim_light_row','unk03','unk04','maybe_alpha_test','mat_type',
+        'use_specular_tex','specular_red','specular_green','specular_blue','specular_power','unk12','unk13','unk14',
+        'enable_env_map','env_map_strength']
     set_0 = [] # Materials, including the indices that map to set_1 (textures)
     for i in range(section_7_toc[0]['num_entries']):
         f.seek(section_7_toc[0]['offset'] + (i * (4 * addr_size + 0x18)))
@@ -571,7 +572,7 @@ def read_section_7 (f, offset):
         else:
             vals2 = struct.unpack("{}{}I".format(e, num_vals2), f.read(num_vals2 * 4))
         param_names_2 = ['unk{0:02d}'.format(j) for j in range(num_vals2)]
-        if num_vals2 > len(set_0_shader_params):
+        if num_vals2 >= len(set_0_shader_params):
             param_names_2[0:len(set_0_shader_params)] = set_0_shader_params
         set_0.append({'base': values, 'vals1': vals1, 'vals2': dict(zip(param_names_2, vals2))})
     set_1 = [] # Texture assignments, each is a tuple where the second number points to set_6
@@ -622,13 +623,13 @@ def read_section_7 (f, offset):
     if len(set_0) == len(set_2):
         for i in range(len(set_0)):
             material = {'name': set_2[i]['name']}
-            material['textures'] = [set_6[set_1[set_0[i]['base']['tex0']+j][1]]['tex_name'] for j in range(set_0[i]['base']['num_uv'])]
+            material['textures'] = [set_6[set_1[set_0[i]['base']['first_tex_layer']+j][1]]['tex_name'] for j in range(set_0[i]['base']['num_tex_layers'])]
             if len(set_4) > 0 or len(set_5) > 0:
                 material['texture_params'] = {}
-                if set_0[i]['base']['num_uv'] > 0 and (set_0[i]['base']['tex0'] + set_0[i]['base']['num_uv']) < len(set_4) + 1:
-                    material['texture_params']['set_4'] = set_4[set_0[i]['base']['tex0']:set_0[i]['base']['tex0']+set_0[i]['base']['num_uv']]
-                if set_0[i]['base']['num_uv'] > 0 and (set_0[i]['base']['tex0'] + set_0[i]['base']['num_uv']) < len(set_5) + 1:
-                    material['texture_params']['set_5'] = set_5[set_0[i]['base']['tex0']:set_0[i]['base']['tex0']+set_0[i]['base']['num_uv']]
+                if set_0[i]['base']['num_tex_layers'] > 0 and (set_0[i]['base']['first_tex_layer'] + set_0[i]['base']['num_tex_layers']) < len(set_4) + 1:
+                    material['texture_params']['set_4'] = set_4[set_0[i]['base']['first_tex_layer']:set_0[i]['base']['first_tex_layer']+set_0[i]['base']['num_tex_layers']]
+                if set_0[i]['base']['num_tex_layers'] > 0 and (set_0[i]['base']['first_tex_layer'] + set_0[i]['base']['num_tex_layers']) < len(set_5) + 1:
+                    material['texture_params']['set_5'] = set_5[set_0[i]['base']['first_tex_layer']:set_0[i]['base']['first_tex_layer']+set_0[i]['base']['num_tex_layers']]
             material['parameters'] = {'mat_info': set_0[i]['base'],
                 'mat_params': set_0[i]['vals1'], 'shader_params': set_0[i]['vals2'], 'set_2_unk_0': set_2[i]['vals1'],
                 'set_2_unk_1': set_2[i]['vals2']}
