@@ -549,9 +549,10 @@ def read_section_7 (f, offset):
         'ani_uv_scroll_slot','ani_sprite_sheet_slot','shader_type','render_pass','unused']
     set_0_params = ['fog','shadow_target','projection_target','local_z_pass','water_reflect',
         'glow','stencil_order','outline','highlight_target','invisible','casts_shadow']
-    set_0_shader_params = ['toon_ramp_row','toon_ramp_select','rim_light_row','unk03','unk04','maybe_alpha_test','mat_type',
+    set_0_shader_params = {1: ['toon_ramp_row','toon_ramp_select','rim_light_row','unk03','unk04','maybe_alpha_test','mat_type',
         'use_specular_tex','specular_red','specular_green','specular_blue','specular_power','unk12','unk13','unk14',
-        'enable_env_map','env_map_strength']
+        'enable_env_map','env_map_strength']}
+    set_0_shader_params[8] = set_0_shader_params[1] #1 is Zest, 8 is Bers, adds one param but it's unknown
     set_0 = [] # Materials, including the indices that map to set_1 (textures)
     for i in range(section_7_toc[0]['num_entries']):
         f.seek(section_7_toc[0]['offset'] + (i * (4 * addr_size + 0x18)))
@@ -572,8 +573,8 @@ def read_section_7 (f, offset):
         else:
             vals2 = struct.unpack("{}{}I".format(e, num_vals2), f.read(num_vals2 * 4))
         param_names_2 = ['unk{0:02d}'.format(j) for j in range(num_vals2)]
-        if num_vals2 >= len(set_0_shader_params):
-            param_names_2[0:len(set_0_shader_params)] = set_0_shader_params
+        if values['shader_type'] in set_0_shader_params:
+            param_names_2[0:len(set_0_shader_params[values['shader_type']])] = set_0_shader_params[values['shader_type']]
         set_0.append({'base': values, 'vals1': vals1, 'vals2': dict(zip(param_names_2, vals2))})
     set_1 = [] # Texture assignments, each is a tuple where the second number points to set_6
     for i in range(section_7_toc[1]['num_entries']):
