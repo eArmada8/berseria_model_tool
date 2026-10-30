@@ -549,21 +549,22 @@ def read_section_7 (f, offset):
         'ani_uv_scroll_slot','ani_sprite_sheet_slot','shader_type','render_pass','unused']
     set_0_params = ['fog','shadow_target','projection_target','local_z_pass','water_reflect',
         'glow','stencil_order','outline','highlight_target','invisible','casts_shadow']
-    set_0_shader_params = {1: ['toon_ramp_row','toon_ramp_select','rim_light_row','unk03','unk04','maybe_alpha_test','mat_type',
+    set_0_shader_params = {1: ['toon_ramp_row','toon_color_preset','rim_light_row','unk03','unk04','maybe_alpha_test','mat_type',
         'use_specular_tex','specular_red','specular_green','specular_blue','specular_power','unk12','unk13','unk14',
-        'enable_env_map','env_map_strength']}
-    set_0_shader_params[8] = set_0_shader_params[1] #1 is Zest, 8 is Bers, adds one param but it's unknown
+        'enable_env_map','env_map_strength'],
+        2: ['unk00','unk01','unk02','unk03','mat_params_index'],
+        3: ['unk00','unk01','unk02','unk03','mat_params_index','light_mode']}
+    set_0_shader_params[8] = set_0_shader_params[1] #1 is Zest, 8 is Bers, adds 6 params but they're unknown
     set_0 = [] # Materials, including the indices that map to set_1 (textures)
     for i in range(section_7_toc[0]['num_entries']):
         f.seek(section_7_toc[0]['offset'] + (i * (4 * addr_size + 0x18)))
-        values = dict(zip(set_0_names, struct.unpack("{}I10h".format(e), f.read(24))))
+        values = dict(zip(set_0_names, struct.unpack("{}I3H4h3H".format(e), f.read(24))))
         offset1, num_vals1 = read_offset_and_count(f)
         offset2, num_vals2 = read_offset_and_count(f)
         end_offset = f.tell()
         f.seek(offset1)
         param_names_1 = ['unk{0:02d}'.format(j) for j in range(num_vals1)]
-        if num_vals1 == 11:
-            param_names_1[0:len(set_0_params)] = set_0_params
+        param_names_1[0:len(set_0_params)] = set_0_params
         vals1 = dict(zip(param_names_1, struct.unpack("{}{}I".format(e, num_vals1), f.read(num_vals1 * 4))))
         f.seek(offset2)
         if num_vals2 == 0x17:
@@ -576,11 +577,11 @@ def read_section_7 (f, offset):
         if values['shader_type'] in set_0_shader_params:
             param_names_2[0:len(set_0_shader_params[values['shader_type']])] = set_0_shader_params[values['shader_type']]
         set_0.append({'base': values, 'vals1': vals1, 'vals2': dict(zip(param_names_2, vals2))})
-    set_1 = [] # Texture assignments, each is a tuple where the second number points to set_6
+    set_1 = [] # Texture assignments, each is a tuple where the third number points to set_6
     for i in range(section_7_toc[1]['num_entries']):
         f.seek(section_7_toc[1]['offset'] + (i * 6))
-        values = struct.unpack("{}3h".format(e), f.read(6))
-        set_1.append(values)
+        values = struct.unpack("{}2B2H".format(e), f.read(6))
+        set_1.append(list(values))
     set_2 = [] # Materials, including material names (and alpha)
     for i in range(section_7_toc[2]['num_entries']):
         f.seek(section_7_toc[2]['offset'] + (i * (5 * addr_size)))
@@ -593,17 +594,17 @@ def read_section_7 (f, offset):
         vals2 = struct.unpack("{}{}I".format(e, num_vals2), f.read(num_vals2 * 4))
         name = read_string(f, str_offset)
         set_2.append({'name': name, 'vals1': vals1, 'vals2': vals2})
-    set_3 = [] # Used by Symphonia only, index of materials
+    set_3 = [] # Color Animation Targets - list of material indices (not needed)
     if section_7_toc[3]['num_entries'] > 0:
         f.seek(section_7_toc[3]['offset'])
         set_3 = list(struct.unpack("{}{}H".format(e, section_7_toc[3]['num_entries']),
             f.read(section_7_toc[3]['num_entries'] * 2)))
-    set_4 = [] # Used by Symphonia only, each value index of material
+    set_4 = [] # UV Scroll Animation Targets - list of material indices (not needed)
     if section_7_toc[4]['num_entries'] > 0:
         f.seek(section_7_toc[4]['offset'])
         set_4 = list(struct.unpack("{}{}H".format(e, section_7_toc[4]['num_entries']),
             f.read(section_7_toc[4]['num_entries'] * 2)))
-    set_5 = [] # Used by Symphonia only, index of materials
+    set_5 = [] # Sprite Sheet Animation Targets - list of material indices (not needed)
     if section_7_toc[5]['num_entries'] > 0:
         f.seek(section_7_toc[5]['offset'])
         set_5 = list(struct.unpack("{}{}H".format(e, section_7_toc[5]['num_entries']),
@@ -613,29 +614,48 @@ def read_section_7 (f, offset):
         if addr_size == 8:
             f.seek(section_7_toc[6]['offset'] + (i * 24))
             str_offset = read_offset(f)
-            vals = struct.unpack("{}2Q".format(e), f.read(16))
+            vals = struct.unpack("{}IfI4x".format(e), f.read(16))
         else:
             f.seek(section_7_toc[6]['offset'] + (i * 8))
             str_offset = read_offset(f)
-            vals = struct.unpack("{}2H".format(e), f.read(4))
+            vals = struct.unpack("{}I".format(e), f.read(4))
+        wrapS = 'MIRROR' if vals[0] & 1 else 'REPEAT' if vals[0] & 4 else 'CLAMP'
+        wrapT = 'MIRROR' if vals[0] & 2 else 'REPEAT' if vals[0] & 8 else 'CLAMP'
         tex_name = read_string(f, str_offset)
-        set_6.append({'tex_name': tex_name, 'vals': vals})
+        set_6_i = {'tex_name': tex_name, 'wrapS': wrapS, 'wrapT': wrapT, 'vals': vals}
+        if addr_size == 8:
+            set_6_i['lod_bias'] = vals[1]
+        set_6.append(set_6_i)
     material_struct = []
     if len(set_0) == len(set_2):
         for i in range(len(set_0)):
             material = {'name': set_2[i]['name']}
-            material['textures'] = [set_6[set_1[set_0[i]['base']['first_tex_layer']+j][1]]['tex_name'] for j in range(set_0[i]['base']['num_tex_layers'])]
-            if len(set_4) > 0 or len(set_5) > 0:
-                material['texture_params'] = {}
-                if set_0[i]['base']['num_tex_layers'] > 0 and (set_0[i]['base']['first_tex_layer'] + set_0[i]['base']['num_tex_layers']) < len(set_4) + 1:
-                    material['texture_params']['set_4'] = set_4[set_0[i]['base']['first_tex_layer']:set_0[i]['base']['first_tex_layer']+set_0[i]['base']['num_tex_layers']]
-                if set_0[i]['base']['num_tex_layers'] > 0 and (set_0[i]['base']['first_tex_layer'] + set_0[i]['base']['num_tex_layers']) < len(set_5) + 1:
-                    material['texture_params']['set_5'] = set_5[set_0[i]['base']['first_tex_layer']:set_0[i]['base']['first_tex_layer']+set_0[i]['base']['num_tex_layers']]
+            material['textures'] = []
+            for j in range(set_0[i]['base']['num_tex_layers']):
+                set_1_tex_i = set_0[i]['base']['first_tex_layer']+j
+                set_6_tex_i = set_1[set_1_tex_i][2]
+                texture = {'texture_name': set_6[set_6_tex_i]['tex_name'],
+                    'wrapS': set_6[set_6_tex_i]['wrapS'],
+                    'wrapT': set_6[set_6_tex_i]['wrapT']}
+                if 'lod_bias' in set_6[set_6_tex_i]:
+                    texture['lod_bias'] = set_6[set_6_tex_i]['lod_bias']
+                texture['layer_options'] = {'blend_type': set_1[set_1_tex_i][0],
+                    'unk': set_1[set_1_tex_i][1],
+                    'frame_count': set_1[set_1_tex_i][3]}
+                if texture['layer_options']['frame_count'] > 0:
+                    frames = []
+                    for k in range(texture['layer_options']['frame_count']):
+                        frame = {'texture_name': set_6[set_6_tex_i + k]['tex_name'],
+                            'wrapS': set_6[set_6_tex_i + k]['wrapS'],
+                            'wrapT': set_6[set_6_tex_i + k]['wrapT']}
+                        if 'lod_bias' in set_6[set_6_tex_i + k]:
+                            frame['lod_bias'] = set_6[set_6_tex_i + k]['lod_bias']
+                        frames.append(frame)
+                    texture['frames'] = frames
+                material['textures'].append(texture)
             material['parameters'] = {'mat_info': set_0[i]['base'],
-                'mat_params': set_0[i]['vals1'], 'shader_params': set_0[i]['vals2'], 'set_2_unk_0': set_2[i]['vals1'],
-                'set_2_unk_1': set_2[i]['vals2']}
-            if i < len(set_3):
-                material['parameters']['set_3'] = set_3[i]
+                'mat_params': set_0[i]['vals1'], 'shader_params': set_0[i]['vals2'], 'vshader_keys': set_2[i]['vals1'],
+                'pshader_keys': set_2[i]['vals2']}
             material_struct.append(material)
     return(material_struct)
 
@@ -749,7 +769,12 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
     buffer_view = 0
     # Materials
     material_dict = [{'name': material_struct[i]['name'],
-        'texture': material_struct[i]['textures'][0] if len(material_struct[i]['textures']) > 0 else '',
+        'texture': material_struct[i]['textures'][0]['texture_name']
+        if len(material_struct[i]['textures']) > 0 else '',
+        'wrapS': {'REPEAT': 10497, 'MIRROR': 33648, 'CLAMP': 33071}[material_struct[i]['textures'][0]['wrapS']]
+        if len(material_struct[i]['textures']) > 0 else 10497,
+        'wrapT': {'REPEAT': 10497, 'MIRROR': 33648, 'CLAMP': 33071}[material_struct[i]['textures'][0]['wrapT']]
+        if len(material_struct[i]['textures']) > 0 else 10497,
         'alpha': material_struct[i]['parameters']['mat_info']['mat_alpha_flags']}
         for i in range(len(material_struct))]
     texture_list = sorted(list(set([x['texture'] for x in material_dict if not x['texture'] == ''])))
@@ -758,7 +783,7 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
         material = { 'name': mat['name'] }
         material['pbrMetallicRoughness'] = { 'metallicFactor' : 0.0, 'roughnessFactor' : 1.0 }
         if not mat['texture'] == '':
-            sampler = { 'wrapS': 10497, 'wrapT': 10497 } # I have no idea if this setting exists
+            sampler = { 'wrapS': mat['wrapS'], 'wrapT':  mat['wrapT'] }
             texture = { 'source': texture_list.index(mat['texture']), 'sampler': len(gltf_data['samplers']) }
             material['pbrMetallicRoughness']['baseColorTexture'] = { 'index' : len(gltf_data['textures']), }
             gltf_data['samplers'].append(sampler)

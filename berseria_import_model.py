@@ -294,34 +294,72 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
     return(section_6, uvidx_data)
 
 #Materials
-def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
-    all_tex = sorted(list(set([x for y in [z['textures'] for z in material_struct] for x in y])))
-    tex_dict = {all_tex[i]:i for i in range(len(all_tex))}
+def create_section_7 (material_struct, ani_value_first_index = 0, ani_target_first_index = 0):
+    all_tex_groups = []
+    for i in range(len(material_struct)):
+        for j in range(len(material_struct[i]['textures'])):
+            if 'frames' in material_struct[i]['textures'][j]:
+                tex_group = []
+                for k in range(len(material_struct[i]['textures'][j]['frames'])):
+                    tex_group.append(material_struct[i]['textures'][j]['frames'][k])
+            else:
+                tex_group = [material_struct[i]['textures'][j]]
+            all_tex_groups.append(tex_group)
+    # Deduplicate groups
+    dedup_tex_groups = []
+    for i in range(len(all_tex_groups)):
+        if len(all_tex_groups[i]) > 1: # Process frames first
+            if not [x['texture_name'] for x in all_tex_groups[i]] in [[t['texture_name'] for t in g] for g in dedup_tex_groups]:
+                dedup_tex_groups.append(all_tex_groups[i])
+    for i in range(len(all_tex_groups)):
+        if len(all_tex_groups[i]) == 1: # Single textures can exist inside other frames
+            if not all_tex_groups[i][0]['texture_name'] in [x for y in [[t['texture_name'] for t in g] for g in dedup_tex_groups] for x in y]:
+                dedup_tex_groups.append(all_tex_groups[i])
+    sorted_tex_groups = sorted(dedup_tex_groups, key=lambda g: [t['texture_name'] for t in g])
+    all_tex = [x for y in sorted_tex_groups for x in y]
+    tex_dict = {}
+    for i in range(len(all_tex)):
+        if not all_tex[i]['texture_name'] in tex_dict:
+            tex_dict[all_tex[i]['texture_name']] = i
+    all_tex_name_list = [x['texture_name'] for x in all_tex]
+    all_tex_names = [x + '.totexb_d' for x in tex_dict.keys()]
+    frame_dict = {} # Frames need consecutive textures, so find the exact group in the final list
+    for i in range(len(all_tex_groups)):
+        if len(all_tex_groups[i]) > 1: # Process frames only
+            frame_names = [x['texture_name'] for x in all_tex_groups[i]]
+            counter = 0
+            while all_tex_name_list[counter:counter+len(frame_names)] != frame_names:
+                counter += 1
+            frame_dict[tuple(frame_names)] = counter
     tex_counter = 0
     set_0_base = []
     set_1 = []
-    set_2_val2 = []
-    set_3 = []
-    set_4 = []
-    set_5 = []
     for i in range(len(material_struct)):
         s0vals = list(material_struct[i]['parameters']['mat_info'].values())
         s0vals[3], s0vals[5] = len(material_struct[i]['textures']), tex_counter
         set_0_base.append(s0vals)
         tex_counter += len(material_struct[i]['textures'])
-        set_1.extend([[0, tex_dict[x], 0] for x in material_struct[i]['textures']])
-        if 'set_3' in material_struct[i]['parameters']:
-            set_3.append(i)
-        if 'texture_params' in material_struct[i] and 'set_4' in material_struct[i]['texture_params']:
-            set_4.extend([i for _ in range(len(material_struct[i]['textures']))])
-        if 'texture_params' in material_struct[i] and 'set_5' in material_struct[i]['texture_params']:
-            set_5.extend([i for _ in range(len(material_struct[i]['textures']))])
+        set_1.extend([[material_struct[i]['textures'][j]['layer_options']['blend_type'],
+            material_struct[i]['textures'][j]['layer_options']['unk'],
+            frame_dict[tuple(x['texture_name'] for x in material_struct[i]['textures'][j]['frames'])]
+            if 'frames' in material_struct[i]['textures'][j]
+            else tex_dict[material_struct[i]['textures'][j]['texture_name']],
+            material_struct[i]['textures'][j]['layer_options']['frame_count']]
+            for j in range(len(material_struct[i]['textures']))])
+    mat_info_blocks = [x['parameters']['mat_info'] for x in material_struct]
+    set_3 = sorted(range(len(mat_info_blocks)), key=lambda i: mat_info_blocks[i]['ani_color_slot'])
+    set_3 = [i for i in set_3 if mat_info_blocks[i]['ani_color_slot'] != -1]
+    count_3 = len(set_3)
+    set_4 = [i for i, m in enumerate(mat_info_blocks) if m['ani_uv_scroll_slot'] != -1]
+    count_4 = sum([len(material_struct[i]['textures']) for i in set_4])
+    set_5 = [i for i, m in enumerate(mat_info_blocks) if m['ani_sprite_sheet_slot'] != -1]
+    count_5 = sum([len(material_struct[i]['textures']) for i in set_5])
     # Build section 0 (Material parameters?)
     set_0_header_len = (addr_size * 4 + 0x18)  * len(material_struct)
     set_0_header = bytearray()
     set_0_data = bytearray()
     for i in range(len(material_struct)):
-        set_0_header.extend(struct.pack("{}I10h".format(e), *set_0_base[i]))
+        set_0_header.extend(struct.pack("{}I3H4h3H".format(e), *set_0_base[i]))
         offset = set_0_header_len - len(set_0_header) + len(set_0_data)
         set_0_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset, len(material_struct[i]['parameters']['mat_params'])))
         set_0_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['parameters']['mat_params'])),
@@ -338,10 +376,12 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
             set_0_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['parameters']['shader_params'])),
                 *list(material_struct[i]['parameters']['shader_params'].values())))
     set_0_block = set_0_header + set_0_data
+    if len(set_0_block) % addr_size:
+        set_0_block += b'\x00' * (addr_size - (len(set_0_block) % addr_size))
     # Build section 1 (Texture Pointers)
     set_1_block = bytearray()
     for i in range(len(set_1)):
-        set_1_block.extend(struct.pack("{}3h".format(e), *set_1[i]))
+        set_1_block.extend(struct.pack("{}2B2H".format(e), *set_1[i]))
     if len(set_1_block) % addr_size:
         set_1_block += b'\x00' * (addr_size - (len(set_1_block) % addr_size))
     # Build section 2 (Material name, etc)
@@ -350,20 +390,22 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
     set_2_data = bytearray()
     for i in range(len(material_struct)):
         offset = set_2_header_len - len(set_2_header) + len(set_2_data)
-        set_2_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset, len(material_struct[i]['parameters']['set_2_unk_0'])))
-        set_2_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['parameters']['set_2_unk_0'])),
-            *material_struct[i]['parameters']['set_2_unk_0']))
+        set_2_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset, len(material_struct[i]['parameters']['vshader_keys'])))
+        set_2_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['parameters']['vshader_keys'])),
+            *material_struct[i]['parameters']['vshader_keys']))
         offset = set_2_header_len - len(set_2_header) + len(set_2_data)
         set_2_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset,
-            len(material_struct[i]['parameters']['set_2_unk_1'])))
-        set_2_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['parameters']['set_2_unk_1'])),
-            *material_struct[i]['parameters']['set_2_unk_1']))
+            len(material_struct[i]['parameters']['pshader_keys'])))
+        set_2_data.extend(struct.pack("{}{}I".format(e, len(material_struct[i]['parameters']['pshader_keys'])),
+            *material_struct[i]['parameters']['pshader_keys']))
         offset = set_2_header_len - len(set_2_header) + len(set_2_data)
         set_2_header.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset))
         set_2_data.extend(material_struct[i]['name'].encode()+b'\x00')
         if len(set_2_data) % 4:
             set_2_data += b'\x00' * (4 - (len(set_2_data) % 4))
     set_2_block = set_2_header + set_2_data
+    if len(set_2_block) % addr_size:
+        set_2_block += b'\x00' * (addr_size - (len(set_2_block) % addr_size))
     # Build section 3
     set_3_block = bytearray()
     set_3_block.extend(struct.pack("{}{}h".format(e, len(set_3)), *set_3))
@@ -384,17 +426,22 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
     set_6_header = bytearray()
     set_6_data = bytearray()
     for i in range(len(all_tex)):
+        wrap_flag = ({'MIRROR':1,'REPEAT':4,'CLAMP':0}[all_tex[i]['wrapS']] +
+                     {'MIRROR':2,'REPEAT':8,'CLAMP':0}[all_tex[i]['wrapT']])
         offset = set_6_header_len - len(set_6_header) + len(set_6_data)
         set_6_header.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset))
-        set_6_data.extend(all_tex[i].encode()+b'\x00')
+        set_6_data.extend(all_tex[i]['texture_name'].encode()+b'\x00')
         if len(set_6_data) % 2:
             set_6_data += b'\x00' * (2 - (len(set_6_data) % 2))
-        set_6_header.extend(struct.pack("{}2{}".format(e, {4: "H", 8: "Q"}[addr_size]), 12, 0)) # SHORTS here in 32-bit format
+        if addr_size == 8:
+            set_6_header.extend(struct.pack("{}IfI4x".format(e), wrap_flag,
+                all_tex[i]['lod_bias'] if 'lod_bias' in all_tex[i] else 0.0, 0))
+        else:
+            set_6_header.extend(struct.pack("{}I".format(e), wrap_flag))
     if len(set_6_data) % addr_size:
         set_6_data += b'\x00' * (addr_size - (len(set_6_data) % addr_size))
     set_6_block = set_6_header + set_6_data
     # Build offset header
-    count_3, count_4, count_5 = len(set_3), len(set_4), len(set_5)
     header_counts = [count_3*4, count_3,  # Color animation counts (# RGBA floats, # animation targets)
                     count_4*5, count_4*3, # UV scroll animation counts (# 5x floats, # animation targets)
                     count_5, count_5,     # Sprite sheet animation counts (# 1x floats, # animation targets)
@@ -403,14 +450,14 @@ def create_section_7 (material_struct, unk0 = 0, unk1 = 0):
         len(set_3_block), len(set_4_block), len(set_5_block), len(set_6_block)]
     block_offsets = [sum(block_lengths[:i], (addr_size * 14)-((addr_size * 2) * i)) if block_lengths[i] > 0 else 0
         for i in range(len(block_lengths))]
-    block_counts = [len(material_struct), len(set_1), len(material_struct), count_3, count_4, count_5, len(all_tex)]
+    block_counts = [len(material_struct), len(set_1), len(material_struct), len(set_3), len(set_4), len(set_5), len(all_tex)]
     block_header = bytearray()
-    block_header.extend(struct.pack("{}2I8H".format(e), unk0, unk1, *header_counts))
+    block_header.extend(struct.pack("{}2I8H".format(e), ani_value_first_index, ani_target_first_index, *header_counts))
     for i in range(7):
         block_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), block_offsets[i], block_counts[i]))
     # Return assembled block
     return(block_header + set_0_block + set_1_block + set_2_block + set_3_block
-        + set_4_block + set_5_block + set_6_block)
+        + set_4_block + set_5_block + set_6_block, all_tex_names)
 
 #Animation defaults?
 def create_section_11 (raw_sec11_struct):
@@ -470,7 +517,8 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                 phys_unk = struct.unpack("{}2I".format(e), data_blocks[4][0:8]) # Date stamp?
                 mesh_unk = struct.unpack("{}2I".format(e), data_blocks[6][0:8]) # Date stamp?
                 mat_unk = struct.unpack("{}2I8H".format(e), data_blocks[7][0:24]) # Same as above
-                symphonia_mode = True if sum(mat_unk[2:]) > 0 else False
+                # Until we find a better way... This will default to Z/B if there are no materials
+                symphonia_mode = len(material_struct[0]['parameters']['mat_params']) == 1 if material_struct else False
                 if swap_endian == True:
                     # Changing e will change endianness for this script *only*; do not call set_endianness()!
                     e = {'>': '<', '<': '>'}[e] # Write mode
@@ -489,10 +537,9 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                     print("Unsupported mesh detected, skipping {}...".format(tomdlb_file))
                     return False
                 # Create new material block
-                data_blocks[7] = create_section_7(material_struct, mat_unk[0], mat_unk[1])
+                data_blocks[7], all_tex_names = create_section_7(material_struct, mat_unk[0], mat_unk[1])
                 # Create new opening dictionary
-                all_tex = sorted(list(set([x+'.totexb_d' for y in [z['textures'] for z in material_struct] for x in y])))
-                new_opening_dict_strings = [dlp_file, anmb_file] + all_tex
+                new_opening_dict_strings = [dlp_file, anmb_file] + all_tex_names
                 new_opening_dict = write_string_dict(new_opening_dict_strings)[0]
                 # Create new internal file (BLDM block)
                 new_bldm_block, dict_offset = create_data_block (data_blocks, new_opening_dict, addr_size, 1, addr_size)
