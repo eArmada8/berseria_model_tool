@@ -84,7 +84,7 @@ def convert_matrix_to_trs (matrix):
     return(matrix[12:15], q.tolist(), scale) #TRS
 
 def decode_target_flag (flag):
-    return({'type': flag & 0xFFFFFFFF, 'target': flag >> 32 & 0xFFFF, 'unknown': flag >> 48})
+    return({'type': flag & 0xFFFFFFFF, 'target': flag >> 32 & 0xFFFFFF, 'node_or_physics': flag >> 56})
 
 def read_vals (f, e, vec_len, val_sz):
     vals = list(struct.unpack("{}{}{}".format(e, vec_len, val_sz[0]), f.read(val_sz[1] * vec_len)))
@@ -109,14 +109,14 @@ class base_list:
     def __init__ (self, dct_header, base_all):
         self.index = 0
         self.base1 = (dct_header[0] / 0xFFFF) * base_all
-        self.base2 = (dct_header[1] / 0xFFFF) * base_all
-        self.base3 = (dct_header[2] / 0xFF) * self.base1 * self.base2
+        self.base2 = (dct_header[1] / 0xFFFF) * self.base1
+        self.base3 = (dct_header[2] / 0xFF) * self.base2
         self.num_base1 = dct_header[5] >> 4
         self.num_base2 = dct_header[5] & 0xF
     def get_base (self):
         if self.index < self.num_base1:
             return self.base1
-        elif self.index < self.num_base2:
+        elif self.index < self.num_base1 + self.num_base2:
             return self.base2
         else:
             return self.base3
@@ -160,7 +160,7 @@ def read_dct_segment (f, base_all, vec_len, segment_len):
     return(vectors)
 
 def decompress_dct (f, flag, num_indices):
-    type_, val_sz, vec_len = flag & 0xF, {0:('f',4),1:('h',2)}[flag >> 4 & 0x3], flag >> 12 & 0xF
+    type_, val_sz, vec_len = flag & 0xF, ('h',2) if (flag & 0x30) == 0x10 else ('f',4), flag >> 12 & 0xF
     base_all, = struct.unpack("{}f".format(e), f.read(4))
     dct_toc = [0]
     if type_ == 9: # Values are segmented as stream is too long to fit into single segment
@@ -177,15 +177,24 @@ def decompress_dct (f, flag, num_indices):
     dct_offsets = [(x*4) + f.tell() for x in dct_toc]
     dct_segments = []
     for i in range(segments):
-        f.seek(dct_offsets[i])
         segment_len = (num_indices - (dct_max * i) - 1) if (i == segments - 1) else dct_max
-        dct_segments.append(read_dct_segment(f, base_all, vec_len, segment_len))
+        if not (i > 0 and dct_toc[i] == 0):
+            f.seek(dct_offsets[i])
+            dct_segments.append(read_dct_segment(f, base_all, vec_len, segment_len))
+        else:
+            dct_segments.append([[0.0 for _ in range(vec_len)] for _ in range(segment_len + 1)])
     vecs = []
     for i in range(num_indices):
         seg_i, ii = i // dct_max, i % dct_max
         result_vec = dct_segments[seg_i][ii] if seg_i < segments else [0.0 for _ in range(vec_len)]
-        static_vec = float_table[(seg_i * vec_len):((seg_i + 1) * vec_len)]
-        vecs.append([result_vec[i]+static_vec[i] for i in range(vec_len)])
+        static_vec = float_table[(seg_i * vec_len):((seg_i + 1) * vec_len)]       # current key
+        if seg_i < segments:  # At least one more key coming up, smoothly interpolate between keys
+            next_vec = float_table[((seg_i + 1) * vec_len):((seg_i + 2) * vec_len)]  # upcoming key
+            segment_len = (num_indices - (dct_max * seg_i) - 1) if (seg_i == segments - 1) else dct_max
+            t = ii / segment_len
+        else:  # last frame lands exactly on the final key
+            next_vec, t = static_vec, 0.0
+        vecs.append([static_vec[j] + (next_vec[j] - static_vec[j]) * t + result_vec[j] for j in range(vec_len)])
     return(vecs)
     
 def read_vector_stream (f, num_blocks): 
@@ -197,14 +206,18 @@ def read_vector_stream (f, num_blocks):
         data_toc.append([dat_offset, dat_size])
     stream_data = []
     for i in range(len(data_toc)):
+        f.seek(data_toc[i][0]) # Unneeded, but just in case entries are out of order
         start_loc = f.tell()
         flag, = struct.unpack("{}I".format(e), f.read(4))
         # Not sure if val_sz should be f/e or f/h but f/e results in some NaN so will use f/h for now -> h might be SNORM (h / (2^15-1))
-        type_, val_sz, header_type, vec_len = flag & 0xF, {0:('f',4),1:('h',2)}[flag >> 4 & 0x3], flag >> 8 & 0xF, flag >> 12 & 0xF
+        type_, val_sz, header_type, vec_len = flag & 0xF, ('h',2) if (flag & 0x30) == 0x10 else ('f',4), flag >> 8 & 0xF, flag >> 12 & 0xF
         header = []
         if header_type > 0:
             count, = struct.unpack("{}I".format(e), f.read(4))
-            unk_float, = struct.unpack("{}f".format(e), f.read(4))
+            if header_type in [2,3,4]:
+                time_scale, = struct.unpack("{}f".format(e), f.read(4))
+            else:
+                time_scale = 1.0
             if header_type in [1,2,3]: # 0 is no header, and 4 seems to be blank
                 header_val_sz = {1:('f',4), 2:('H',2), 3:('B',1)}[header_type]
                 header = list(struct.unpack("{}{}{}".format(e, count, header_val_sz[0]), f.read(header_val_sz[1] * count)))
@@ -212,6 +225,8 @@ def read_vector_stream (f, num_blocks):
                     f.seek(1,1)
             else: # 4 is blank header, or "indexed"
                 header = list(range(count))
+        else:
+            count, time_scale, header = 1, 1.0, [] # Type 3, just clearing memory
         try:
             assert ((type_ == 3 and header_type == 0) or (type_ in [0,2,8,9] and header_type > 0))
         except AssertionError:
@@ -221,12 +236,15 @@ def read_vector_stream (f, num_blocks):
             vecs = []
             for _ in range(count):
                 vecs.append(read_vals (f, e, vec_len, val_sz))
-            stream_data.append({'flag': flag, 'unk_float': unk_float, 'header': header, 'vecs': vecs})
+            stream_data.append({'type': type_, 'flag': flag, 'time_scale': time_scale, 'header': header, 'vecs': vecs})
         elif type_ == 3: # Single vector
-            stream_data.append({'flag': flag, 'vec': read_vals (f, e, vec_len, val_sz)})
+            stream_data.append({'type': type_, 'flag': flag, 'vec': read_vals (f, e, vec_len, val_sz)})
         elif type_ in [8,9]: # Vectors are compressed with discrete cosine transform (DCT)
             vecs = decompress_dct(f, flag, count)
-            stream_data.append({'flag': flag, 'unk_float': unk_float, 'header': header, 'vecs': vecs})
+            stream_data.append({'type': type_, 'flag': flag, 'time_scale': time_scale, 'header': header, 'vecs': vecs})
+            f.seek(data_toc[i][0] + data_toc[i][1])
+        else:
+            stream_data.append({'type': type_, 'flag': flag}) # Should never happen, but missing keys 'vec'/'vecs' will reveal error
             f.seek(data_toc[i][0] + data_toc[i][1])
         try:
             assert data_toc[i][0] + data_toc[i][1] == f.tell()
@@ -239,15 +257,19 @@ def read_vector_stream (f, num_blocks):
 
 def read_tosamsb (animbin_file):
     global addr_size, e, file_version
+    # Reset global variables to default between files
+    set_endianness('<')
+    set_address_size(8)
+    set_file_version(1)
     data = {}
     with open(animbin_file, 'rb') as f:
         print("Processing {}...".format(animbin_file))
-        explore = struct.unpack("<4I", f.read(16))
-        if explore[1] > 0:
-            if explore[1] < 0x10000000:
-                set_endianness('>')
-            if explore[3] > 0:
-                set_address_size(4)
+        explore = struct.unpack("<4IQ", f.read(24))
+        if explore[3] > 0:
+            set_address_size(4)
+        offset_val_to_check = 4 if addr_size == 8 else 3
+        if explore[offset_val_to_check] > 0xFFFF:
+            set_endianness('>')
         f.seek(0)
         data['file_type'] = {'address_size': addr_size, 'endianness': e}
         data['header'] = list(struct.unpack("{}I2f".format(e), f.read(12)))
@@ -269,7 +291,7 @@ def read_tosamsb (animbin_file):
             count1b, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size)) # Number of hashes
         if count1a == 0:
             print("Empty file, skipping...")
-            return
+            return {}
         offset2 = read_offset(f) # Offset to the second data block (actual animation data)
         count2, = struct.unpack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), f.read(addr_size)) # Number of data blocks, same as count1a
         if hash_table_present == False:
@@ -283,7 +305,7 @@ def read_tosamsb (animbin_file):
                 assert offset1 + (count1a * 16) + (4 if file_version == 1 else 0) == offset2
         except AssertionError:
             print("Error, {} not in the expected binary format!  Skipping...".format(animbin_file))
-            return
+            return {}
         # Hash table
         if hash_table_present == True:
             data['hash_table'] = [] # Will be rebuilt when offsets known
@@ -342,10 +364,10 @@ def write_glTF (ani_data, skel_struct, basename, write_glb = True):
             g_node['scale'] = s
         gltf_data['nodes'].append(g_node)
     for i in range(len(gltf_data['nodes'])):
-        if len(gltf_data['nodes'][i]['children']) == 0 and i > 0:
+        if len(gltf_data['nodes'][i]['children']) == 0:
             del(gltf_data['nodes'][i]['children'])
     if len(gltf_data['nodes']) == 0:
-        gltf_data['nodes'].append({'children': [], 'name': 'root'})
+        gltf_data['nodes'].append({'name': 'root'})
     # Animations
     node_dict = {gltf_data['nodes'][j]['name']:j for j in range(len(gltf_data['nodes']))}
     bone_id_to_name = {x['ani_id']:x['name'] for x in skel_struct}
@@ -364,29 +386,31 @@ def write_glTF (ani_data, skel_struct, basename, write_glb = True):
                 else:
                     outputs.append(outputs_raw[j])
             if ani_list[i]['type'] == 0x10014:
+                qc = Quaternion([outputs_raw[j][3]] + outputs_raw[j][0:3])
                 if 'rotation' in gltf_data['nodes'][node_dict[bone_id_to_name[ani_list[i]['target']]]]:
                     q1 = gltf_data['nodes'][node_dict[bone_id_to_name[ani_list[i]['target']]]]['rotation']
                     qp = Quaternion([q1[3]] + q1[0:3])
-                    qc = Quaternion([outputs_raw[j][3]] + outputs_raw[j][0:3])
-                    new_ = list(qp * qc)
-                    outputs.append(new_[1:]+[new_[0]])
+                    new_ = list((qp * qc).normalised)
                 else:
-                    outputs.append(outputs_raw[j])
+                    new_ = list(qc.normalised)
+                outputs.append(new_[1:]+[new_[0]])
             if ani_list[i]['type'] == 0x00003:
                 if 'scale' in gltf_data['nodes'][node_dict[bone_id_to_name[ani_list[i]['target']]]]:
                     new_ = (numpy.array(outputs_raw[j])
-                        * numpy.array(gltf_data['nodes'][node_dict[bone_id_to_name[ani_list[i]['target']]]]['scale']))
+                        + numpy.array(gltf_data['nodes'][node_dict[bone_id_to_name[ani_list[i]['target']]]]['scale']))
                     outputs.append(new_.tolist())
                 else:
-                    outputs.append(outputs_raw[j])
+                    outputs.append(outputs_raw[j] + numpy.array([1.0,1.0,1.0]))
         if 'header' in vec_channel:
-            inputs = [x / ani_fps for x in vec_channel['header']]
+            inputs = [x * vec_channel['time_scale'] / ani_fps for x in vec_channel['header']]
         else:
             inputs = [0.0]
-        sampler = { 'input': len(gltf_data['accessors']), 'interpolation': 'LINEAR', 'output':  len(gltf_data['accessors'])+1 }
-        channel = { 'sampler': len(gltf_data['animations'][0]['samplers']),\
-            'target': { 'node': node_dict[bone_id_to_name[ani_list[i]['target']]],
-                'path': {0x20003:'translation', 0x10014:'rotation', 0x00003:'scale'}[ani_list[i]['type']] } }
+        sampler = { 'input': len(gltf_data['accessors']),
+                    'interpolation': 'STEP' if vec_channel['type'] == 2 else 'LINEAR',
+                    'output':  len(gltf_data['accessors'])+1 }
+        channel = { 'sampler': len(gltf_data['animations'][0]['samplers']),
+                    'target': { 'node': node_dict[bone_id_to_name[ani_list[i]['target']]],
+                    'path': {0x20003:'translation', 0x10014:'rotation', 0x00003:'scale'}[ani_list[i]['type']] } }
         gltf_data['accessors'].append({"bufferView" : len(gltf_data['bufferViews']),\
             "componentType": 5126,\
             "count": len(inputs),\
@@ -408,6 +432,10 @@ def write_glTF (ani_data, skel_struct, basename, write_glb = True):
         giant_buffer +=output_buffer
         gltf_data['animations'][0]['channels'].append(channel)
         gltf_data['animations'][0]['samplers'].append(sampler)
+    # Check to see if there is actual animation data, and quit if there isn't (in case the animation has no TRS channels)
+    if len(gltf_data['animations'][0]['channels']) == 0:
+        print("Animation file did not contain any useable (translation / rotation / scale) channels, skipping...")
+        return
     skin = {}
     skin['skeleton'] = 0
     joints = [i for i in range(len(gltf_data['nodes'])) if i != 0]
@@ -425,7 +453,7 @@ def write_glTF (ani_data, skel_struct, basename, write_glb = True):
             f.write(struct.pack('<II', len(giant_buffer), 5130562))
             f.write(giant_buffer)
     else:
-        gltf_data['buffers'][0]["uri"] = basename+'.bin'
+        gltf_data['buffers'][0]["uri"] = os.path.basename(basename) + '.bin'
         with open(basename+'.bin', 'wb') as f:
             f.write(giant_buffer)
         with open(basename+'.gltf', 'wb') as f:
@@ -434,6 +462,8 @@ def write_glTF (ani_data, skel_struct, basename, write_glb = True):
 def process_tosamsb (animbin_file, overwrite = False, write_glb = True, dump_extra_animation_data = False):
     basename = ".".join(animbin_file.split(".")[:-1])
     ani_data = read_tosamsb (animbin_file)
+    if ani_data == {}:
+        return # Skip empty files
     if dump_extra_animation_data == True:
         open(basename + "_ani_data.json", 'wb').write(json.dumps(ani_data, indent = 4).encode())
     try:
