@@ -57,17 +57,67 @@ def read_physics_data (tomdlb_file, backup_phys_block, raw_skel_data):
         for i in range(len(physics_params)):
             physics_params[i]['target_node'] = local_bone_dict[physics_params[i]['target_node']]
     except:
-        print("{0}/physics_info.json missing or unreadable, reading data from {0}.TOMBDLB_D instead...".format(tomdlb_file[-9:]))
+        print("{0}/physics_info.json missing or unreadable, reading data from {0}.TOMBDLB_D instead...".format(tomdlb_file[:-9]))
         with io.BytesIO(backup_phys_block) as ff:
             physics_params = read_section_4 (ff, 0)
     return physics_params
+
+def read_collision_data (tomdlb_file, backup_coll_block, raw_skel_data):
+    # Will read data from JSON file and raw buffers, or load original data from the mdl file if JSON is missing
+    try:
+        data1, data2 = [], []
+        collision_list = read_struct_from_json(tomdlb_file[:-9] + "/collision_info.json")
+        local_bone_dict = {raw_skel_data[5][i]:i for i in range(len(raw_skel_data[2]))}
+        try:
+            for i in range(len(collision_list)):
+                collision_list[i]['target_node'] = local_bone_dict[collision_list[i]['target_node']]
+        except KeyError:
+            print("Bone names in collision_info.json are corrupt, possibly due to spelling error or old metadata format.")
+            raise
+        for i in range(len(collision_list)):
+            try:
+                mesh_filename = tomdlb_file[:-9] + '/COLLISION_MESH_{0:02d}'.format(i)
+                fmt = read_fmt(mesh_filename + '.fmt')
+                ib = read_ib(mesh_filename + '.ib', fmt)
+                vb = read_vb(mesh_filename + '.vb', fmt)
+                assert vb[0]['SemanticName'] == 'POSITION'
+            except (FileNotFoundError, AssertionError) as err:
+                print("Submesh {0} not found or corrupt, generating an empty submesh...".format(mesh_filename))
+                # Generate an empty submesh
+                ib = []
+                vb = [{'Buffer':[[0.0, 0.0, 0.0]]}]
+            print("Processing collision mesh {0}...".format(mesh_filename))
+            try:
+                all_indices = set(x for y in ib for x in y)
+                used_tris = [vb[0]["Buffer"][j] for j in range(len(vb[0]["Buffer"])) if j in all_indices]
+                bbox_min = [min(x[0] for x in used_tris),
+                    min(x[1] for x in used_tris),
+                    min(x[2] for x in used_tris)]
+                bbox_max = [max(x[0] for x in used_tris),
+                    max(x[1] for x in used_tris),
+                    max(x[2] for x in used_tris)]
+            except ValueError:
+                bbox_min, bbox_max = [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]
+            index = len(data2)
+            num_tris = len(ib)
+            data1.append([collision_list[i]['target_node']] + [collision_list[i]['group']]
+                + bbox_min + bbox_max + [index] + [num_tris])
+            for j in range(len(ib)):
+                data2.append([x for y in [vb[0]['Buffer'][ib[j][0]], vb[0]['Buffer'][ib[j][1]],
+                    vb[0]['Buffer'][ib[j][2]]] for x in y])
+        raw_sec5_struct = [data1, data2]
+    except:
+        print("{0}/collision_information missing or corrupt, reading data from {0}.TOMBDLB_D instead...".format(tomdlb_file[:-9]))
+        with io.BytesIO(backup_coll_block) as ff:
+            raw_sec5_struct = read_section_5 (ff, 0)
+    return raw_sec5_struct
 
 def read_material_data (tomdlb_file, backup_mat_block):
     # Will read data from JSON file, or load original data from the mdl file if JSON is missing
     try:
         material_struct = read_struct_from_json(tomdlb_file[:-9] + "/material_info.json")
     except:
-        print("{0}/material_info.json missing or unreadable, reading data from {0}.TOMBDLB_D instead...".format(tomdlb_file[-9:]))
+        print("{0}/material_info.json missing or unreadable, reading data from {0}.TOMBDLB_D instead...".format(tomdlb_file[:-9]))
         with io.BytesIO(backup_mat_block) as ff:
             material_struct = read_section_7 (ff, 0)
     return material_struct
@@ -130,26 +180,54 @@ def create_section_4 (physics_params, unk0 = 0, unk1 = 0):
     return(data_block)
 
 #Collision
-def create_section_5 (raw_sec5_struct):
+def create_section_5 (raw_sec5_struct, symphonia_mode = False):
     header_block = bytearray()
     data_block = bytearray()
-    header_size = (addr_size * 4)
-    for i in range(2):
-        count = len(raw_sec5_struct[i])
-        data = bytearray()
-        for j in range(len(raw_sec5_struct[i])):
-            if i == 0:
-                data.extend(struct.pack("{}2H6f2I".format(e), *raw_sec5_struct[i][j]))
-            else:
-                data.extend(struct.pack("{}9f".format(e), *raw_sec5_struct[i][j]))
-        if count > 0:
-            header_block.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), len(data_block) + header_size - len(header_block)))
-            header_block.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), count))
+    if symphonia_mode == True:
+        header_size = (addr_size * 2)
+        if len(raw_sec5_struct[0]) > 0:
+            tri_header_size = (28 + (addr_size * 2)) * len(raw_sec5_struct[0])
+            while tri_header_size % addr_size:
+                tri_header_size += 1
+            tri_header_block = bytearray()
+            tri_data_block = bytearray()
+            for i in range(len(raw_sec5_struct[0])):
+                tri_header_block.extend(struct.pack("{}hH6f".format(e), *raw_sec5_struct[0][i][:-2]))
+                offset = tri_header_size - len(tri_header_block) + len(tri_data_block)
+                tris = raw_sec5_struct[1][raw_sec5_struct[0][i][-2]:raw_sec5_struct[0][i][-2]+raw_sec5_struct[0][i][-1]]
+                if len(tris) == 0:
+                    offset = 0
+                tri_header_block.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]),
+                    offset, len(tris)))
+                for j in range(len(tris)):
+                    tri_data_block.extend(struct.pack("{}9f".format(e), *tris[j]))
+            if len(tri_header_block) % addr_size:
+                tri_header_block.extend(b'\x00' * (addr_size - (len(tri_header_block) % addr_size)))
+            if len(tri_data_block) % addr_size:
+                tri_data_block.extend(b'\x00' * (addr_size - (len(tri_data_block) % addr_size)))
+            offset = header_size - len(header_block) + len(data_block)
+            header_block.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset, len(raw_sec5_struct[0])))
+            data_block.extend(tri_header_block + tri_data_block)
         else:
             header_block.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), 0, 0))
-        data_block.extend(data)
-        if len(data_block) % addr_size:
-            data_block.extend(b'\x00' * (addr_size - (len(data_block) % addr_size)))
+    else:
+        header_size = (addr_size * 4)
+        for i in range(2):
+            count = len(raw_sec5_struct[i])
+            data = bytearray()
+            for j in range(len(raw_sec5_struct[i])):
+                if i == 0:
+                    data.extend(struct.pack("{}hH6f2I".format(e), *raw_sec5_struct[i][j]))
+                else:
+                    data.extend(struct.pack("{}9f".format(e), *raw_sec5_struct[i][j]))
+            if count > 0:
+                header_block.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), len(data_block) + header_size - len(header_block)))
+                header_block.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), count))
+            else:
+                header_block.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), 0, 0))
+            data_block.extend(data)
+            if len(data_block) % addr_size and i == 1:
+                data_block.extend(b'\x00' * (addr_size - (len(data_block) % addr_size)))
     return(header_block + data_block)
 
 #Meshes
@@ -161,7 +239,7 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
     try:
         mesh_blocks_info = read_struct_from_json(tomdlb_file[:-9] + "/mesh_info.json")
     except:
-        print("{0}/mesh_info.json missing or unreadable, using data from {0}.TOMBDLB_D instead...".format(tomdlb_file[-9:]))
+        print("{0}/mesh_info.json missing or unreadable, using data from {0}.TOMBDLB_D instead...".format(tomdlb_file[:-9]))
         mesh_blocks_info = orig_mesh_blocks_info
     material_dict = {material_struct[i]['name']: i for i in range(len(material_struct))}
     material_list = []
@@ -512,24 +590,25 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                         data_blocks.append(f.read(toc[i+1] - toc[i]))
                 skel_struct, raw_skel_data = read_section_0(f, toc[0])
                 physics_params = read_physics_data (tomdlb_file, data_blocks[4], raw_skel_data)
+                collision_struct = read_collision_data (tomdlb_file, data_blocks[5], raw_skel_data)
                 # Read material information (needed for both building mesh and material blocks)
                 material_struct = read_material_data (tomdlb_file, data_blocks[7])
-                phys_unk = struct.unpack("{}2I".format(e), data_blocks[4][0:8]) # Date stamp?
-                mesh_unk = struct.unpack("{}2I".format(e), data_blocks[6][0:8]) # Date stamp?
-                mat_unk = struct.unpack("{}2I8H".format(e), data_blocks[7][0:24]) # Same as above
+                phys_unk = struct.unpack("{}2I".format(e), data_blocks[4][0:8]) # Indices in data_blocks[11]
+                mesh_unk = struct.unpack("{}2I".format(e), data_blocks[6][0:8]) # Indices in data_blocks[11]
+                mat_unk = struct.unpack("{}2I8H".format(e), data_blocks[7][0:24]) # Indices in data_blocks[11]
                 # Until we find a better way... This will default to Z/B if there are no materials
                 symphonia_mode = len(material_struct[0]['parameters']['mat_params']) == 1 if material_struct else False
                 if swap_endian == True:
                     # Changing e will change endianness for this script *only*; do not call set_endianness()!
                     e = {'>': '<', '<': '>'}[e] # Write mode
                     data_blocks[0] = create_section_0(raw_skel_data)
-                    data_blocks[5] = create_section_5(read_section_5 (f, toc[5]))
                     data_blocks[11] = create_section_11(read_section_11 (f, toc[11]))
                     for i in [1,2,3,8,9,10]:
                         data_blocks[i] = write_generic_int_section(read_generic_int_section(f, toc[i], (toc[i+1]-toc[i])))
                 # Create new physics block
-                if symphonia_mode == False:
-                    data_blocks[4] = create_section_4(physics_params, phys_unk[0], phys_unk[1])
+                data_blocks[4] = create_section_4(physics_params, phys_unk[0], phys_unk[1])
+                # Create new collision block
+                data_blocks[5] = create_section_5(collision_struct, symphonia_mode)
                 # Create new mesh block
                 data_blocks[6], dlp_block = create_section_6(tomdlb_file, data_blocks[6],
                     dlp_file, material_struct, mesh_unk[0], mesh_unk[1])

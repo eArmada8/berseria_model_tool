@@ -480,10 +480,10 @@ def read_section_4 (f, offset):
     offset, count = read_offset_and_count(f)
     data = [list(struct.unpack("{}4h25f".format(e), f.read(0x6c))) for _ in range(count)]
     param_names = ['flag', 'target_node', 'group', 'unk_correction', 'elasticity_x', 'elasticity_y',
-        'air_resist', 'gravity', 'weight', 'friction', 'size_of_collision', 'unk0', 'unk1', 'unk2', 'unk3',
-        'maybe_wind', 'child_pos_x', 'child_pos_y', 'child_pos_z', 'child_len', 'dynamic_mtx_00',
-        'dynamic_mtx_01', 'dynamic_mtx_02', 'dynamic_mtx_10', 'dynamic_mtx_11', 'dynamic_mtx_12',
-        'dynamic_mtx_20', 'dynamic_mtx_21', 'dynamic_mtx_22']
+        'air_resistance', 'gravity', 'weight', 'friction', 'size_of_collision', 'unk_rotation_0',
+        'unk_rotation_1', 'unk_rotation_2', 'unk_rotation_3', 'wind', 'child_pos_x', 'child_pos_y',
+        'child_pos_z', 'child_len', 'dynamic_mtx_00', 'dynamic_mtx_01', 'dynamic_mtx_02', 'dynamic_mtx_10',
+        'dynamic_mtx_11', 'dynamic_mtx_12', 'dynamic_mtx_20', 'dynamic_mtx_21', 'dynamic_mtx_22']
     decoded = []
     for i in range(len(data)):
         decoded.append(dict(zip(param_names, data[i])))
@@ -491,18 +491,40 @@ def read_section_4 (f, offset):
 
 #Collision meshes, offset should be toc[5].
 def read_section_5 (f, offset, decode_data = False):
+    data1, data2 = [], []
     f.seek(offset)
     offset1, count1 = read_offset_and_count(f)
-    offset2, count2 = read_offset_and_count(f)
-    data1 = [list(struct.unpack("{}2H6f2I".format(e), f.read(36))) for _ in range(count1)]
-    data2 = [list(struct.unpack("{}9f".format(e), f.read(36))) for _ in range(count2)]
+    if count1 > 0:
+        if offset1 == f.tell(): # Symphonia
+            for i in range(count1):
+                # 0: target_node, 1: group, 2-7: bounding box, 8: offset, 9: number of triangles
+                datum1 = list(struct.unpack("{}hH6f".format(e), f.read(28)))
+                offset2, count2 = read_offset_and_count(f)
+                current_loc = f.tell()
+                f.seek(offset2)
+                datum1.extend([len(data2), count2])
+                data2.extend([list(struct.unpack("{}9f".format(e), f.read(36))) for _ in range(count2)])
+                data1.append(datum1)
+                f.seek(current_loc)
+        else: # Zestiria / Berseria
+            offset2, count2 = read_offset_and_count(f)
+            f.seek(offset1)
+            # 0: target_node, 1: group, 2-7: bounding box, 8: index, 9: number of triangles
+            data1 = [list(struct.unpack("{}hH6f2I".format(e), f.read(36))) for _ in range(count1)]
+            f.seek(offset2)
+            data2 = [list(struct.unpack("{}9f".format(e), f.read(36))) for _ in range(count2)]
     if decode_data == True:
         triangles = [[x[0:3], x[3:6], x[6:9]] for x in data2]
         decoded = []
+        meshes = []
         for i in range(len(data1)):
-            decoded.append({'target_node': data1[i][0], 'group': data1[i][1], 'min': data1[i][2:5], 'max': data1[i][5:8],
-                'index': data1[i][8], 'num_triangles': data1[i][9], 'triangles': triangles[data1[i][8]:data1[i][8]+data1[i][9]]})
-        return(decoded)
+            decoded.append({'target_node': data1[i][0], 'group': data1[i][1]})
+            fmt = make_fmt(1, semantics_present = {'NORMAL': False, 'TANGENT': False, 'BINORMAL': False,
+                    'COLOR': False, 'BLENDWEIGHTS': False, 'BLENDINDICES': False}) # Leave in 1 uv, Blender plug-in needs it
+            pos = [x for y in triangles[data1[i][8]:data1[i][8]+data1[i][9]] for x in y]
+            uv = [[0.0,0.0] for _ in range(len(pos))]
+            meshes.append({'fmt': fmt, 'ib': range(len(pos)), 'vb': [{'Buffer':pos},{'Buffer':uv}]})
+        return(decoded, meshes)
     else:
         return([data1, data2])
 
@@ -962,7 +984,7 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                 if os.path.exists(dlp_file) or os.path.exists(dlp_file.upper()): # TLTool uses uppercase extension
                     skel_struct, raw_skel_data = read_section_0(f, toc[0])
                     physics_params = read_section_4 (f, toc[4])
-                    collision_data = read_section_5 (f, toc[5], decode_data = True)
+                    collision_data, collision_meshes = read_section_5 (f, toc[5], decode_data = True)
                     meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlp_file)
                     # Attempt to incorporate an external skeleton (skipped if skeleton already complete)
                     skel_struct = find_and_add_external_skeleton (skel_struct, bone_palette_ids)
@@ -988,19 +1010,25 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                                     write_ib(meshes[i]['ib'], '{0}/{1}.ib'.format(base_name, filename), meshes[i]['fmt'], '<')
                                     write_vb(meshes[i]['vb'], '{0}/{1}.vb'.format(base_name, filename), meshes[i]['fmt'], '<')
                                     open('{0}/{1}.vgmap'.format(base_name, filename), 'wb').write(json.dumps(vgmap,indent=4).encode())
+                            for i in range(len(collision_meshes)):
+                                    filename = 'COLLISION_MESH_{0:02d}'.format(i)
+                                    write_fmt(collision_meshes[i]['fmt'], '{0}/{1}.fmt'.format(base_name, filename))
+                                    write_ib(collision_meshes[i]['ib'], '{0}/{1}.ib'.format(base_name, filename), collision_meshes[i]['fmt'], '<')
+                                    write_vb(collision_meshes[i]['vb'], '{0}/{1}.vb'.format(base_name, filename), collision_meshes[i]['fmt'], '<')
                             mesh_struct = [{y:x[y] for y in x if not any(
                                 ['offset' in y, 'num' in y])} for x in mesh_blocks_info]
                             for i in range(len(mesh_struct)):
                                 mesh_struct[i]['material'] = material_struct[mesh_struct[i]['material']]['name']
-                            write_struct_to_json(physics_params, base_name + '/physics_info')
                             local_bone_dict = [(raw_skel_data[2][i], raw_skel_data[5][i]) for i in range(len(raw_skel_data[2]))]
                             for i in range(len(physics_params)):
                                 physics_params[i]['target_node'] = local_bone_dict[physics_params[i]['target_node']][1]
+                            for i in range(len(collision_data)):
+                                collision_data[i]['target_node'] = local_bone_dict[collision_data[i]['target_node']][1]
                             mesh_struct = [{'id_referenceonly': i, **mesh_struct[i]} for i in range(len(mesh_struct))]
                             #write_struct_to_json(raw_skel_data, base_name + '/skeleton_info')
                             write_struct_to_json(mesh_struct, base_name + '/mesh_info')
                             write_struct_to_json(physics_params, base_name + '/physics_info')
-                            #write_struct_to_json(collision_data, base_name + '/collision_info')
+                            write_struct_to_json(collision_data, base_name + '/collision_info')
                             write_struct_to_json(material_struct, base_name + '/material_info')
                             write_struct_to_json(opening_dict, base_name + '/linked_files')
                             #write_struct_to_json(skel_struct, base_name + '/skeleton_info')
