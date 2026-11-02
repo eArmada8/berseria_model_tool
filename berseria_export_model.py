@@ -63,7 +63,7 @@ def trianglestrip_to_list(ib_list):
     split_lists = [[]]
     # Split ib_list by primitive restart command, some models have this
     for i in range(len(ib_list)):
-        if not ib_list[i] == -1:
+        if not ib_list[i] == 0xFFFF:
             split_lists[-1].append(ib_list[i])
         else:
             split_lists.append([])
@@ -332,14 +332,16 @@ def read_mesh (main_f, idx_f, start_offset, flags):
         padding = stride - (num * 4)
         for i in range(total):
             vecs.append(read_floats(f, num))
-            f.seek(padding, 1)
+            if i < (total - 1):
+                f.seek(padding, 1)
         return(vecs)
     def read_interleaved_bytes (f, num, stride, total):
         vecs = []
         padding = stride - (num)
         for i in range(total):
             vecs.append(read_bytes(f, num))
-            f.seek(padding, 1)
+            if i < (total - 1):
+                f.seek(padding, 1)
         return(vecs)
     def read_interleaved_ufloats (f, num, stride, total): # Unsigned normalized byte floats
         vecs = []
@@ -348,122 +350,165 @@ def read_mesh (main_f, idx_f, start_offset, flags):
         for i in range(total):
             vals = read_bytes(f, num)
             vecs.append([x / float_max for x in vals])
-            f.seek(padding, 1)
+            if i < (total - 1):
+                f.seek(padding, 1)
         return(vecs)
+    def read_vert_vector_data (f, flags, stride, num_verts, nrm_offset = 0, tangent_offset = 0, binormal_offset = 0):
+        positions, normals, tangents, binormals = [], [], [], []
+        base_start = f.tell()
+        positions = read_interleaved_floats(f, 3, stride, num_verts)
+        if not flags & 0x2000:
+            f.seek(base_start + nrm_offset)
+            normals = read_interleaved_floats(f, 3, stride, num_verts)
+            if flags & 0x80:
+                f.seek(base_start + tangent_offset)
+                tangents = read_interleaved_floats(f, 3, stride, num_verts)
+                f.seek(base_start + binormal_offset)
+                binormals = read_interleaved_floats(f, 3, stride, num_verts)
+        return positions, normals, tangents, binormals
     def fix_weights (weights):
         for _ in range(3):
             weights = [x+[round(1-sum(x),6)] if len(x) < 4 else x for x in weights]
         return(weights)
-    main_f.seek(start_offset)
-    num_verts, num_idx, offset_uvs, offset_idx = struct.unpack("{}2H2I".format(e), main_f.read(12))
-    uv_stride = (offset_idx - offset_uvs) // num_verts
+    # Calculate strides from flags
+    semantics_present = {'NORMAL': False, 'TANGENT': False, 'BINORMAL': False,
+            'COLOR': True, 'BLENDWEIGHTS': False, 'BLENDINDICES': False} # Only color is always present
+    cpu_stride_no_wt, gpu_stride = 0, 0 # final stride = cpu_stride_no_wt + weights, which are variable
+    pos_offset, nrm_offset, tangent_offset, binormal_offset, blend_idx_offset, blend_wt_offset = 0, 0, 0, 0, 0, 0
+    if flags & 0x30: # CPU skinning, vertex vector data in TOMDLB_D
+        cpu_stride_no_wt += 12
+        if not flags & 0x2000: # Unclear if this flag is actually used
+            semantics_present['NORMAL'] = True
+            nrm_offset = cpu_stride_no_wt
+            cpu_stride_no_wt += 12
+            if flags & 0x80:
+                semantics_present['TANGENT'] = True
+                semantics_present['BINORMAL'] = True
+                tangent_offset = cpu_stride_no_wt
+                cpu_stride_no_wt += 12
+                binormal_offset = cpu_stride_no_wt
+                cpu_stride_no_wt += 12
+        elif flags & 0x20:
+            nrm_offset = cpu_stride_no_wt
+            cpu_stride_no_wt += 12 # If flags & 0x20, the normal slot is always there, even if unused
+        if not (flags & 0x20):
+            blend_idx_offset = cpu_stride_no_wt
+            cpu_stride_no_wt += 4 # Blend indices
+            blend_wt_offset = cpu_stride_no_wt
+        if flags & 0x10:
+            semantics_present['BLENDWEIGHTS'] = True
+            semantics_present['BLENDINDICES'] = True
+    else: # No skinning, vertex vector data in TOMDLP_P (sent directly to GPU)
+        gpu_stride += 12
+        if not flags & 0x2000:
+            semantics_present['NORMAL'] = True
+            nrm_offset = gpu_stride
+            gpu_stride += 12
+            if flags & 0x80:
+                semantics_present['TANGENT'] = True
+                semantics_present['BINORMAL'] = True
+                tangent_offset = gpu_stride
+                gpu_stride += 12
+                binormal_offset = gpu_stride
+                gpu_stride += 12
+    color_offset = gpu_stride
+    gpu_stride += 4 # Vertex color
+    uv_offsets = []
     num_uv_maps = flags & 0xF
-    #num_uv_maps = (uv_stride - 4) // 8 # 4 byte buffer + VEC2 per map
-    verts = []
-    norms = []
-    if flags & 0xF0 == 0x50:
-        blend_idx = []
-        weights = []
-        num_v_per_wt_grp = list(struct.unpack("{}4I".format(e), main_f.read(16)))
-        if sum(num_v_per_wt_grp) == num_verts:
-            num_vertices_array = [num_v_per_wt_grp]
-        else: # Some builds have arrays of arrays, might be a PS3 thing
-            main_f.seek(-16,1)
-            num_vertices_array = [[]]
-            count, = struct.unpack("{}I".format(e), main_f.read(4))
-            for i in range(count):
-                num_vertices_array.append(list(struct.unpack("{}4H".format(e), main_f.read(8))))
-        for i in range(len(num_vertices_array)):
-            for j in range(len(num_vertices_array[i])):
-                vert_offset = main_f.tell()
-                norm_offset = vert_offset + 12
-                blend_idx_offset = norm_offset + 12
-                weights_offset = blend_idx_offset + 4
-                stride = 28 + (j * 4)
-                end_offset = main_f.tell() + (num_vertices_array[i][j] * stride)
-                main_f.seek(vert_offset)
-                verts.extend(read_interleaved_floats(main_f, 3, stride, num_vertices_array[i][j]))
-                main_f.seek(norm_offset)
-                norms.extend(read_interleaved_floats(main_f, 3, stride, num_vertices_array[i][j]))
-                main_f.seek(blend_idx_offset)
-                blend_idx.extend(read_interleaved_bytes(main_f, 4, stride, num_vertices_array[i][j]))
-                if j > 0:
-                    main_f.seek(weights_offset)
-                    weights.extend(read_interleaved_floats(main_f, j, stride, num_vertices_array[i][j]))
-                else:
-                    weights.extend([[1.0] for _ in range(num_vertices_array[i][j])])
-                main_f.seek(end_offset)
-        weights = fix_weights(weights)
-    elif flags & 0xF0 == 0x70:
-        num_unk = struct.unpack("{}2H".format(e), main_f.read(4)) # Dunno what this is, maybe shape morphs?
-        unk_list = list(struct.unpack("{}{}I".format(e, num_unk[0]), main_f.read(4 * num_unk[0])))
-        vert_offset = main_f.tell()
-        norm_offset = vert_offset + 12
-        stride = 24
-        end_offset = main_f.tell() + (num_verts * stride)
-        main_f.seek(vert_offset)
-        verts.extend(read_interleaved_floats(main_f, 3, stride, num_verts))
-        main_f.seek(norm_offset)
-        norms.extend(read_interleaved_floats(main_f, 3, stride, num_verts))
-        main_f.seek(end_offset) # More data after this
-    elif flags & 0xF0 in [0x0, 0x40]:
-        vert_offset = idx_f.seek(offset_uvs)
-        norm_offset = vert_offset + 12
-        stride = 28 + ((flags & 0xF) * 8) # 12 + 12 + 4 extra for UV padding
-        idx_f.seek(vert_offset)
-        verts.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
-        idx_f.seek(norm_offset)
-        norms.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
-    elif flags & 0xF0 == 0xC0:
-        tangents = []
-        binormals = []
-        colors = []
-        vert_offset = idx_f.seek(offset_uvs)
-        norm_offset = vert_offset + 12
-        tan_offset = norm_offset + 12
-        binorm_offset = tan_offset + 12
-        color_offset = binorm_offset + 12
-        stride = 52 + ((flags & 0xF) * 8) # 12 + 12 + 4 extra for UV padding
-        idx_f.seek(vert_offset)
-        verts.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
-        idx_f.seek(norm_offset)
-        norms.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
-        idx_f.seek(tan_offset)
-        tangents.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
-        idx_f.seek(binorm_offset)
-        binormals.extend(read_interleaved_floats(idx_f, 3, stride, num_verts))
-        idx_f.seek(color_offset)
-        colors.extend(read_interleaved_ufloats(idx_f, 4, stride, num_verts))
+    for _ in range(num_uv_maps):
+        uv_offsets.append(gpu_stride)
+        gpu_stride += 8 # UVs
+    # Read vertex data
+    positions, normals, tangents, binormals, blend_idx, weights, morphs = [], [], [], [], [], [], []
+    main_f.seek(start_offset)
+    num_verts, num_idx, offset_gpu_verts, offset_idx = struct.unpack("{}2H2I".format(e), main_f.read(12))
+    if flags & 0x30:
+        if flags & 0x20: # Morph target animation
+            num_targets, bone_slot = struct.unpack("{}2H".format(e), main_f.read(4))
+            morph_offsets = list(struct.unpack("{}{}I".format(e, num_targets), main_f.read(4 * num_targets)))
+            base_offset = main_f.tell()
+            positions, normals, tangents, binormals = read_vert_vector_data (main_f, flags, cpu_stride_no_wt, num_verts,
+                nrm_offset, tangent_offset, binormal_offset)
+            if flags & 0x10: # Skinned morph targets
+                blend_idx = [[bone_slot, 0, 0, 0] for _ in range(num_verts)]
+                weights = [[1.0, 0.0, 0.0, 0.0] for _ in range(num_verts)]
+            morph_base_offset = main_f.seek(base_offset + (num_verts * cpu_stride_no_wt))
+            for i in range(num_targets):
+                main_f.seek(morph_base_offset + morph_offsets[i])
+                with io.BytesIO() as dense_morph_block:
+                    while True:
+                        skip, count = struct.unpack("{}2H".format(e), main_f.read(4))
+                        dense_morph_block.write(b'\x00' * 12 * skip)
+                        if count > 0:
+                            dense_morph_block.write(main_f.read(12 * count))
+                        else:
+                            break
+                    dense_morph_block.seek(0)
+                    morph_p, morph_n, morph_t, morph_b = read_vert_vector_data (dense_morph_block, flags,
+                        cpu_stride_no_wt,num_verts, nrm_offset, tangent_offset, binormal_offset)
+                morphs.append({'position': morph_p, 'normal': morph_n, 'tangent': morph_t, 'binormal': morph_b})
+        else: # Skeletal animation
+            weights = []
+            num_v_per_wt_grp = list(struct.unpack("{}4I".format(e), main_f.read(16)))
+            if sum(num_v_per_wt_grp) == num_verts:
+                num_vertices_array = [num_v_per_wt_grp]
+            else: # Some builds have arrays of arrays, might be a PS3 thing
+                main_f.seek(-16,1)
+                num_vertices_array = [[]]
+                count, = struct.unpack("{}I".format(e), main_f.read(4))
+                for i in range(count):
+                    num_vertices_array.append(list(struct.unpack("{}4H".format(e), main_f.read(8))))
+            for i in range(len(num_vertices_array)):
+                for j in range(len(num_vertices_array[i])):
+                    if num_vertices_array[i][j] > 0:
+                        base_start = main_f.tell()
+                        stride = cpu_stride_no_wt + (j * 4)
+                        new_p, new_n, new_t, new_b = read_vert_vector_data (main_f, flags, stride,
+                            num_vertices_array[i][j], nrm_offset, tangent_offset, binormal_offset)
+                        positions.extend(new_p)
+                        normals.extend(new_n)
+                        tangents.extend(new_t)
+                        binormals.extend(new_b)
+                        main_f.seek(base_start + blend_idx_offset)
+                        blend_idx.extend(read_interleaved_bytes(main_f, 4, stride, num_vertices_array[i][j]))
+                        if j > 0:
+                            main_f.seek(base_start + blend_wt_offset)
+                            weights.extend(read_interleaved_floats(main_f, j, stride, num_vertices_array[i][j]))
+                        else:
+                            weights.extend([[1.0] for _ in range(num_vertices_array[i][j])])
+            weights = fix_weights(weights)
+    else:
+        idx_f.seek(offset_gpu_verts)
+        positions, normals, tangents, binormals = read_vert_vector_data (idx_f, flags, gpu_stride, num_verts,
+            nrm_offset, tangent_offset, binormal_offset)
+    idx_f.seek(offset_gpu_verts + color_offset)
+    colors = read_interleaved_ufloats(idx_f, 4, gpu_stride, num_verts)
     uv_maps = []
-    if flags & 0xF0 in [0x50, 0x70]:
-        for i in range(num_uv_maps):
-            idx_f.seek(offset_uvs + 4 + (i * 8))
-            uv_maps.append(read_interleaved_floats (idx_f, 2, uv_stride, num_verts))
-    elif flags & 0xF0 in [0x0, 0x40]:
-        for i in range(num_uv_maps):
-            idx_f.seek(offset_uvs + 28 + (i * 8))
-            uv_maps.append(read_interleaved_floats (idx_f, 2, stride, num_verts))
+    for i in range(len(uv_offsets)):
+        idx_f.seek(offset_gpu_verts + uv_offsets[i])
+        uv_maps.append(read_interleaved_floats (idx_f, 2, gpu_stride, num_verts))
+    # Read index data
     idx_f.seek(offset_idx)
-    idx_buffer = list(struct.unpack("{}{}h".format(e, num_idx), idx_f.read(num_idx * 2)))
-    if not flags & 0xF0 in [0xC0]:
-        fmt = make_fmt(len(uv_maps))
-    elif flags & 0xF0 == 0xC0:
-        fmt = make_fmt(len(uv_maps), semantics_present = {'NORMAL': True, 'TANGENT': True, 'BINORMAL': True,
-            'COLOR': True, 'BLENDWEIGHTS': True, 'BLENDINDICES': True})
-    vb = [{'Buffer': verts}, {'Buffer': norms}]
-    if flags & 0xF0 == 0xC0:
+    idx_buffer = list(struct.unpack("{}{}H".format(e, num_idx), idx_f.read(num_idx * 2)))
+    if not (flags & 0xF00 == 0x100):
+        ib = trianglestrip_to_list(idx_buffer)
+    else:
+        ib = idx_buffer
+    # Build raw buffers for export
+    fmt = make_fmt(len(uv_maps), semantics_present)
+    vb = [{'Buffer': positions}]
+    if not flags & 0x2000:
+        vb.append({'Buffer': normals})
+    if flags & 0x80:
         vb.append({'Buffer': tangents})
         vb.append({'Buffer': binormals})
-        vb.append({'Buffer': colors})
+    vb.append({'Buffer': colors})
     for uv_map in uv_maps:
         vb.append({'Buffer': uv_map})
-    if flags & 0xF0 == 0x50:
+    if flags & 0x10:
         vb.append({'Buffer': weights})
         vb.append({'Buffer': blend_idx})
-    elif flags & 0xF0 in [0x0, 0x40, 0x70, 0xC0]:
-        vb.append({'Buffer': [[1.0, 0.0, 0.0, 0.0] for _ in range(len(verts))]})
-        vb.append({'Buffer': [[0, 0, 0, 0] for _ in range(len(verts))]})
-    return({'fmt': fmt, 'vb': vb, 'ib': trianglestrip_to_list(idx_buffer)})
+    return({'fmt': fmt, 'vb': vb, 'ib': ib, 'morphs': morphs})
 
 #This function is purely for flipping endianness
 def read_generic_int_section (f, offset, length):
@@ -549,7 +594,7 @@ def read_section_6 (f, offset, dlp_file):
         for i in range(section_6_toc[1]['num_entries']):
             data = {'current_block_offset': f.tell(), 'name': ''}
             data["mesh"], data["submesh"], data["node"], \
-                data["flags"], data["material"], data["unknown"] = struct.unpack("{}i4hi".format(e), f.read(16))
+                data["flags"], data["material"], data["first_morph_wt_slot"] = struct.unpack("{}i4hi".format(e), f.read(16))
             data['string_offset'] = read_offset(f)
             data['data_offset'], data["data_block_size"] = read_offset_and_count(f)
             current_offset = f.tell()
@@ -960,6 +1005,8 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
                 f.write(json.dumps(gltf_data, indent=4).encode("utf-8"))
 
 def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_binary_gltf = True):
+    set_endianness('<')
+    set_address_size(8)
     print("Processing {}...".format(dlb_file))
     base_name = dlb_file.split('.TOMDLB_D')[0]
     with open(dlb_file, 'rb') as f:

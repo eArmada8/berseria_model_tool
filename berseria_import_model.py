@@ -232,6 +232,9 @@ def create_section_5 (raw_sec5_struct, symphonia_mode = False):
 
 #Meshes
 def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct, unk0 = 0, unk1 = 0):
+    def unorm_to_bytes (vals):
+        float_max = ((2**8)-1)
+        return([(int(round(min(max(x,0), 1) * float_max))) for x in vals])
     # We will need some information from the original block regardless, so we will read it
     with io.BytesIO(backup_mesh_block) as ff:
         original_meshes, bone_palette_ids, orig_mesh_blocks_info = read_section_6(ff, 0, dlp_file)
@@ -241,6 +244,8 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
     except:
         print("{0}/mesh_info.json missing or unreadable, using data from {0}.TOMBDLB_D instead...".format(tomdlb_file[:-9]))
         mesh_blocks_info = orig_mesh_blocks_info
+        for i in range(len(mesh_blocks_info)):
+            mesh_blocks_info[i]['material'] = material_struct[mesh_blocks_info[i]['material']]['name']
     material_dict = {material_struct[i]['name']: i for i in range(len(material_struct))}
     material_list = []
     sec_0 = bytearray()
@@ -250,44 +255,103 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
     uvidx_data = bytearray()
     for i in range(len(mesh_blocks_info)):
         safe_filename = "".join([x if x not in "\\/:*?<>|" else "_" for x in mesh_blocks_info[i]["name"]])
-        num_uvs = (mesh_blocks_info[i]["flags"] & 0xF)
+        flags = mesh_blocks_info[i]["flags"]
+        # Calculate strides / semantics  from flags
+        semantics_present = {'NORMAL': False, 'TANGENT': False, 'BINORMAL': False,
+                'COLOR': True, 'BLENDWEIGHT': False, 'BLENDINDICES': False} # Only color is always present
+        cpu_stride_no_wt, gpu_stride = 0, 0 # final stride = cpu_stride_no_wt + weights, which are variable
+        pos_offset, nrm_offset, tangent_offset, binormal_offset, blend_idx_offset, blend_wt_offset = 0, 0, 0, 0, 0, 0
+        if flags & 0x30: # CPU skinning, vertex vector data in TOMDLB_D
+            cpu_stride_no_wt += 12
+            if not flags & 0x2000: # Unclear if this flag is actually used
+                semantics_present['NORMAL'] = True
+                nrm_offset = cpu_stride_no_wt
+                cpu_stride_no_wt += 12
+                if flags & 0x80:
+                    semantics_present['TANGENT'] = True
+                    semantics_present['BINORMAL'] = True
+                    tangent_offset = cpu_stride_no_wt
+                    cpu_stride_no_wt += 12
+                    binormal_offset = cpu_stride_no_wt
+                    cpu_stride_no_wt += 12
+            elif flags & 0x20:
+                nrm_offset = cpu_stride_no_wt
+                cpu_stride_no_wt += 12 # If flags & 0x20, the normal slot is always there, even if unused
+            if not (flags & 0x20):
+                blend_idx_offset = cpu_stride_no_wt
+                cpu_stride_no_wt += 4 # Blend indices
+                blend_wt_offset = cpu_stride_no_wt
+            if flags & 0x10:
+                semantics_present['BLENDWEIGHT'] = True
+                semantics_present['BLENDINDICES'] = True
+        else: # No skinning, vertex vector data in TOMDLP_P (sent directly to GPU)
+            gpu_stride += 12
+            if not flags & 0x2000:
+                semantics_present['NORMAL'] = True
+                nrm_offset = gpu_stride
+                gpu_stride += 12
+                if flags & 0x80:
+                    semantics_present['TANGENT'] = True
+                    semantics_present['BINORMAL'] = True
+                    tangent_offset = gpu_stride
+                    gpu_stride += 12
+                    binormal_offset = gpu_stride
+                    gpu_stride += 12
+        color_offset = gpu_stride
+        gpu_stride += 4 # Vertex color
+        uv_offsets = []
+        num_uv_maps = flags & 0xF
+        for _ in range(num_uv_maps):
+            uv_offsets.append(gpu_stride)
+            gpu_stride += 8 # UVs
+        expected_fmt = make_fmt(num_uv_maps, semantics_present)
+        semantic_i = {"{}{}".format(expected_fmt['elements'][i]['SemanticName'],
+            "_" + expected_fmt['elements'][i]['SemanticIndex'] if expected_fmt['elements'][i]['SemanticName'] == 'TEXCOORD' else '')
+            : i for i in range(len(expected_fmt['elements']))}
+        mesh_filename = tomdlb_file[:-9] + '/{0:02d}_{1}'.format(i, safe_filename)
+        print("Processing submesh {0}...".format(mesh_filename))
         try:
-            mesh_filename = tomdlb_file[:-9] + '/{0:02d}_{1}'.format(i, safe_filename)
             fmt = read_fmt(mesh_filename + '.fmt')
-            ib = stripify(read_ib(mesh_filename + '.ib', fmt), stitchstrips = True)[0]
+            ib = read_ib(mesh_filename + '.ib', fmt)
+            if not (flags & 0xF00 == 0x100):
+                ib = stripify(ib, stitchstrips = True)[0]
+            else:
+                ib = [x for y in ib for x in y]
             vb = read_vb(mesh_filename + '.vb', fmt)
             assert ([x['SemanticName'] for x in fmt['elements']]
-                == ['POSITION', 'NORMAL']
-                + ['TEXCOORD'] * num_uvs
-                + ['BLENDWEIGHTS', 'BLENDINDICES'])
+                == [x['SemanticName'] for x in expected_fmt['elements']])
             stride_semantic = 'vb0 stride' if 'vb0 stride' in fmt else 'stride'
-            assert (int(fmt[stride_semantic]) == 44 + (8 * (mesh_blocks_info[i]["flags"] & 0xF)))
+            assert (int(fmt[stride_semantic]) == int(fmt['stride']))
             assert len(ib) > 2
         except (FileNotFoundError, AssertionError) as err:
             print("Submesh {0} not found or corrupt, generating an empty submesh...".format(mesh_filename))
             # Generate an empty submesh
-            fmt = make_fmt(num_uvs)
+            fmt = expected_fmt
             ib = [0,0,0]
-            vb = [{'Buffer':[[0.0, 0.0, 0.0]]}, {'Buffer':[[0.0, 0.0, 0.0]]}]
-            vb.extend([{'Buffer':[[0.0, 0.0]]} for _ in range(num_uvs)])
-            vb.extend([{'Buffer':[[1.0, 0.0, 0.0, 0.0]]}, {'Buffer':[[0, 0, 0, 0]]}])
-        print("Processing submesh {0}...".format(mesh_filename))
+            vb = [{'Buffer':[[0.0, 0.0, 0.0]]}]
+            if not flags & 0x2000:
+                vb.append({'Buffer': [[0.0, 0.0, 0.0]]})
+            if flags & 0x80:
+                vb.append({'Buffer': [[0.0, 0.0, 0.0]]})
+                vb.append({'Buffer': [[0.0, 0.0, 0.0]]})
+            vb.append({'Buffer': [[1.0, 1.0, 1.0, 1.0]]})
+            for _ in range(num_uv_maps):
+                vb.append({'Buffer': [[0.0, 0.0]]})
+            if flags & 0x10:
+                vb.append({'Buffer': [[1.0, 0.0, 0.0, 0.0]]})
+                vb.append({'Buffer': [[0, 0, 0, 0]]})
         try:
             material_list.append(material_dict[mesh_blocks_info[i]["material"]])
-        except KeyError: # Try legacy metadata format
-            try:
-                material = read_struct_from_json(tomdlb_file[:-9] + '/{0:02d}_{1}.material'.format(i, safe_filename))
-                material_list.append(material_dict[material['material']])
-            except:
-                print("Unable to read material for {}!  The material assignment is either missing or invalid.".format(safe_filename))
-                input("Press Enter to quit.")
-                raise
+        except:
+            print("Unable to read material for {}!  The material assignment is either missing or invalid.".format(safe_filename))
+            input("Press Enter to quit.")
+            raise
         # I don't know what these are, in the sample models they are always 0.  Might be for non-mesh TOMDLB_D's
         sec_0.extend(struct.pack("{}4I".format(e), 0, 0, 0, 0))
         # Add basic data
         sec_1_header.extend(struct.pack("{}i4hi".format(e), mesh_blocks_info[i]["mesh"], mesh_blocks_info[i]["submesh"],
             mesh_blocks_info[i]["node"], mesh_blocks_info[i]["flags"], material_list[-1],
-            mesh_blocks_info[i]["unknown"]))
+            mesh_blocks_info[i]["first_morph_wt_slot"]))
         data_block_start = len(sec_1_data)
         # Add mesh name
         offset = sec_1_header_length - len(sec_1_header) + len(sec_1_data)
@@ -299,61 +363,98 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
         offset = sec_1_header_length - len(sec_1_header) + len(sec_1_data)
         sec_1_header.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), offset))
         # Standard weighted meshes
-        if mesh_blocks_info[i]["flags"] & 0xF0 == 0x50:
-            # Split vertices into weight types
-            vgrp = [4 if not x[3]==0.0 else 3 if not x[2]==0.0 else 2 if not x[1]==0.0 else 1 for x in vb[-2]['Buffer']]
-            v_by_grp = [[k for k, vgrpval in enumerate(vgrp) if vgrpval == j] for j in range(1,5)]
-            new_v_assgn = {}
-            counter = 0
-            for j in range(len(v_by_grp)):
-                for k in range(len(v_by_grp[j])):
-                    new_v_assgn[v_by_grp[j][k]] = counter
-                    counter += 1
-            new_ib = [new_v_assgn[x] for x in ib]
+        if flags & 0x30 and not flags & 0x20:
             submesh_datablock = bytearray()
-            submesh_datablock.extend(struct.pack("{}4I".format(e), *[len(x) for x in v_by_grp]))
+            submesh_datablock_header = bytearray()
             uv_block = bytearray()
-            for j in range(len(v_by_grp)):
-                for k in range(len(v_by_grp[j])):
-                    submesh_datablock.extend(struct.pack("{}3f".format(e), *vb[0]['Buffer'][v_by_grp[j][k]])) # Vertices
-                    submesh_datablock.extend(struct.pack("{}3f".format(e), *vb[1]['Buffer'][v_by_grp[j][k]])) # Normals
-                    submesh_datablock.extend(struct.pack("{}4B".format(e), *vb[-1]['Buffer'][v_by_grp[j][k]])) # Blend indices
-                    if j > 0:
-                        submesh_datablock.extend(struct.pack("{}{}f".format(e, j),
-                            *vb[-2]['Buffer'][v_by_grp[j][k]][:j])) # Blend weights
-                    uv_block.extend(struct.pack("{}i".format(e), -1)) # Padding
-                    for l in range(num_uvs):
-                        uv_block.extend(struct.pack("{}2f".format(e), *vb[2+l]['Buffer'][v_by_grp[j][k]])) # UVs
-            new_ib_block = bytearray(struct.pack("{}{}H".format(e, len(new_ib)), *new_ib)) # Triangles
+            vertices_to_process = []
+            ps3_mode = False
+            if e == '>' and addr_size == 4: # PS3 mode, split vertices into groups
+                ps3_mode = True
+                vcount = 0
+                while vcount < len(vb[0]['Buffer']):
+                    vertices_to_process.append((vcount, min(vcount+0x200, len(vb[0]['Buffer']))))
+                    vcount += 512
+                submesh_datablock_header.extend(struct.pack("{}I".format(e), len(vertices_to_process)))
+            else:
+                vertices_to_process.append((0, len(vb[0]['Buffer'])))
+            vgrp = [4 if not x[3]==0.0 else 3 if not x[2]==0.0 else 2 if not x[1]==0.0 else 1 for x in
+                vb[semantic_i['BLENDWEIGHT']]['Buffer']]
+            new_v_assgn = {}
+            for slice_i in range(len(vertices_to_process)):
+                # Split vertices into weight types
+                v_by_grp = [[k + vertices_to_process[slice_i][0] for k, vgrpval
+                    in enumerate(vgrp[vertices_to_process[slice_i][0]
+                    :vertices_to_process[slice_i][1]]) if vgrpval == j] for j in range(1,5)]
+                counter = vertices_to_process[slice_i][0]
+                for j in range(len(v_by_grp)):
+                    for k in range(len(v_by_grp[j])):
+                        new_v_assgn[v_by_grp[j][k]] = counter
+                        counter += 1
+                if ps3_mode == True:
+                    submesh_datablock_header.extend(struct.pack("{}4H".format(e), *[len(x) for x in v_by_grp]))
+                else:
+                    submesh_datablock_header.extend(struct.pack("{}4I".format(e), *[len(x) for x in v_by_grp]))
+                for j in range(len(v_by_grp)):
+                    for k in range(len(v_by_grp[j])):
+                        submesh_datablock.extend(struct.pack("{}3f".format(e),
+                            *vb[semantic_i['POSITION']]['Buffer'][v_by_grp[j][k]]))
+                        if not flags & 0x2000:
+                            submesh_datablock.extend(struct.pack("{}3f".format(e),
+                                *vb[semantic_i['NORMAL']]['Buffer'][v_by_grp[j][k]]))
+                        if flags & 0x80:
+                            submesh_datablock.extend(struct.pack("{}3f".format(e),
+                                *vb[semantic_i['TANGENT']]['Buffer'][v_by_grp[j][k]]))
+                            submesh_datablock.extend(struct.pack("{}3f".format(e),
+                                *vb[semantic_i['BINORMAL']]['Buffer'][v_by_grp[j][k]]))
+                        submesh_datablock.extend(struct.pack("{}4B".format(e),
+                            *vb[semantic_i['BLENDINDICES']]['Buffer'][v_by_grp[j][k]]))
+                        if j > 0:
+                            submesh_datablock.extend(struct.pack("{}{}f".format(e, j),
+                                *vb[semantic_i['BLENDWEIGHT']]['Buffer'][v_by_grp[j][k]][:j]))
+                        uv_block.extend(struct.pack("{}4B".format(e),
+                            *unorm_to_bytes(vb[semantic_i['COLOR']]['Buffer'][v_by_grp[j][k]])))
+                        for l in range(num_uv_maps):
+                            uv_block.extend(struct.pack("{}2f".format(e),
+                                *vb[semantic_i['TEXCOORD_'+str(l)]]['Buffer'][v_by_grp[j][k]]))
+            new_ib = [new_v_assgn[x] for x in ib]
+            new_ib_block = bytearray(struct.pack("{}{}H".format(e, len(new_ib)), *new_ib))
             if len(new_ib_block) % 4:
                 new_ib_block += b'\x00' * (4 - (len(new_ib_block) % 4))
-            sec_1_data.extend(struct.pack("{}2HI".format(e), len(vb[0]['Buffer']), len(new_ib), len(uvidx_data)))
+            sec_1_data.extend(struct.pack("{}2HI".format(e), len(vb[semantic_i['POSITION']]['Buffer']),
+                len(new_ib), len(uvidx_data)))
             uvidx_data.extend(uv_block)
             sec_1_data.extend(struct.pack("{}I".format(e), len(uvidx_data)))
             uvidx_data.extend(new_ib_block)
-            sec_1_data.extend(submesh_datablock)
-            sec_1_header.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), len(submesh_datablock) + 0xC))
+            sec_1_data.extend(submesh_datablock_header + submesh_datablock)
+            sec_1_header.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]),
+                len(submesh_datablock_header + submesh_datablock) + 0xC))
+        # Morph target meshes
+        elif flags & 0x20:
+            return False, False # Currently morph targets not supported
         # Unweighted meshes
-        elif mesh_blocks_info[i]["flags"] & 0xF0 == 0x0:
+        else:
             uv_block = bytearray()
-            for j in range(len(vb[0]['Buffer'])):
-                uv_block.extend(struct.pack("{}3f".format(e), *vb[0]['Buffer'][j])) # Vertices
-                uv_block.extend(struct.pack("{}3f".format(e), *vb[1]['Buffer'][j])) # Normals
-                uv_block.extend(struct.pack("{}i".format(e), -1)) # Padding
-                for l in range(num_uvs):
-                    uv_block.extend(struct.pack("{}2f".format(e), *vb[2+l]['Buffer'][j])) # UVs
+            for j in range(len(vb[semantic_i['POSITION']]['Buffer'])):
+                uv_block.extend(struct.pack("{}3f".format(e), *vb[semantic_i['POSITION']]['Buffer'][j]))
+                if not flags & 0x2000:
+                    uv_block.extend(struct.pack("{}3f".format(e), *vb[semantic_i['NORMAL']]['Buffer'][j]))
+                if flags & 0x80:
+                    uv_block.extend(struct.pack("{}3f".format(e), *vb[semantic_i['TANGENT']]['Buffer'][j]))
+                    uv_block.extend(struct.pack("{}3f".format(e), *vb[semantic_i['BINORMAL']]['Buffer'][j]))
+                uv_block.extend(struct.pack("{}4B".format(e), *unorm_to_bytes(vb[semantic_i['COLOR']]['Buffer'][j])))
+                for l in range(num_uv_maps):
+                    uv_block.extend(struct.pack("{}2f".format(e), *vb[semantic_i['TEXCOORD_'+str(l)]]['Buffer'][j]))
             new_ib_block = bytearray(struct.pack("{}{}H".format(e, len(ib)), *ib)) # Triangles
             if len(new_ib_block) % 4:
                 new_ib_block += b'\x00' * (4 - (len(new_ib_block) % 4))
-            sec_1_data.extend(struct.pack("{}2HI".format(e), len(vb[0]['Buffer']), len(ib), len(uvidx_data)))
+            sec_1_data.extend(struct.pack("{}2HI".format(e), len(vb[semantic_i['POSITION']]['Buffer']),
+                len(ib), len(uvidx_data)))
             uvidx_data.extend(uv_block)
             sec_1_data.extend(struct.pack("{}I".format(e), len(uvidx_data)))
             uvidx_data.extend(new_ib_block)
             sec_1_data.extend(struct.pack("{}5I".format(e), 0, 0, 0, 0, 0))
             sec_1_header.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), 0x20))
-        # Unsupported mesh type, e.g. 0x70 mesh
-        else:
-            return False, False
     sec_1 = sec_1_header + sec_1_data
     sec_2 = bytearray(struct.pack("{}{}I".format(e, len(bone_palette_ids)), *bone_palette_ids))
     sec_3 = struct.pack("{}2I".format(e), len(mesh_blocks_info), len(bone_palette_ids))
