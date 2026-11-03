@@ -346,8 +346,7 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
             print("Unable to read material for {}!  The material assignment is either missing or invalid.".format(safe_filename))
             input("Press Enter to quit.")
             raise
-        # I don't know what these are, in the sample models they are always 0.  Might be for non-mesh TOMDLB_D's
-        sec_0.extend(struct.pack("{}4I".format(e), 0, 0, 0, 0))
+        sec_0.extend(struct.pack("{}i3f".format(e), mesh_blocks_info[i]["sort_priority"], *mesh_blocks_info[i]["sort_center"]))
         # Add basic data
         sec_1_header.extend(struct.pack("{}i4hi".format(e), mesh_blocks_info[i]["mesh"], mesh_blocks_info[i]["submesh"],
             mesh_blocks_info[i]["node"], mesh_blocks_info[i]["flags"], material_list[-1],

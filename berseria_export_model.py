@@ -254,7 +254,7 @@ def find_and_add_external_skeleton (skel_struct, bone_palette_ids):
         return(skel_struct)
 
 def make_fmt(num_uvs, semantics_present = {'NORMAL': True, 'TANGENT': False, 'BINORMAL': False,
-        'COLOR': False, 'BLENDWEIGHTS': True, 'BLENDINDICES': True}):
+        'COLOR': False, 'BLENDWEIGHT': True, 'BLENDINDICES': True}):
     fmt = {'stride': '0', 'topology': 'trianglelist', 'format':\
         "DXGI_FORMAT_R16_UINT", 'elements': []}
     element_id, stride = 0, 0
@@ -296,8 +296,8 @@ def make_fmt(num_uvs, semantics_present = {'NORMAL': True, 'TANGENT': False, 'BI
                 element_id += 1
                 stride += 4
                 semantic_present = True
-            elif i == 7+num_uvs-2 and semantics_present['BLENDWEIGHTS']:
-                element['SemanticName'] = 'BLENDWEIGHTS'
+            elif i == 7+num_uvs-2 and semantics_present['BLENDWEIGHT']:
+                element['SemanticName'] = 'BLENDWEIGHT'
                 element['Format'] = 'R32G32B32A32_FLOAT'
                 element_id += 1
                 stride += 16
@@ -372,7 +372,7 @@ def read_mesh (main_f, idx_f, start_offset, flags):
         return(weights)
     # Calculate strides from flags
     semantics_present = {'NORMAL': False, 'TANGENT': False, 'BINORMAL': False,
-            'COLOR': True, 'BLENDWEIGHTS': False, 'BLENDINDICES': False} # Only color is always present
+            'COLOR': True, 'BLENDWEIGHT': False, 'BLENDINDICES': False} # Only color is always present
     cpu_stride_no_wt, gpu_stride = 0, 0 # final stride = cpu_stride_no_wt + weights, which are variable
     pos_offset, nrm_offset, tangent_offset, binormal_offset, blend_idx_offset, blend_wt_offset = 0, 0, 0, 0, 0, 0
     if flags & 0x30: # CPU skinning, vertex vector data in TOMDLB_D
@@ -396,7 +396,7 @@ def read_mesh (main_f, idx_f, start_offset, flags):
             cpu_stride_no_wt += 4 # Blend indices
             blend_wt_offset = cpu_stride_no_wt
         if flags & 0x10:
-            semantics_present['BLENDWEIGHTS'] = True
+            semantics_present['BLENDWEIGHT'] = True
             semantics_present['BLENDINDICES'] = True
     else: # No skinning, vertex vector data in TOMDLP_P (sent directly to GPU)
         gpu_stride += 12
@@ -565,7 +565,7 @@ def read_section_5 (f, offset, decode_data = False):
         for i in range(len(data1)):
             decoded.append({'target_node': data1[i][0], 'group': data1[i][1]})
             fmt = make_fmt(1, semantics_present = {'NORMAL': False, 'TANGENT': False, 'BINORMAL': False,
-                    'COLOR': False, 'BLENDWEIGHTS': False, 'BLENDINDICES': False}) # Leave in 1 uv, Blender plug-in needs it
+                    'COLOR': False, 'BLENDWEIGHT': False, 'BLENDINDICES': False}) # Leave in 1 uv, Blender plug-in needs it
             pos = [x for y in triangles[data1[i][8]:data1[i][8]+data1[i][9]] for x in y]
             uv = [[0.0,0.0] for _ in range(len(pos))]
             meshes.append({'fmt': fmt, 'ib': range(len(pos)), 'vb': [{'Buffer':pos},{'Buffer':uv}]})
@@ -581,10 +581,12 @@ def read_section_6 (f, offset, dlp_file):
     for _ in range(4):
         offset, num_entries = read_offset_and_count(f)
         section_6_toc.append({'offset': offset, 'num_entries': num_entries})
-    #section_6_toc[0] - VEC4 (u32, f32?) - in sample is all zeroes
+    #section_6_toc[0] - mesh sorting (fixed draw order)
     #section_6_toc[1] - meshes
     #section_6_toc[2] - bone palette
     #section_6_toc[3] - u32 x 2 - # meshes, # bones
+    f.seek(section_6_toc[0]['offset'])
+    sort_values = [struct.unpack("{}i3f".format(e), f.read(16)) for _ in range(section_6_toc[0]['num_entries'])]
     f.seek(section_6_toc[2]['offset'])
     bone_palette_ids = struct.unpack("{}{}I".format(e, section_6_toc[2]['num_entries']), f.read(4 * section_6_toc[2]['num_entries']))
     mesh_blocks_info = []
@@ -595,6 +597,7 @@ def read_section_6 (f, offset, dlp_file):
             data = {'current_block_offset': f.tell(), 'name': ''}
             data["mesh"], data["submesh"], data["node"], \
                 data["flags"], data["material"], data["first_morph_wt_slot"] = struct.unpack("{}i4hi".format(e), f.read(16))
+            data["sort_priority"], data["sort_center"] = sort_values[i][0], sort_values[i][1:4]
             data['string_offset'] = read_offset(f)
             data['data_offset'], data["data_block_size"] = read_offset_and_count(f)
             current_offset = f.tell()
@@ -785,7 +788,7 @@ def convert_format_for_gltf(dxgi_format):
 def convert_fmt_for_gltf(fmt):
     new_fmt = copy.deepcopy(fmt)
     stride = 0
-    new_semantics = {'BLENDWEIGHTS': 'WEIGHTS', 'BLENDINDICES': 'JOINTS'}
+    new_semantics = {'BLENDWEIGHT': 'WEIGHTS', 'BLENDINDICES': 'JOINTS'}
     need_index = ['WEIGHTS', 'JOINTS', 'COLOR', 'TEXCOORD']
     for i in range(len(fmt['elements'])):
         if new_fmt['elements'][i]['SemanticName'] in new_semantics.keys():
