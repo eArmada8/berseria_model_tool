@@ -53,7 +53,6 @@ def morton (t, sx, sy):
 
 def unswizzle (texture_data, dwWidth, dwHeight, bpp):
     output = bytearray(dwHeight * dwWidth * bpp)
-    data_index = 0
     for t in range(dwHeight * dwWidth):
         d = morton(t, dwWidth, dwHeight)
         output[d*bpp:(d+1)*bpp] = texture_data[t*bpp:(t+1)*bpp]
@@ -120,7 +119,7 @@ def process_texb (texb_file):
                         for i in range(max(mipmaps, 1)):
                             w, h = max(1, width >> i), max(1, height >> i)
                             mip_data = bytearray()
-                            for _ in range(w * h):
+                            for _ in range(w * h * max(1, depth >> i)):
                                 mip_data.extend(struct.pack("<I", struct.unpack(">I", ff.read(4))[0]))
                             if not (format_ & 0x20):
                                 mip_data = unswizzle(mip_data, w, h, bpp)
