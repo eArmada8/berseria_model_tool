@@ -36,29 +36,53 @@ def read_string (f, start_offset):
     f.seek(current_loc)
     return(null_term_string[:-1].decode())
 
+def morton (t, sx, sy):
+    num = [1,1,t,sx,sy,0,0]
+    while num[3] > 1 or num[4] > 1:
+        if num[3] > 1:
+            num[5] += num[1] * (num[2] & 1)
+            num[2] >>= 1
+            num[1] *= 2
+            num[3] >>= 1
+        if num[4] > 1:
+            num[6] += num[0] * (num[2] & 1)
+            num[2] >>= 1
+            num[0] *= 2
+            num[4] >>= 1
+    return(num[6] * sx + num[5])
+
+def unswizzle (texture_data, dwWidth, dwHeight, bpp):
+    output = bytearray(dwHeight * dwWidth * bpp)
+    data_index = 0
+    for t in range(dwHeight * dwWidth):
+        d = morton(t, dwWidth, dwHeight)
+        output[d*bpp:(d+1)*bpp] = texture_data[t*bpp:(t+1)*bpp]
+    return(output)
+
 def write_dds_header (type_, dwMipMapCount, dwWidth, dwHeight, dwDepth, format_):
     try:
-        dds_format = {0x86: 'DXT1', 0x87: 'DXT3', 0x88: 'DXT5'}[format_ & 0x9F]
+        dds_format = {0x85: 'ARGB8', 0x86: 'DXT1', 0x87: 'DXT3', 0x88: 'DXT5'}[format_ & 0x9F]
     except KeyError:
         print("Unsupported texture format: {}!".format(hex(format_)))
         return False
     block_compressed = True if dds_format in ['DXT1', 'DXT3', 'DXT5'] else False
-    dwFlags = 0x1007
+    dwFlags, dwCaps, dwCaps2 = 0x1007, 0x1000, 0
     if block_compressed:
         dwPitchOrLinearSize = max(1,(dwWidth+3)//4) * max(1,(dwHeight+3)//4) * (8 if dds_format == 'DXT1' else 16)
         dwFlags |= 0x80000
         px_header = struct.pack("<2I", 32, 0x4) + dds_format.encode() + struct.pack("<5I", *[0]*5)
-        dwCaps, dwCaps2 = 0x1000, 0
-        if type_ == 1 or dwDepth > 1:
-            dwCaps |= 0x8
-            dwCaps2 = 0x200000
-            dwFlags |= 0x800000
-        elif type_ == 2:
-            dwCaps |= 0x8
-            dwCaps2 = 0x200 | 0xFE00
     else:
-        print("Unsupported texture format: {}!".format(hex(format_)))
-        return False
+        dwPitchOrLinearSize = dwWidth * 4
+        dwFlags |= 0x8
+        px_header = struct.pack("<2I4s5I", 32, 0x41, b'\x00' * 4, 32,
+            0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000) # Mask is little endian
+    if type_ == 1 or dwDepth > 1:
+        dwCaps |= 0x8
+        dwCaps2 = 0x200000
+        dwFlags |= 0x800000
+    elif type_ == 2:
+        dwCaps |= 0x8
+        dwCaps2 = 0x200 | 0xFE00
     if dwMipMapCount > 1:
         dwCaps |= 0x400000 | 0x8
         dwFlags |= 0x20000
@@ -90,7 +114,19 @@ def process_texb (texb_file):
                 return
             if os.path.exists(tex_resource):
                 with open(tex_resource, 'rb') as ff:
-                    tex_data = ff.read()
+                    if format_ & 0x9F == 0x85:
+                        tex_data = bytearray()
+                        bpp = 4
+                        for i in range(max(mipmaps, 1)):
+                            w, h = max(1, width >> i), max(1, height >> i)
+                            mip_data = bytearray()
+                            for _ in range(w * h):
+                                mip_data.extend(struct.pack("<I", struct.unpack(">I", ff.read(4))[0]))
+                            if not (format_ & 0x20):
+                                mip_data = unswizzle(mip_data, w, h, bpp)
+                            tex_data.extend(mip_data)
+                    else:
+                        tex_data = ff.read()
                     with open(base_name + '.dds', 'wb') as fff:
                         fff.write(dds_header + tex_data)
             else:
