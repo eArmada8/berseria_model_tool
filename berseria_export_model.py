@@ -1047,7 +1047,7 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
                 gltf_data['meshes'][-1]['weights'] = morph_weights
             # Skinning
             if (len(vgmaps[mesh_blocks_info[i]["vgmap"]]) > 0 and skinning_possible == True
-                    and mesh_blocks_info[i]['flags'] & 0x40):
+                    and all(['JOINTS_0' in p['attributes'] for p in primitives])):
                 gltf_data['nodes'][node_id]['skin'] = len(gltf_data['skins'])
                 gltf_data['skins'].append({"inverseBindMatrices": len(gltf_data['accessors']),\
                     "joints": [node_list.index(x) for x in vgmaps[mesh_blocks_info[i]["vgmap"]]]})
