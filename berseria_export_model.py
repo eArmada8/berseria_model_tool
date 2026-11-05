@@ -862,7 +862,6 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
     gltf_data['nodes'] = []
     gltf_data['samplers'] = []
     gltf_data['scenes'] = [{}]
-    gltf_data['scenes'][0]['nodes'] = [0]
     gltf_data['scene'] = 0
     gltf_data['skins'] = []
     gltf_data['textures'] = []
@@ -917,7 +916,8 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
     if not 'children' in gltf_data['nodes'][0]:
         gltf_data['nodes'][0]['children'] = []
     for mesh_node_id in mesh_node_ids:
-        if all(['true_node' in x for x in mesh_blocks_info if x['mesh_v'] == mesh_node_id]):
+        if all(['true_node' in x and x['true_node'] in [y['name'] for y in gltf_data['nodes']]
+                for x in mesh_blocks_info if x['mesh_v'] == mesh_node_id]):
             continue
         if not mesh_node_id in node_id_list:
             g_node = {'name': mesh_node_ids[mesh_node_id]}
@@ -1035,7 +1035,7 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
                     morph_weights.append(0.0)
             primitives.append(primitive)
         if len(primitives) > 0:
-            if 'true_node' in mesh_blocks_info[i]:
+            if 'true_node' in mesh_blocks_info[i] and mesh_blocks_info[i]['true_node'] in node_list:
                 node_id = node_list.index(mesh_blocks_info[i]['true_node'])
             elif mesh_node_ids[mesh] in node_list: # One of the new nodes
                 node_id = node_list.index(mesh_node_ids[mesh])
@@ -1059,6 +1059,9 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
                     "byteOffset": len(giant_buffer),\
                     "byteLength": len(inv_mtx_buffers[mesh_blocks_info[i]["vgmap"]])})
                 giant_buffer += inv_mtx_buffers[mesh_blocks_info[i]["vgmap"]]
+    # Attach the root node (and any orphan nodes if the external skeleton is not available) to the scene
+    child_nodes = set([x for y in gltf_data['nodes'] for x in y.get('children', [])])
+    gltf_data['scenes'][0]['nodes'] = sorted([i for i in range(len(gltf_data['nodes'])) if i not in child_nodes])
     # Write GLB
     gltf_data['buffers'].append({"byteLength": len(giant_buffer)})
     if (os.path.exists(base_name + '.gltf') or os.path.exists(base_name + '.glb')) and (overwrite == False):
@@ -1176,6 +1179,8 @@ def process_dlbs_combined (dlb_files, overwrite = False, write_binary_gltf = Tru
     gltf_overwrite = copy.deepcopy(overwrite)
     base_name_dict = {}
     for i in range(len(dlb_files)):
+        set_endianness('<')
+        set_address_size(8)
         with open(dlb_files[i], 'rb') as f:
             magic = f.read(4)
             if magic in [b'DPDF', b'FDPD']:
@@ -1196,6 +1201,8 @@ def process_dlbs_combined (dlb_files, overwrite = False, write_binary_gltf = Tru
                     unique_skel = [x for x in new_skel_struct if not x['id'] in [y['id'] for y in skel_struct]]
                     skel_struct.extend(unique_skel) # At this point the children lists are garbage
     for i in range(len(dlb_files)):
+        set_endianness('<')
+        set_address_size(8)
         base_name = dlb_files[i].split('.TOMDLB_D')[0]
         with open(dlb_files[i], 'rb') as f:
             print("Processing {} for combined glTF...".format(dlb_files[i]))

@@ -799,6 +799,8 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
     with open(tomdlb_file, 'rb') as f:
         magic = f.read(4)
         if magic in [b'DPDF', b'FDPD']:
+            e, addr_size = '<', 8
+            set_endianness('<')
             if magic == b'FDPD':
                 e = '>' # Write mode
                 set_endianness('>') # Read mode
