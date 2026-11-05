@@ -984,6 +984,35 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
             del(ib_stream)
             primitive["mode"] = 4 #TRIANGLES
             primitive["material"] = mesh_blocks_info[i]['material']
+            morph_weights = []
+            if len(meshes[i]['morphs']) > 0:
+                primitive["targets"] = []
+                for morph in meshes[i]['morphs']:
+                    target = {}
+                    for element in morph:
+                        if len(morph[element]) > 0:
+                            delta_block = numpy.array(morph[element], dtype='<f4').tobytes()
+                            target[element] = len(gltf_data['accessors'])
+                            gltf_data['accessors'].append({"bufferView" : len(gltf_data['bufferViews']),
+                                "componentType": 5126,
+                                "count": len(morph[element]),
+                                "type": "VEC3"})
+                            if element == 'POSITION':
+                                gltf_data['accessors'][-1]['max'] =\
+                                    [max([x[0] for x in morph[element]]),
+                                     max([x[1] for x in morph[element]]),
+                                     max([x[2] for x in morph[element]])]
+                                gltf_data['accessors'][-1]['min'] =\
+                                    [min([x[0] for x in morph[element]]),
+                                     min([x[1] for x in morph[element]]),
+                                     min([x[2] for x in morph[element]])]
+                            gltf_data['bufferViews'].append({"buffer": 0,
+                                "byteOffset": len(giant_buffer),
+                                "byteLength": len(delta_block),
+                                "target" : 34962})
+                            giant_buffer += delta_block
+                    primitive["targets"].append(target)
+                    morph_weights.append(0.0)
             primitives.append(primitive)
         if len(primitives) > 0:
             if mesh_node_ids[mesh] in node_list: # One of the new nodes
@@ -992,6 +1021,8 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
                 node_id = node_id_list.index(mesh_blocks_info[i]["mesh_v"])
             gltf_data['nodes'][node_id]['mesh'] = len(gltf_data['meshes'])
             gltf_data['meshes'].append({"primitives": primitives, "name": mesh_node_ids[mesh]})
+            if len(morph_weights) > 0:
+                gltf_data['meshes'][-1]['weights'] = morph_weights
             # Skinning
             if len(vgmaps[mesh_blocks_info[i]["vgmap"]]) > 0 and skinning_possible == True:
                 gltf_data['nodes'][node_id]['skin'] = len(gltf_data['skins'])
