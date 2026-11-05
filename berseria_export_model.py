@@ -508,7 +508,12 @@ def read_mesh (main_f, idx_f, start_offset, flags):
     if flags & 0x10:
         vb.append({'Buffer': weights})
         vb.append({'Buffer': blend_idx})
-    return({'fmt': fmt, 'vb': vb, 'ib': ib, 'morphs': morphs})
+    mesh = {'fmt': fmt, 'vb': vb, 'ib': ib, 'morphs': morphs}
+    if flags & 0x80:
+        expected_binormals = numpy.cross(normals, tangents)
+        w = numpy.where(numpy.einsum('ij,ij->i', expected_binormals, binormals) >= 0.0, 1.0, -1.0)
+        mesh['tangent4'] = [tangents[i] + [float(w[i])] for i in range(len(tangents))]
+    return(mesh)
 
 def make_morphed_meshes (mesh):
     morphed_meshes = []
@@ -590,8 +595,8 @@ def read_section_5 (f, offset, decode_data = False):
     else:
         return([data1, data2])
 
-#Meshes, offset should be toc[6].  Requires dlp filename for uv's and index buffer.
-def read_section_6 (f, offset, dlp_file):
+#Meshes, offset should be toc[6].  Requires dlp filename for uv's and index buffer.  skel_struct is pre-merging.
+def read_section_6 (f, offset, dlp_file, skel_struct = False):
     f.seek(offset)
     #ani_value_first_index, ani_target_first_index, total_ani_value, total_ani_target, total_morph_weights, padding
     section_6_unk = struct.unpack("{}2I4H".format(e), f.read(16))
@@ -623,6 +628,8 @@ def read_section_6 (f, offset, dlp_file):
             data["name"] = read_string (f, data['string_offset'])
             meshes.append(read_mesh (f, idx_f, data['data_offset'], data["flags"]))
             data["morph_count"] = len(meshes[-1]['morphs'])
+            if (data["flags"] & 0x40 == 0) and (not data["node"] == -1) and skel_struct != False:
+                data["true_node"] = skel_struct[data["node"]]["name"]
             mesh_blocks_info.append(data)
             f.seek(current_offset)
     return(meshes, bone_palette_ids, mesh_blocks_info)
@@ -834,9 +841,13 @@ def convert_fmt_for_gltf(fmt):
 def fix_strides(submesh):
     offset = 0
     for i in range(len(submesh['vb'])):
-        submesh['vb'][i]['fmt']['AlignedByteOffset'] = str(offset)
-        submesh['vb'][i]['stride'] = get_stride_from_dxgi_format(submesh['vb'][i]['fmt']['Format'])
-        offset += submesh['vb'][i]['stride']
+        submesh['fmt']['elements'][i]['AlignedByteOffset'] = str(offset)
+        new_stride = get_stride_from_dxgi_format(submesh['fmt']['elements'][i]['Format'])
+        offset += new_stride
+    if 'vb0 stride' in submesh['fmt']:
+        submesh['fmt']['vb0 stride'] = str(offset)
+    else:
+        submesh['fmt']['stride'] = str(offset)
     return(submesh)
 
 def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, material_struct,\
@@ -906,6 +917,8 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
     if not 'children' in gltf_data['nodes'][0]:
         gltf_data['nodes'][0]['children'] = []
     for mesh_node_id in mesh_node_ids:
+        if all(['true_node' in x for x in mesh_blocks_info if x['mesh_v'] == mesh_node_id]):
+            continue
         if not mesh_node_id in node_id_list:
             g_node = {'name': mesh_node_ids[mesh_node_id]}
             gltf_data['nodes'][0]['children'].append(len(gltf_data['nodes']))
@@ -931,12 +944,19 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
         for j in range(len(mesh_block_tree[mesh])): #Submesh
             i = mesh_block_tree[mesh][j]
             # Vertex Buffer
+            for k, element in enumerate(meshes[i]['fmt']['elements']): #Expand tangent to vec4
+                if element['SemanticName'] == 'TANGENT' and 'tangent4' in meshes[i]:
+                    meshes[i]['vb'][k]['Buffer'] = meshes[i]['tangent4']
+                    element['Format'] = 'R32G32B32A32_FLOAT'
+            meshes[i] = fix_strides(meshes[i])
             gltf_fmt = convert_fmt_for_gltf(meshes[i]['fmt'])
             vb_stream = io.BytesIO()
             write_vb_stream(meshes[i]['vb'], vb_stream, gltf_fmt, e='<', interleave = False)
             block_offset = len(giant_buffer)
             primitive = {"attributes":{}}
             for element in range(len(gltf_fmt['elements'])):
+                if gltf_fmt['elements'][element]['SemanticName'] == 'BINORMAL':
+                    gltf_fmt['elements'][element]['SemanticName'] = '_BINORMAL'
                 primitive["attributes"][gltf_fmt['elements'][element]['SemanticName']]\
                     = len(gltf_data['accessors'])
                 gltf_data['accessors'].append({"bufferView" : len(gltf_data['bufferViews']),\
@@ -990,7 +1010,7 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
                 for morph in meshes[i]['morphs']:
                     target = {}
                     for element in morph:
-                        if len(morph[element]) > 0:
+                        if len(morph[element]) > 0 and element != 'BINORMAL':
                             delta_block = numpy.array(morph[element], dtype='<f4').tobytes()
                             target[element] = len(gltf_data['accessors'])
                             gltf_data['accessors'].append({"bufferView" : len(gltf_data['bufferViews']),
@@ -1015,7 +1035,9 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
                     morph_weights.append(0.0)
             primitives.append(primitive)
         if len(primitives) > 0:
-            if mesh_node_ids[mesh] in node_list: # One of the new nodes
+            if 'true_node' in mesh_blocks_info[i]:
+                node_id = node_list.index(mesh_blocks_info[i]['true_node'])
+            elif mesh_node_ids[mesh] in node_list: # One of the new nodes
                 node_id = node_list.index(mesh_node_ids[mesh])
             else: # One of the pre-assigned nodes
                 node_id = node_id_list.index(mesh_blocks_info[i]["mesh_v"])
@@ -1024,7 +1046,8 @@ def write_gltf(base_name, skel_struct, vgmaps, mesh_blocks_info, meshes, materia
             if len(morph_weights) > 0:
                 gltf_data['meshes'][-1]['weights'] = morph_weights
             # Skinning
-            if len(vgmaps[mesh_blocks_info[i]["vgmap"]]) > 0 and skinning_possible == True:
+            if (len(vgmaps[mesh_blocks_info[i]["vgmap"]]) > 0 and skinning_possible == True
+                    and mesh_blocks_info[i]['flags'] & 0x40):
                 gltf_data['nodes'][node_id]['skin'] = len(gltf_data['skins'])
                 gltf_data['skins'].append({"inverseBindMatrices": len(gltf_data['accessors']),\
                     "joints": [node_list.index(x) for x in vgmaps[mesh_blocks_info[i]["vgmap"]]]})
@@ -1086,7 +1109,7 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                     skel_struct, raw_skel_data = read_section_0(f, toc[0])
                     physics_params = read_section_4 (f, toc[4])
                     collision_data, collision_meshes = read_section_5 (f, toc[5], decode_data = True)
-                    meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlp_file)
+                    meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlp_file, skel_struct)
                     # Attempt to incorporate an external skeleton (skipped if skeleton already complete)
                     skel_struct = find_and_add_external_skeleton (skel_struct, bone_palette_ids)
                     vgmap = {'bone_{}'.format(bone_palette_ids[i]):i for i in range(len(bone_palette_ids))}
@@ -1191,7 +1214,8 @@ def process_dlbs_combined (dlb_files, overwrite = False, write_binary_gltf = Tru
                     unk_int2, = struct.unpack("{}I".format(e), f.read(4))
                     toc = [read_offset(f) for _ in range(12)]
                     if os.path.exists(dlp_file) or os.path.exists(dlp_file.upper()): # TLTool uses uppercase extension
-                        meshes_i, bone_palette_ids_i, mesh_blocks_info_i = read_section_6(f, toc[6], dlp_file)
+                        local_skel_struct, _ = read_section_0(f, toc[0])
+                        meshes_i, bone_palette_ids_i, mesh_blocks_info_i = read_section_6(f, toc[6], dlp_file, local_skel_struct)
                         material_struct_i = read_section_7(f, toc[7])
                         base_name_dict[len(bone_palettes)] = base_name 
                         for i in range(len(mesh_blocks_info_i)):
