@@ -446,7 +446,7 @@ def read_mesh (main_f, idx_f, start_offset, flags):
                     dense_morph_block.seek(0)
                     morph_p, morph_n, morph_t, morph_b = read_vert_vector_data (dense_morph_block, flags,
                         cpu_stride_no_wt,num_verts, nrm_offset, tangent_offset, binormal_offset)
-                morphs.append({'position': morph_p, 'normal': morph_n, 'tangent': morph_t, 'binormal': morph_b})
+                morphs.append({'POSITION': morph_p, 'NORMAL': morph_n, 'TANGENT': morph_t, 'BINORMAL': morph_b})
         else: # Skeletal animation
             weights = []
             num_v_per_wt_grp = list(struct.unpack("{}4I".format(e), main_f.read(16)))
@@ -509,6 +509,23 @@ def read_mesh (main_f, idx_f, start_offset, flags):
         vb.append({'Buffer': weights})
         vb.append({'Buffer': blend_idx})
     return({'fmt': fmt, 'vb': vb, 'ib': ib, 'morphs': morphs})
+
+def make_morphed_meshes (mesh):
+    morphed_meshes = []
+    for i in range(len(mesh['morphs'])):
+        morphed_vb = []
+        for j in range(len(mesh['vb'])):
+            semantic = mesh['fmt']['elements'][j]['SemanticName']
+            if semantic in mesh['morphs'][i]:
+                buffer = []
+                for k in range(len(mesh['vb'][j]['Buffer'])):
+                    buffer.append([mesh['vb'][j]['Buffer'][k][l] + mesh['morphs'][i][semantic][k][l]
+                        for l in range(len(mesh['vb'][j]['Buffer'][k]))])
+                morphed_vb.append({'Buffer': buffer})
+            else:
+                morphed_vb.append(mesh['vb'][j])
+        morphed_meshes.append({'fmt': mesh['fmt'], 'vb': morphed_vb, 'ib': mesh['ib']})
+    return(morphed_meshes)
 
 #This function is purely for flipping endianness
 def read_generic_int_section (f, offset, length):
@@ -576,7 +593,8 @@ def read_section_5 (f, offset, decode_data = False):
 #Meshes, offset should be toc[6].  Requires dlp filename for uv's and index buffer.
 def read_section_6 (f, offset, dlp_file):
     f.seek(offset)
-    section_6_unk = struct.unpack("{}4I".format(e), f.read(16))
+    #ani_value_first_index, ani_target_first_index, total_ani_value, total_ani_target, total_morph_weights, padding
+    section_6_unk = struct.unpack("{}2I4H".format(e), f.read(16))
     section_6_toc = []
     for _ in range(4):
         offset, num_entries = read_offset_and_count(f)
@@ -596,13 +614,15 @@ def read_section_6 (f, offset, dlp_file):
         for i in range(section_6_toc[1]['num_entries']):
             data = {'current_block_offset': f.tell(), 'name': ''}
             data["mesh"], data["submesh"], data["node"], \
-                data["flags"], data["material"], data["first_morph_wt_slot"] = struct.unpack("{}i4hi".format(e), f.read(16))
+                data["flags"], data["material"], data["first_morph_wt_slot"], \
+                data["padding"] = struct.unpack("{}i6h".format(e), f.read(16))
             data["sort_priority"], data["sort_center"] = sort_values[i][0], sort_values[i][1:4]
             data['string_offset'] = read_offset(f)
             data['data_offset'], data["data_block_size"] = read_offset_and_count(f)
             current_offset = f.tell()
             data["name"] = read_string (f, data['string_offset'])
             meshes.append(read_mesh (f, idx_f, data['data_offset'], data["flags"]))
+            data["morph_count"] = len(meshes[-1]['morphs'])
             mesh_blocks_info.append(data)
             f.seek(current_offset)
     return(meshes, bone_palette_ids, mesh_blocks_info)
@@ -1060,6 +1080,14 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                                     write_ib(meshes[i]['ib'], '{0}/{1}.ib'.format(base_name, filename), meshes[i]['fmt'], '<')
                                     write_vb(meshes[i]['vb'], '{0}/{1}.vb'.format(base_name, filename), meshes[i]['fmt'], '<')
                                     open('{0}/{1}.vgmap'.format(base_name, filename), 'wb').write(json.dumps(vgmap,indent=4).encode())
+                                    if len(meshes[i]['morphs']) > 0:
+                                        morphed_meshes = make_morphed_meshes(meshes[i])
+                                        for j in range(len(morphed_meshes)):
+                                            filename = '{0:02d}_{1}_morphed_{2:02d}'.format(i, mesh_blocks_info[i]['name'], j)
+                                            write_fmt(morphed_meshes[j]['fmt'], '{0}/{1}.fmt'.format(base_name, filename))
+                                            write_ib(morphed_meshes[j]['ib'], '{0}/{1}.ib'.format(base_name, filename), meshes[i]['fmt'], '<')
+                                            write_vb(morphed_meshes[j]['vb'], '{0}/{1}.vb'.format(base_name, filename), meshes[i]['fmt'], '<')
+                                            open('{0}/{1}.vgmap'.format(base_name, filename), 'wb').write(json.dumps(vgmap,indent=4).encode())
                             for i in range(len(collision_meshes)):
                                     filename = 'COLLISION_MESH_{0:02d}'.format(i)
                                     write_fmt(collision_meshes[i]['fmt'], '{0}/{1}.fmt'.format(base_name, filename))

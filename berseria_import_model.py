@@ -122,6 +122,65 @@ def read_material_data (tomdlb_file, backup_mat_block):
             material_struct = read_section_7 (ff, 0)
     return material_struct
 
+def make_morph_deltas (mesh, morphed_mesh):
+    deltas = {'POSITION': [], 'NORMAL': [], 'TANGENT': [], 'BINORMAL': []}
+    for j in range(len(mesh['vb'])):
+        semantic = mesh['fmt']['elements'][j]['SemanticName']
+        if semantic in deltas:
+            delta_list = []
+            for k in range(len(mesh['vb'][j]['Buffer'])):
+                delta_list.append([morphed_mesh['vb'][j]['Buffer'][k][l] - mesh['vb'][j]['Buffer'][k][l]
+                    for l in range(len(mesh['vb'][j]['Buffer'][k]))])
+            deltas[semantic] = delta_list
+    return(deltas)
+
+def make_morph_run (delta):
+    blank = [0.0, 0.0, 0.0]
+    use_t = True if len(delta['TANGENT']) else False
+    use_b = True if len(delta['BINORMAL']) else False
+    full_stream = []
+    skip_stream = []
+    for i in range(len(delta['POSITION'])):
+        full_stream.append(delta['POSITION'][i])
+        skip_stream.append(1 if delta['POSITION'][i] == blank else 0)
+        full_stream.append(delta['NORMAL'][i] if len(delta['NORMAL']) else blank)
+        skip_stream.append(1 if (len(delta['NORMAL']) == 0) or delta['NORMAL'][i] == blank else 0)
+        if use_t:
+            full_stream.append(delta['TANGENT'][i])
+            skip_stream.append(1 if delta['TANGENT'][i] == blank else 0)
+        if use_b:
+            full_stream.append(delta['BINORMAL'][i])
+            skip_stream.append(1 if delta['BINORMAL'][i] == blank else 0)
+    full_run = bytearray()
+    counter, skips = 0, 0
+    while counter < len(full_stream):
+        try:
+            next_val = skip_stream.index(0, counter)
+            while next_val - counter > 0xFFFF: # Shorten the skip if needed to fit into u16
+                full_run.extend(struct.pack("{}2H3f".format(e), 0xFFFF, 1, *blank))
+                counter += 0x10000
+            skips = next_val - counter
+        except ValueError:
+            skips = len(skip_stream) - counter
+            skips = min(skips, 0xFFFF) # Remaining skips not needed
+            run = 0
+            break
+        counter = next_val
+        try:
+            next_val = skip_stream.index(1, counter)
+        except ValueError:
+            next_val = len(skip_stream)
+        next_val = min(next_val, counter + 0xFFFF) # Shorten the run if needed to fit into u16
+        run = next_val - counter
+        run_vals = full_stream[counter:counter+run]
+        full_run.extend(struct.pack("{}2H".format(e), skips, run))
+        for i in range(len(run_vals)):
+            full_run.extend(struct.pack("{}3f".format(e), *run_vals[i]))
+        counter = next_val
+        skips = 0
+    full_run.extend(struct.pack("{}2H".format(e), skips, 0))
+    return(full_run)
+
 #This function is purely for flipping endianness
 def write_generic_int_section (int_list):
     return(struct.pack("{}{}I".format(e, len(int_list)), *int_list))
@@ -163,10 +222,11 @@ def create_section_0 (raw_skel_struct):
     return(struct.pack("{}3I6H".format(e), *raw_skel_struct[0]) + header_block + data_block)
 
 #Physics
-def create_section_4 (physics_params, unk0 = 0, unk1 = 0):
+def create_section_4 (physics_params, ani_value_first_index = 0, ani_target_first_index = 0):
     raw_sec4_struct = [list(x.values()) for x in physics_params] # Remove dict keys
     data_block = bytearray()
-    data_block.extend(struct.pack("{}2I2H".format(e), unk0, unk1, len(raw_sec4_struct), len(raw_sec4_struct)))
+    data_block.extend(struct.pack("{}2I2H".format(e), ani_value_first_index, ani_target_first_index,
+        len(raw_sec4_struct), len(raw_sec4_struct)))
     if addr_size == 8:
         data_block.extend(struct.pack("{}I".format(e), 0)) # Padding
     if len(raw_sec4_struct) > 0:
@@ -231,7 +291,8 @@ def create_section_5 (raw_sec5_struct, symphonia_mode = False):
     return(header_block + data_block)
 
 #Meshes
-def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct, unk0 = 0, unk1 = 0):
+def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
+        ani_value_first_index = 0, ani_target_first_index = 0):
     def unorm_to_bytes (vals):
         float_max = ((2**8)-1)
         return([(int(round(min(max(x,0), 1) * float_max))) for x in vals])
@@ -253,6 +314,9 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
     sec_1_header_length = (addr_size * 3 + 0x10) * len(mesh_blocks_info)
     sec_1_data = bytearray()
     uvidx_data = bytearray()
+    morph_counter = 0
+    assigned_morph_slots = {}
+    max_ani_count = 0
     for i in range(len(mesh_blocks_info)):
         safe_filename = "".join([x if x not in "\\/:*?<>|" else "_" for x in mesh_blocks_info[i]["name"]])
         flags = mesh_blocks_info[i]["flags"]
@@ -321,7 +385,7 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
             assert ([x['SemanticName'] for x in fmt['elements']]
                 == [x['SemanticName'] for x in expected_fmt['elements']])
             stride_semantic = 'vb0 stride' if 'vb0 stride' in fmt else 'stride'
-            assert (int(fmt[stride_semantic]) == int(fmt['stride']))
+            assert (int(fmt[stride_semantic]) == int(expected_fmt['stride']))
             assert len(ib) > 2
         except (FileNotFoundError, AssertionError) as err:
             print("Submesh {0} not found or corrupt, generating an empty submesh...".format(mesh_filename))
@@ -340,6 +404,26 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
             if flags & 0x10:
                 vb.append({'Buffer': [[1.0, 0.0, 0.0, 0.0]]})
                 vb.append({'Buffer': [[0, 0, 0, 0]]})
+        if flags & 0x20: # Read in morph targets
+            morphed_meshes = []
+            for j in range(mesh_blocks_info[i]["morph_count"]):
+                morphed_mesh_filename = "{0}_morphed_{1:02d}".format(mesh_filename, j)
+                try:
+                    mfmt = read_fmt(morphed_mesh_filename + '.fmt')
+                    mvb = read_vb(morphed_mesh_filename + '.vb', mfmt)
+                    assert ([x['SemanticName'] for x in mfmt['elements']]
+                        == [x['SemanticName'] for x in expected_fmt['elements']])
+                    stride_semantic = 'vb0 stride' if 'vb0 stride' in mfmt else 'stride'
+                    assert (int(mfmt[stride_semantic]) == int(expected_fmt['stride']))
+                    assert len(mvb[0]['Buffer']) == len(vb[0]['Buffer'])
+                except (FileNotFoundError, AssertionError) as err:
+                    print("Morphed submesh {0} not found or corrupt, generating an empty morph...".format(morphed_mesh_filename))
+                    # Generate an cloned submesh (for empty deltas)
+                    mfmt = fmt
+                    mvb = vb
+                morphed_meshes.append({'fmt': mfmt, 'ib': ib, 'vb': mvb})
+            deltas = [make_morph_deltas({'fmt': fmt, 'ib': ib, 'vb': vb}, morphed_mesh) for morphed_mesh in morphed_meshes]
+            runs = [make_morph_run(delta) for delta in deltas]
         try:
             material_list.append(material_dict[mesh_blocks_info[i]["material"]])
         except:
@@ -348,9 +432,17 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
             raise
         sec_0.extend(struct.pack("{}i3f".format(e), mesh_blocks_info[i]["sort_priority"], *mesh_blocks_info[i]["sort_center"]))
         # Add basic data
-        sec_1_header.extend(struct.pack("{}i4hi".format(e), mesh_blocks_info[i]["mesh"], mesh_blocks_info[i]["submesh"],
+        if not flags & 0x20:
+            first_morph_wt_slot = 0
+        else:
+            morph_slot_code = '{}_{}'.format(mesh_blocks_info[i]["name"], len(runs)) 
+            if morph_slot_code in assigned_morph_slots:
+                first_morph_wt_slot = assigned_morph_slots[morph_slot_code]
+            else:
+                first_morph_wt_slot = morph_counter
+        sec_1_header.extend(struct.pack("{}i6h".format(e), mesh_blocks_info[i]["mesh"], mesh_blocks_info[i]["submesh"],
             mesh_blocks_info[i]["node"], mesh_blocks_info[i]["flags"], material_list[-1],
-            mesh_blocks_info[i]["first_morph_wt_slot"]))
+            first_morph_wt_slot, mesh_blocks_info[i]["padding"]))
         data_block_start = len(sec_1_data)
         # Add mesh name
         offset = sec_1_header_length - len(sec_1_header) + len(sec_1_data)
@@ -430,7 +522,47 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
                 len(submesh_datablock_header + submesh_datablock) + 0xC))
         # Morph target meshes
         elif flags & 0x20:
-            return False, False # Currently morph targets not supported
+            if flags & 0x10:
+                bone_slot = vb[semantic_i['BLENDINDICES']]['Buffer'][0][0]
+            else:
+                bone_slot = 0
+            num_verts = len(vb[semantic_i['POSITION']]['Buffer'])
+            submesh_datablock = bytearray()
+            uv_block = bytearray()
+            for j in range(num_verts):
+                submesh_datablock.extend(struct.pack("{}3f".format(e), *vb[semantic_i['POSITION']]['Buffer'][j]))
+                if not flags & 0x2000:
+                    submesh_datablock.extend(struct.pack("{}3f".format(e), *vb[semantic_i['NORMAL']]['Buffer'][j]))
+                else:
+                    submesh_datablock.extend(struct.pack("{}3f".format(e), 0.0, 0.0, 0.0)) # Ignored by game engine
+                if flags & 0x80:
+                    submesh_datablock.extend(struct.pack("{}3f".format(e), *vb[semantic_i['TANGENT']]['Buffer'][j]))
+                    submesh_datablock.extend(struct.pack("{}3f".format(e), *vb[semantic_i['BINORMAL']]['Buffer'][j]))
+                uv_block.extend(struct.pack("{}4B".format(e), *unorm_to_bytes(vb[semantic_i['COLOR']]['Buffer'][j])))
+                for l in range(num_uv_maps):
+                    uv_block.extend(struct.pack("{}2f".format(e), *vb[semantic_i['TEXCOORD_'+str(l)]]['Buffer'][j]))
+            new_ib_block = bytearray(struct.pack("{}{}H".format(e, len(ib)), *ib)) # Triangles
+            if len(new_ib_block) % 4:
+                new_ib_block += b'\x00' * (4 - (len(new_ib_block) % 4))
+            sec_1_data.extend(struct.pack("{}2HI".format(e), len(vb[semantic_i['POSITION']]['Buffer']),
+                len(ib), len(uvidx_data)))
+            uvidx_data.extend(uv_block)
+            sec_1_data.extend(struct.pack("{}I".format(e), len(uvidx_data)))
+            uvidx_data.extend(new_ib_block)
+            sec_1_data.extend(struct.pack("{}2H".format(e), len(runs), bone_slot))
+            morph_offsets = []
+            morph_block = bytearray()
+            for j in range(len(runs)):
+                morph_offsets.append(len(morph_block))
+                morph_block.extend(runs[j])
+            sec_1_data.extend(struct.pack("{}{}I".format(e, len(morph_offsets)), *morph_offsets))
+            sec_1_data.extend(submesh_datablock + morph_block)
+            sec_1_header.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]),
+                0xC + 4 + 4 * len(runs) + len(submesh_datablock) + len(morph_block)))
+            if not morph_slot_code in assigned_morph_slots:
+                assigned_morph_slots[morph_slot_code] = morph_counter
+                morph_counter += len(runs)
+            max_ani_count = max(max_ani_count, assigned_morph_slots[morph_slot_code] + len(runs))
         # Unweighted meshes
         else:
             uv_block = bytearray()
@@ -463,7 +595,9 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
         for i in range(len(block_lengths))]
     block_counts = [len(mesh_blocks_info), len(mesh_blocks_info), len(bone_palette_ids), 1]
     block_header = bytearray()
-    block_header.extend(struct.pack("{}4I".format(e), unk0, unk1, 0, 0))
+    #ani_value_first_index, ani_target_first_index, total_ani_value, total_ani_target, total_morph_weights, padding
+    block_header.extend(struct.pack("{}2I4H".format(e), ani_value_first_index, ani_target_first_index,
+        max_ani_count, max_ani_count, max_ani_count, 0))
     for i in range(4):
         block_header.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), block_offsets[i], block_counts[i]))
     section_6 = bytearray(block_header + sec_0 + sec_1 + sec_2 + sec_3)
