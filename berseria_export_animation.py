@@ -84,7 +84,7 @@ def convert_matrix_to_trs (matrix):
     return(matrix[12:15], q.tolist(), scale) #TRS
 
 def decode_target_flag (flag):
-    return({'type': flag & 0xFFFFFFFF, 'target': flag >> 32 & 0xFFFFFF, 'node_or_physics': flag >> 56})
+    return({'type': flag & 0xFFFFFFFF, 'target': flag >> 32 & 0xFFFFFF, 'category': flag >> 56})
 
 def read_vals (f, e, vec_len, val_sz):
     vals = list(struct.unpack("{}{}{}".format(e, vec_len, val_sz[0]), f.read(val_sz[1] * vec_len)))
@@ -370,8 +370,8 @@ def write_glTF (ani_data, skel_struct, basename, write_glb = True):
         gltf_data['nodes'].append({'name': 'root'})
     # Animations
     node_dict = {gltf_data['nodes'][j]['name']:j for j in range(len(gltf_data['nodes']))}
-    bone_id_to_name = {x['ani_id']:x['name'] for x in skel_struct}
-    valid_bones = [skel_struct[i]['ani_id'] for i in range(len(skel_struct)) if skel_struct[i]['name'] in node_dict]
+    bone_id_to_name = {x['id']:x['name'] for x in skel_struct}
+    valid_bones = [skel_struct[i]['id'] for i in range(len(skel_struct)) if skel_struct[i]['name'] in node_dict]
     ani_list = [x for x in ani_data['decoded_target_table'] if x['target'] in valid_bones and x['type'] in [0x00003, 0x10014, 0x20003]]
     for i in range(len(ani_list)):
         vec_channel = ani_data['data_stream'][ani_list[i]['vec_index']]
