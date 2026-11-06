@@ -49,6 +49,56 @@ def write_string_dict (strings_list):
     enc_strings = [bytearray(x.encode()) + b'\x00' for x in strings_list]
     return create_data_block(enc_strings, b'', addr_size, 2, addr_size) # Data alignment of 2 otherwise default
 
+def read_skeleton_data (tomdlb_file, backup_skel_block):
+    # Some values taken directly from the original block
+    with io.BytesIO(backup_skel_block) as ff:
+        local_skel_struct_backup, raw_skel_data_backup = read_section_0 (ff, 0)
+        # Take original header and bounding sphere.  Some values on the original header will be replaced.
+        raw_skel_data = raw_skel_data_backup[0:2]
+    # Will read data from JSON file, or load original data from the mdl file if JSON is missing
+    try:
+        local_skel_struct = read_struct_from_json(tomdlb_file[:-9] + "/skeleton.json")
+        raw_skel_data.append([x['id'] for x in local_skel_struct])
+        raw_skel_data.append([x['true_parent'] for x in local_skel_struct])
+        raw_skel_data.append([x['transform_info'] for x in local_skel_struct])
+        raw_skel_data.append([x['name'] for x in local_skel_struct])
+        local_mtx_idx = {local_skel_struct[i]['transform_info']['index']:i for i in range(len(local_skel_struct))
+            if local_skel_struct[i]['transform_info']['flags'] & 0xF == 1}
+        local_mtxs = []
+        for i in sorted(list(local_mtx_idx.keys())):
+            local_mtxs.append(local_skel_struct[local_mtx_idx[i]]['local_matrix'])
+        raw_skel_data.append(local_mtxs)
+        raw_skel_data.append([x['abs_matrix'] for x in local_skel_struct])
+        raw_skel_data.append([x['inv_matrix'] for x in local_skel_struct])
+        # Reconstruct visibility parent index
+        counter, slot = 0, []
+        for i in range(len(local_skel_struct)):
+            if local_skel_struct[i]['transform_info']['flags'] & 0x100:
+                slot.append(counter)
+                counter += 1
+            else:
+                slot.append(-1 if local_skel_struct[i]['transform_info']['parent'] == -1
+                    else slot[local_skel_struct[i]['transform_info']['parent']])
+        raw_skel_data.append([-1 if local_skel_struct[i]['transform_info']['parent'] == -1
+            else slot[local_skel_struct[i]['transform_info']['parent']]
+                for i in range(len(local_skel_struct)) if local_skel_struct[i]['transform_info']['flags'] & 0x100])
+        billboard_nodes = [i for i in range(len(local_skel_struct)) if 'billboard_mode' in local_skel_struct[i]]
+        raw_skel_data.append([[local_skel_struct[i]['billboard_mode'],i] for i in billboard_nodes])
+        po_groups = [x['process_order_group'] for x in local_skel_struct]
+        try:
+            assert all([po_groups[i] >= po_groups[i-1] for i in range(1, len(po_groups))])
+        except AssertionError:
+            print("Invalid skeleton order!  All ordinary nodes must be first, then constraint-driven nodes, then physics nodes.")
+            raise
+        po_header = [0]
+        for i in range(3):
+            po_header.append(po_header[i] + len([x for x in po_groups if x == i]))
+        raw_skel_data.append(po_header)
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("{0}/skeleton.json missing or unreadable, reading data from {0}.TOMDLB_D instead...".format(tomdlb_file[:-9]))
+        raw_skel_data = raw_skel_data_backup
+    return raw_skel_data
+
 def read_physics_data (tomdlb_file, backup_phys_block, raw_skel_data):
     # Will read data from JSON file, or load original data from the mdl file if JSON is missing
     try:
@@ -186,19 +236,25 @@ def write_generic_int_section (int_list):
     return(struct.pack("{}{}I".format(e, len(int_list)), *int_list))
 
 #Hierarchy
-def create_section_0 (raw_skel_struct):
+def create_section_0 (raw_skel_struct, ani_value_first_index = 0, ani_target_first_index = 0, start_offset = 0):
     header_block = bytearray()
     data_block = bytearray()
-    header_size = (addr_size * 16)
-    data_block.extend(struct.pack("{}2{}4Hfi6f".format(e, {4: "I", 8: "Q"}[addr_size]), *raw_skel_struct[1]))
-    for i in range(2,10):
+    header_size = (addr_size * 18)
+    data_block.extend(struct.pack("{}4H".format(e), *raw_skel_struct[11]))
+    data_block.extend(struct.pack("{}fi".format(e), raw_skel_struct[1]['bounding_sphere_radius'],
+        raw_skel_struct[1]['bounding_sphere_node']))
+    data_block.extend(struct.pack("{}3f".format(e), *raw_skel_struct[1]['bounding_sphere_center']))
+    data_block.extend(struct.pack("{}3f".format(e), *raw_skel_struct[1]['bounding_sphere_relative_center']))
+    for i in range(2,11):
         count = len(raw_skel_struct[i])
         if i == 2:
             data = struct.pack("{}{}I".format(e, count), *raw_skel_struct[i])
         elif i == 3:
             data = struct.pack("{}{}i".format(e, count), *raw_skel_struct[i])
         elif i == 4:
-            data = struct.pack("{}{}h".format(e, 4 * count), *[x for y in raw_skel_struct[i] for x in y])
+            data = b''.join([struct.pack("{}2H2h".format(e), raw_skel_struct[i][j]['flags'],
+                raw_skel_struct[i][j]['index'], raw_skel_struct[i][j]['parent'],
+                raw_skel_struct[i][j]['vis_index']) for j in range(count)])
         elif i == 5:
             data, _ = write_string_dict (raw_skel_struct[i])
         elif i == 6:
@@ -209,17 +265,21 @@ def create_section_0 (raw_skel_struct):
             data = struct.pack("{}{}f".format(e, 16 * count), *[x for y in raw_skel_struct[i] for x in y])
         elif i == 9:
             data = struct.pack("{}{}h".format(e, count), *raw_skel_struct[i])
+        elif i == 10:
+            data = b''.join([struct.pack("{}Hh".format(e), *list(raw_skel_struct[i][j])) for j in range(count)])
         if count > 0:
             header_block.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), len(data_block) + header_size - len(header_block)))
             header_block.extend(struct.pack("{}{}".format(e, {4: "I", 8: "Q"}[addr_size]), count))
         else:
             header_block.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), 0, 0))
         data_block.extend(data)
-        if len(data_block) % addr_size:
-            data_block.extend(b'\x00' * (addr_size - (len(data_block) % addr_size)))
-        if i == 5: # The text block has extra padding
-            data_block.extend(b'\x00' * 8)
-    return(struct.pack("{}3I6H".format(e), *raw_skel_struct[0]) + header_block + data_block)
+        while (start_offset + 0x18 + header_size + len(data_block)) % {5:16, 10:addr_size}.get(i,1):
+            data_block.extend(b'\x00')
+    num_ani_nodes = len([x for x in raw_skel_struct[4] if x['flags'] & 0xF == 0])
+    num_vis_nodes = len([x for x in raw_skel_struct[4] if x['flags'] & 0x100])
+    section_0_header = [raw_skel_struct[0][0], ani_value_first_index, ani_target_first_index,
+        num_ani_nodes * 13, num_ani_nodes * 4, num_vis_nodes, num_vis_nodes, num_ani_nodes, 0]
+    return(struct.pack("{}3I6H".format(e), *section_0_header) + header_block + data_block)
 
 #Physics
 def create_section_4 (physics_params, ani_value_first_index = 0, ani_target_first_index = 0):
@@ -824,11 +884,12 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                         data_blocks.append(f.read())
                     else:
                         data_blocks.append(f.read(toc[i+1] - toc[i]))
-                skel_struct, raw_skel_data = read_section_0(f, toc[0])
+                raw_skel_data = read_skeleton_data (tomdlb_file, data_blocks[0])
                 physics_params = read_physics_data (tomdlb_file, data_blocks[4], raw_skel_data)
                 collision_struct = read_collision_data (tomdlb_file, data_blocks[5], raw_skel_data)
                 # Read material information (needed for both building mesh and material blocks)
                 material_struct = read_material_data (tomdlb_file, data_blocks[7])
+                skel_unk = struct.unpack("{}2I".format(e), data_blocks[0][4:12]) # Indices in data_blocks[11]
                 phys_unk = struct.unpack("{}2I".format(e), data_blocks[4][0:8]) # Indices in data_blocks[11]
                 mesh_unk = struct.unpack("{}2I".format(e), data_blocks[6][0:8]) # Indices in data_blocks[11]
                 mat_unk = struct.unpack("{}2I8H".format(e), data_blocks[7][0:24]) # Indices in data_blocks[11]
@@ -837,7 +898,6 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                 if swap_endian == True:
                     # Changing e will change endianness for this script *only*; do not call set_endianness()!
                     e = {'>': '<', '<': '>'}[e] # Write mode
-                    data_blocks[0] = create_section_0(raw_skel_data)
                     data_blocks[11] = create_section_11(read_section_11 (f, toc[11]))
                     for i in [1,2,3,8,9,10]:
                         data_blocks[i] = write_generic_int_section(read_generic_int_section(f, toc[i], (toc[i+1]-toc[i])))
@@ -856,6 +916,10 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                 # Create new opening dictionary
                 new_opening_dict_strings = [dlp_file, anmb_file] + all_tex_names
                 new_opening_dict = write_string_dict(new_opening_dict_strings)[0]
+                # Create new skeleton block
+                new_s0_start_offset = (4 + (4 if addr_size == 8 else 0) + (2 * addr_size)
+                    + 8 + (12 * addr_size) + len(new_opening_dict))
+                data_blocks[0] = create_section_0(raw_skel_data, skel_unk[0], skel_unk[1], new_s0_start_offset)
                 # Create new internal file (BLDM block)
                 new_bldm_block, dict_offset = create_data_block (data_blocks, new_opening_dict, addr_size, 1, addr_size)
                 # Instead of overwriting backups, it will just tag a number onto the end

@@ -93,44 +93,61 @@ def read_section_0 (f, offset):
     # Jump to #0
     f.seek(offset)
     section_0_header = struct.unpack("{}3I6H".format(e), f.read(24))
+    # TOC: 0: ID, 1: Parent ID, 2: Transform info, 3: Name, 4: Local MTX, 5: Absolute MTX (base pose)
+    #      6: Inverse bind matrix, 7: Visibility parent index, 8: Billboard nodes
     section_0_toc = []
-    for _ in range(8):
+    for _ in range(9):
         offset, num_entries = read_offset_and_count(f)
         section_0_toc.append({'offset': offset, 'num_entries': num_entries})
-    unk_block = list(struct.unpack("{}2{}".format(e,{4: "I", 8: "Q"}[addr_size]), f.read(addr_size * 2)))
-    unk_block.extend(struct.unpack("{}4Hfi6f".format(e), f.read(40)))
+    boundaries = {}
+    process_order_groups = list(struct.unpack("{}4H".format(e), f.read(8)))
+    boundaries['bounding_sphere_radius'], boundaries['bounding_sphere_node'] = struct.unpack("{}fi".format(e), f.read(8))
+    boundaries['bounding_sphere_center'] = struct.unpack("{}3f".format(e), f.read(12))
+    boundaries['bounding_sphere_relative_center'] = struct.unpack("{}3f".format(e), f.read(12))
     f.seek(section_0_toc[0]['offset'])
     id_ = struct.unpack("{}{}I".format(e, section_0_toc[0]['num_entries']), f.read(section_0_toc[0]['num_entries']*4))
     f.seek(section_0_toc[1]['offset'])
     true_parent = struct.unpack("{}{}i".format(e, section_0_toc[1]['num_entries']), f.read(section_0_toc[1]['num_entries']*4))
     f.seek(section_0_toc[2]['offset'])
-    tree_info = [struct.unpack("{}4h".format(e), f.read(8)) for _ in range(section_0_toc[2]['num_entries'])]
+    param_names = ['flags', 'index', 'parent', 'vis_index']
+    transform_info = [dict(zip(param_names, struct.unpack("{}2H2h".format(e), f.read(8))))
+        for _ in range(section_0_toc[2]['num_entries'])]
     f.seek(section_0_toc[3]['offset'])
     name = [read_string(f, read_offset(f)) for _ in range(section_0_toc[3]['num_entries'])]
     f.seek(section_0_toc[4]['offset'])
-    unk_matrix = [[struct.unpack("{}16f".format(e), f.read(64)) for _ in range(2)] for _ in range(section_0_toc[4]['num_entries'])]
+    local_matrix = [[struct.unpack("{}16f".format(e), f.read(64)) for _ in range(2)] for _ in range(section_0_toc[4]['num_entries'])]
     f.seek(section_0_toc[5]['offset'])
     abs_matrix = [struct.unpack("{}16f".format(e), f.read(64)) for _ in range(section_0_toc[5]['num_entries'])]
     f.seek(section_0_toc[6]['offset'])
     inv_matrix = [struct.unpack("{}16f".format(e), f.read(64)) for _ in range(section_0_toc[6]['num_entries'])]
     f.seek(section_0_toc[7]['offset'])
-    parent_list = struct.unpack("{}{}h".format(e, section_0_toc[7]['num_entries']), f.read(section_0_toc[7]['num_entries']*2))
-    raw_data = [section_0_header, unk_block, id_, true_parent, tree_info, name, unk_matrix, abs_matrix, inv_matrix, parent_list]
-    skel_struct = [{'id': id_[i], 'ani_id': id_[i] & 0xFFFF, 'ani_group': id_[i] >> 16, 'true_parent': true_parent[i],
-        'tree_info': tree_info[i], 'name': name[i], 'abs_matrix': abs_matrix[i], 'inv_matrix': inv_matrix[i],
-        'parent': tree_info[i][2]} for i in range(section_0_toc[0]['num_entries'])]
+    vis_parent_list = struct.unpack("{}{}h".format(e, section_0_toc[7]['num_entries']), f.read(section_0_toc[7]['num_entries']*2))
+    f.seek(section_0_toc[8]['offset'])
+    billboard_node_list = [struct.unpack("{}Hh".format(e), f.read(4)) for _ in range(section_0_toc[8]['num_entries'])]
+    raw_data = [section_0_header, boundaries, id_, true_parent, transform_info, name,
+        local_matrix, abs_matrix, inv_matrix, vis_parent_list, billboard_node_list, process_order_groups]
+    p_orders = [next(i for i, group in enumerate(process_order_groups)
+        if node < group) for node in [i for i in range(section_0_toc[0]['num_entries'])]]
+    skel_struct = [{'id': id_[i], 'true_parent': true_parent[i], 'transform_info': transform_info[i],
+        'name': name[i], 'abs_matrix': abs_matrix[i], 'inv_matrix': inv_matrix[i], 'process_order_group': p_orders[i] - 1,
+        'parent': transform_info[i]['parent']} for i in range(section_0_toc[0]['num_entries'])]
+    for i in range(len(billboard_node_list)):
+        skel_struct[billboard_node_list[i][1]]['billboard_mode'] = billboard_node_list[i][0]
+    local_mtx_index = 0
     for i in range(len(skel_struct)):
         if skel_struct[i]['parent'] in range(len(skel_struct)):
-            abs_mtx = [skel_struct[i]['abs_matrix'][0:4], skel_struct[i]['abs_matrix'][4:8],\
+            abs_mtx = [skel_struct[i]['abs_matrix'][0:4], skel_struct[i]['abs_matrix'][4:8],
                 skel_struct[i]['abs_matrix'][8:12], skel_struct[i]['abs_matrix'][12:16]]
-            parent_inv_mtx = [skel_struct[skel_struct[i]['parent']]['inv_matrix'][0:4],\
-                skel_struct[skel_struct[i]['parent']]['inv_matrix'][4:8],\
-                skel_struct[skel_struct[i]['parent']]['inv_matrix'][8:12],\
+            parent_inv_mtx = [skel_struct[skel_struct[i]['parent']]['inv_matrix'][0:4],
+                skel_struct[skel_struct[i]['parent']]['inv_matrix'][4:8],
+                skel_struct[skel_struct[i]['parent']]['inv_matrix'][8:12],
                 skel_struct[skel_struct[i]['parent']]['inv_matrix'][12:16]]
             skel_struct[i]['matrix'] = numpy.dot(abs_mtx, parent_inv_mtx).flatten('C').tolist()
         else:
             skel_struct[i]['matrix'] = skel_struct[i]['abs_matrix']
         skel_struct[i]['children'] = [j for j in range(len(skel_struct)) if skel_struct[j]['parent'] == i]
+        if skel_struct[i]['transform_info']['flags'] & 0xF == 1:
+            skel_struct[i]['local_matrix'] = local_matrix[skel_struct[i]['transform_info']['index']]
     return(skel_struct, raw_data)
 
 def read_dlb_skeleton (dlb_file):
@@ -759,12 +776,12 @@ def read_section_7 (f, offset):
 #Something to do with animation, offset should be toc[11]. By default the data is not decoded (unneeded).
 def read_section_11 (f, offset, decode_data = False):
     def decode_target_flag (flag):
-        return({'type': flag & 0xFFFFFFFF, 'target': flag >> 32 & 0xFFFF, 'unknown': flag >> 48})
+        return({'type': flag & 0xFFFFFFFF, 'target': flag >> 32 & 0xFFFFFF, 'category': flag >> 56})
     def decode_block_11 (data1, data2):
         decoded = [decode_target_flag(x) for x in data1]
         count = 0
         for i in range(len(decoded)):
-            vec_len = decoded[i]['type'] & 0x7
+            vec_len = decoded[i]['type'] & 0xF
             decoded[i]['vector'] = []
             for _ in range(vec_len):
                 decoded[i]['vector'].append(data2[count])
@@ -1109,12 +1126,12 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                 #5 - offset1, count1, offset2, count2, 0x24 * count1 (u32, f32 *6, u32 *2), 0x24 * count2 (all f)
                 #6 - meshes.  7 - materials.  8,9,10,11 - dunno
                 if os.path.exists(dlp_file) or os.path.exists(dlp_file.upper()): # TLTool uses uppercase extension
-                    skel_struct, raw_skel_data = read_section_0(f, toc[0])
+                    local_skel_struct, raw_skel_data = read_section_0(f, toc[0])
                     physics_params = read_section_4 (f, toc[4])
                     collision_data, collision_meshes = read_section_5 (f, toc[5], decode_data = True)
-                    meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlp_file, skel_struct)
+                    meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlp_file, local_skel_struct)
                     # Attempt to incorporate an external skeleton (skipped if skeleton already complete)
-                    skel_struct = find_and_add_external_skeleton (skel_struct, bone_palette_ids)
+                    skel_struct = find_and_add_external_skeleton (local_skel_struct, bone_palette_ids)
                     vgmap = {'bone_{}'.format(bone_palette_ids[i]):i for i in range(len(bone_palette_ids))}
                     if all([y in [x['id'] for x in skel_struct] for y in bone_palette_ids]):
                         skel_index = {skel_struct[i]['id']:i for i in range(len(skel_struct))}
@@ -1166,7 +1183,7 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                             write_struct_to_json(collision_data, base_name + '/collision_info')
                             write_struct_to_json(material_struct, base_name + '/material_info')
                             write_struct_to_json(opening_dict, base_name + '/linked_files')
-                            #write_struct_to_json(skel_struct, base_name + '/skeleton_info')
+                            write_struct_to_json(local_skel_struct, base_name + '/skeleton')
                     if combine_models_into_single_gltf == False:
                         write_gltf(base_name, skel_struct, [vgmap], mesh_blocks_info, meshes, material_struct,\
                             overwrite = gltf_overwrite, write_binary_gltf = write_binary_gltf)
