@@ -106,8 +106,8 @@ def read_physics_data (tomdlb_file, backup_phys_block, raw_skel_data):
         local_bone_dict = {raw_skel_data[5][i]:i for i in range(len(raw_skel_data[2]))}
         for i in range(len(physics_params)):
             physics_params[i]['target_node'] = local_bone_dict[physics_params[i]['target_node']]
-    except:
-        print("{0}/physics_info.json missing or unreadable, reading data from {0}.TOMBDLB_D instead...".format(tomdlb_file[:-9]))
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("{0}/physics_info.json missing or unreadable, reading data from {0}.TOMDLB_D instead...".format(tomdlb_file[:-9]))
         with io.BytesIO(backup_phys_block) as ff:
             physics_params = read_section_4 (ff, 0)
     return physics_params
@@ -156,8 +156,8 @@ def read_collision_data (tomdlb_file, backup_coll_block, raw_skel_data):
                 data2.append([x for y in [vb[0]['Buffer'][ib[j][0]], vb[0]['Buffer'][ib[j][1]],
                     vb[0]['Buffer'][ib[j][2]]] for x in y])
         raw_sec5_struct = [data1, data2]
-    except:
-        print("{0}/collision_information missing or corrupt, reading data from {0}.TOMBDLB_D instead...".format(tomdlb_file[:-9]))
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("{0}/collision_information missing or corrupt, reading data from {0}.TOMDLB_D instead...".format(tomdlb_file[:-9]))
         with io.BytesIO(backup_coll_block) as ff:
             raw_sec5_struct = read_section_5 (ff, 0)
     return raw_sec5_struct
@@ -166,11 +166,33 @@ def read_material_data (tomdlb_file, backup_mat_block):
     # Will read data from JSON file, or load original data from the mdl file if JSON is missing
     try:
         material_struct = read_struct_from_json(tomdlb_file[:-9] + "/material_info.json")
-    except:
-        print("{0}/material_info.json missing or unreadable, reading data from {0}.TOMBDLB_D instead...".format(tomdlb_file[:-9]))
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("{0}/material_info.json missing or unreadable, reading data from {0}.TOMDLB_D instead...".format(tomdlb_file[:-9]))
         with io.BytesIO(backup_mat_block) as ff:
             material_struct = read_section_7 (ff, 0)
     return material_struct
+
+def read_ani_default_data (tomdlb_file, backup_ani_default_block):
+    def encode_target_flag (ani_struct):
+        return((ani_struct['type']) + (ani_struct['target'] << 32) + (ani_struct['category'] << 56))
+    # Will read data from JSON file, or load original data from the mdl file if JSON is missing
+    try:
+        ani_default_data = read_struct_from_json(tomdlb_file[:-9] + "/ani_default_info.json")
+        data1, data2 = [], []
+        for i in range(len(ani_default_data)):
+            data1.append(encode_target_flag(ani_default_data[i]))
+            try:
+                assert len(ani_default_data[i]['vector']) == ani_default_data[i]['type'] & 0xF
+                data2.extend(ani_default_data[i]['vector'])
+            except AssertionError:
+                print("Corrupt vector (index {}) in ani_default_info.json, defaulting to original data.".format(i))
+                raise
+        raw_sec_11_data = [data1, data2]
+    except (FileNotFoundError, json.JSONDecodeError, AssertionError):
+        print("{0}/ani_default_info.json missing or unreadable, reading data from {0}.TOMDLB_D instead...".format(tomdlb_file[:-9]))
+        with io.BytesIO(backup_ani_default_block) as ff:
+            raw_sec_11_data = read_section_11 (ff, 0, decode_data = False)
+    return raw_sec_11_data
 
 def make_morph_deltas (mesh, morphed_mesh):
     deltas = {'POSITION': [], 'NORMAL': [], 'TANGENT': [], 'BINORMAL': []}
@@ -363,7 +385,7 @@ def create_section_6 (tomdlb_file, backup_mesh_block, dlp_file, material_struct,
     try:
         mesh_blocks_info = read_struct_from_json(tomdlb_file[:-9] + "/mesh_info.json")
     except:
-        print("{0}/mesh_info.json missing or unreadable, using data from {0}.TOMBDLB_D instead...".format(tomdlb_file[:-9]))
+        print("{0}/mesh_info.json missing or unreadable, using data from {0}.TOMDLB_D instead...".format(tomdlb_file[:-9]))
         mesh_blocks_info = orig_mesh_blocks_info
         for i in range(len(mesh_blocks_info)):
             mesh_blocks_info[i]['material'] = material_struct[mesh_blocks_info[i]['material']]['name']
@@ -832,11 +854,14 @@ def create_section_7 (material_struct, ani_value_first_index = 0, ani_target_fir
         + set_4_block + set_5_block + set_6_block, all_tex_names)
 
 #Animation defaults?
-def create_section_11 (raw_sec11_struct):
+def create_section_11 (raw_sec11_struct, start_offset = 0):
     header_block = bytearray()
     data_block = bytearray()
     header_size = (addr_size * 4)
-    data_block.extend(b'\x00' * (addr_size + 8)) # Some sort of padding
+    # Add the blank third vector, offset + (0,0) as addr_size, per-flag exclusivity data.
+    data_block.extend(struct.pack("{}2{}".format(e, {4: "I", 8: "Q"}[addr_size]), 0, 0))
+    while (start_offset + header_size + len(data_block)) % 8: # Alignment
+        data_block.extend(b'\x00')
     for i in range(2):
         count = len(raw_sec11_struct[i])
         if i == 0:
@@ -884,11 +909,12 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                         data_blocks.append(f.read())
                     else:
                         data_blocks.append(f.read(toc[i+1] - toc[i]))
+                # Read data from .json files (or rebuild from original .TOMDLB_D file)
                 raw_skel_data = read_skeleton_data (tomdlb_file, data_blocks[0])
                 physics_params = read_physics_data (tomdlb_file, data_blocks[4], raw_skel_data)
                 collision_struct = read_collision_data (tomdlb_file, data_blocks[5], raw_skel_data)
-                # Read material information (needed for both building mesh and material blocks)
-                material_struct = read_material_data (tomdlb_file, data_blocks[7])
+                material_struct = read_material_data (tomdlb_file, data_blocks[7]) # Needed for meshes as well
+                raw_ani_default_data = read_ani_default_data (tomdlb_file, data_blocks[11])
                 skel_unk = struct.unpack("{}2I".format(e), data_blocks[0][4:12]) # Indices in data_blocks[11]
                 phys_unk = struct.unpack("{}2I".format(e), data_blocks[4][0:8]) # Indices in data_blocks[11]
                 mesh_unk = struct.unpack("{}2I".format(e), data_blocks[6][0:8]) # Indices in data_blocks[11]
@@ -898,7 +924,6 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                 if swap_endian == True:
                     # Changing e will change endianness for this script *only*; do not call set_endianness()!
                     e = {'>': '<', '<': '>'}[e] # Write mode
-                    data_blocks[11] = create_section_11(read_section_11 (f, toc[11]))
                     for i in [1,2,3,8,9,10]:
                         data_blocks[i] = write_generic_int_section(read_generic_int_section(f, toc[i], (toc[i+1]-toc[i])))
                 # Create new physics block
@@ -920,6 +945,11 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                 new_s0_start_offset = (4 + (4 if addr_size == 8 else 0) + (2 * addr_size)
                     + 8 + (12 * addr_size) + len(new_opening_dict))
                 data_blocks[0] = create_section_0(raw_skel_data, skel_unk[0], skel_unk[1], new_s0_start_offset)
+                # Create new animation default data block
+                new_s11_start_offset = (4 + (4 if addr_size == 8 else 0) + (2 * addr_size)
+                    + 8 + (12 * addr_size) + len(new_opening_dict)
+                    + sum([len(data_blocks[i]) for i in range(11)]))
+                data_blocks[11] = create_section_11(raw_ani_default_data, new_s11_start_offset)
                 # Create new internal file (BLDM block)
                 new_bldm_block, dict_offset = create_data_block (data_blocks, new_opening_dict, addr_size, 1, addr_size)
                 # Instead of overwriting backups, it will just tag a number onto the end

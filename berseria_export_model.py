@@ -773,7 +773,7 @@ def read_section_7 (f, offset):
             material_struct.append(material)
     return(material_struct)
 
-#Something to do with animation, offset should be toc[11]. By default the data is not decoded (unneeded).
+# Animation target defaults, including the true bind pose and true default states for physics, animated materials, etc
 def read_section_11 (f, offset, decode_data = False):
     def decode_target_flag (flag):
         return({'type': flag & 0xFFFFFFFF, 'target': flag >> 32 & 0xFFFFFF, 'category': flag >> 56})
@@ -786,15 +786,17 @@ def read_section_11 (f, offset, decode_data = False):
             for _ in range(vec_len):
                 decoded[i]['vector'].append(data2[count])
                 count += 1
-            decoded[i]
         return(decoded)
     f.seek(offset)
     offset1, count1 = read_offset_and_count(f)
     offset2, count2 = read_offset_and_count(f)
-    f.seek(offset1) # Skip 0x10 zero bytes for 8-byte addressing, 0x0c zero bytes for 4-byte - maybe a blank address?
+    offset3, count3 = read_offset_and_count(f)
+    f.seek(offset1)
     # data1 does not look like u64, except when looking at endianness, dunno why
     data1 = [struct.unpack("{}Q".format(e), f.read(8))[0] for _ in range(count1)]
     data2 = [struct.unpack("{}f".format(e), f.read(4))[0] for _ in range(count2)]
+    if (count3 > 0):
+        print("Warning! Alternate flag data found, this file will not fully decode or re-import correctly, please report.")
     if decode_data == True:
         return(decode_block_11(data1, data2))
     else:
@@ -1130,6 +1132,7 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                     physics_params = read_section_4 (f, toc[4])
                     collision_data, collision_meshes = read_section_5 (f, toc[5], decode_data = True)
                     meshes, bone_palette_ids, mesh_blocks_info = read_section_6(f, toc[6], dlp_file, local_skel_struct)
+                    animation_defaults = read_section_11 (f, toc[11], decode_data = True)
                     # Attempt to incorporate an external skeleton (skipped if skeleton already complete)
                     skel_struct = find_and_add_external_skeleton (local_skel_struct, bone_palette_ids)
                     vgmap = {'bone_{}'.format(bone_palette_ids[i]):i for i in range(len(bone_palette_ids))}
@@ -1184,6 +1187,7 @@ def process_dlb (dlb_file, overwrite = False, write_raw_buffers = True, write_bi
                             write_struct_to_json(material_struct, base_name + '/material_info')
                             write_struct_to_json(opening_dict, base_name + '/linked_files')
                             write_struct_to_json(local_skel_struct, base_name + '/skeleton')
+                            write_struct_to_json(animation_defaults, base_name + '/ani_default_info')
                     if combine_models_into_single_gltf == False:
                         write_gltf(base_name, skel_struct, [vgmap], mesh_blocks_info, meshes, material_struct,\
                             overwrite = gltf_overwrite, write_binary_gltf = write_binary_gltf)
