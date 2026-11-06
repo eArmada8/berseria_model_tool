@@ -1,0 +1,5232 @@
+{
+    "CDF_CHR_AIF_HUM_000_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_AIF_HUM_000_FACE_MI",
+        "CHR_AIF_HUM_000_CHEST_MI",
+        "CHR_AIF_HUM_000_CUSTOM_HAT_MI"
+    ],
+    "CDF_CHR_AIF_HUM_050_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_AIF_HUM_000_FACE_MI",
+        "CHR_AIF_HUM_050_CHEST_MI"
+    ],
+    "CDF_CHR_ART_GUR_000_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ART_GUR_000_HAIR_MI",
+        "CHR_ART_GUR_000_FACE_MI",
+        "CHR_ART_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_ART_GUR_000_SYS_100": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ART_GUR_000_HAIR_MI",
+        "CHR_ART_GUR_000_FACE_MI",
+        "CHR_ART_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_ART_GUR_050_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ART_GUR_000_HAIR_MI",
+        "CHR_ART_GUR_000_FACE_MI",
+        "CHR_ART_GUR_050_CHEST_MI"
+    ],
+    "CDF_CHR_ART_GUR_051_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ART_GUR_051_HAIR_MI",
+        "CHR_ART_GUR_051_FACE_MI"
+    ],
+    "CDF_CHR_ART_HUM_000_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ART_GUR_000_HAIR_MI",
+        "CHR_ART_GUR_000_FACE_MI",
+        "CHR_ART_HUM_000_CHEST_MI",
+        "CHR_ART_HUM_000_CUSTOM_MI"
+    ],
+    "CDF_CHR_ART_HUM_000_SYS_100": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ART_GUR_000_HAIR_MI",
+        "CHR_ART_GUR_000_FACE_MI",
+        "CHR_ART_HUM_000_CHEST_MI",
+        "CHR_ART_HUM_000_CUSTOM_MI"
+    ],
+    "CDF_CHR_ART_HUM_001_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ART_GUR_000_HAIR_MI",
+        "CHR_ART_HUM_001_FACE_MI",
+        "CHR_ART_HUM_001_CHEST_MI"
+    ],
+    "CDF_CHR_ART_HUM_001_SYS_100": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ART_GUR_000_HAIR_MI",
+        "CHR_ART_HUM_001_FACE_MI",
+        "CHR_ART_HUM_001_CHEST_MI"
+    ],
+    "CDF_CHR_ART_KAM_000_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ART_KAM_000_HAIR_MI",
+        "CHR_ART_KAM_000_FACE_MI",
+        "CHR_ART_KAM_000_CHEST_MI"
+    ],
+    "CDF_CHR_ART_KAM_000_SYS_100": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ART_KAM_000_HAIR_MI",
+        "CHR_ART_KAM_000_FACE_MI",
+        "CHR_ART_KAM_000_CHEST_MI"
+    ],
+    "CDF_CHR_ART_KAM_000_SYS_200": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ART_KAM_000_HAIR_MI",
+        "CHR_ART_KAM_000_FACE_MI",
+        "CHR_ART_KAM_000_CHEST_MI"
+    ],
+    "CDF_CHR_BBW_EMP_000_SYS_000": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_NMY_EMP_000_CHEST_MI",
+        "CHR_BBW_EMP_000_CUSTOM0_MI"
+    ],
+    "CDF_CHR_BBW_NFY_000_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_ROU_010_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_ROU_200_CHEST_MI",
+        "CHR_NFY_ROU_200_LEG_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI",
+        "CHR_BBW_NFY_000_CUSTOM0_MI"
+    ],
+    "CDF_CHR_BBW_NFY_001_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_POO_010_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_HUM_300_CHEST_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI",
+        "CHR_BBW_NFY_000_CUSTOM1_MI"
+    ],
+    "CDF_CHR_BBW_NFY_002_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_ROU_000_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_ROU_000_CHEST_MI",
+        "CHR_NFY_ROU_000_LEG_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI",
+        "CHR_BBW_NFY_000_CUSTOM0_MI"
+    ],
+    "CDF_CHR_BBW_NFY_003_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_MAI_000_HAIR_MI",
+        "CHR_NFY_ALL_001_FACE_MI",
+        "CHR_NFY_ROU_100_CHEST_MI",
+        "CHR_NFY_ROU_100_LEG_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI",
+        "CHR_BBW_NFY_000_CUSTOM0_MI"
+    ],
+    "CDF_CHR_BBW_NFY_004_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_POO_010_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_ROU_200_CHEST_MI",
+        "CHR_NFY_ROU_200_LEG_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI",
+        "CHR_BBW_NFY_000_CUSTOM0_MI"
+    ],
+    "CDF_CHR_BBW_NFY_005_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_ROU_010_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_ROU_300_CHEST_MI",
+        "CHR_NFY_ROU_300_LEG_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI",
+        "CHR_BBW_NFY_000_CUSTOM0_MI"
+    ],
+    "CDF_CHR_BBW_NMM_000_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_HUM_010_HAIR_MI",
+        "CHR_NMM_ALL_001_FACE_MI",
+        "CHR_NMM_ROU_200_CHEST_MI",
+        "CHR_NMM_ROU_200_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI",
+        "CHR_BBW_NMM_000_CUSTOM1_MI"
+    ],
+    "CDF_CHR_BBW_NMM_001_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_CRA_000_HAIR_MI",
+        "CHR_NMM_ALL_000_FACE_MI",
+        "CHR_NMM_HUM_300_CHEST_MI",
+        "CHR_NMM_HUM_300_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI",
+        "CHR_BBW_NMM_000_CUSTOM0_MI",
+        "CHR_NMM_ALL_000_CUSTOM_SKIN_MI"
+    ],
+    "CDF_CHR_BBW_NMY_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_POO_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_ROU_200_CHEST_MI",
+        "CHR_NMY_ROU_300_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI",
+        "CHR_BBW_NMY_000_CUSTOM0_MI"
+    ],
+    "CDF_CHR_BBW_NMY_001_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ROU_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_HUM_000_CHEST_MI",
+        "CHR_NMY_ROU_200_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI",
+        "CHR_BBW_NMY_000_CUSTOM2_MI"
+    ],
+    "CDF_CHR_BBW_NMY_002_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ROU_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_ROU_000_CHEST_MI",
+        "CHR_NMY_ROU_000_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI",
+        "CHR_BBW_NMY_000_CUSTOM0_MI"
+    ],
+    "CDF_CHR_BBW_NMY_003_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ROU_010_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_ROU_100_CHEST_MI",
+        "CHR_NMY_ROU_100_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI",
+        "CHR_BBW_NMY_000_CUSTOM0_MI"
+    ],
+    "CDF_CHR_BBW_NMY_004_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ARI_000_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_ROU_200_CHEST_MI",
+        "CHR_NMY_ROU_200_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI",
+        "CHR_BBW_NMY_000_CUSTOM0_MI"
+    ],
+    "CDF_CHR_BBW_NMY_005_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_POO_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_ROU_300_CHEST_MI",
+        "CHR_NMY_ROU_300_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI",
+        "CHR_BBW_NMY_000_CUSTOM0_MI"
+    ],
+    "CDF_CHR_BEN_HUM_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_BEN_HUM_000_FACE_MI",
+        "CHR_BEN_HUM_000_CHEST_MI"
+    ],
+    "CDF_CHR_BIE_NOL_000_SYS_000": [
+        "CHR_BONE_NIN_ALL_001_MI",
+        "CHR_NIN_BIE_000_CHEST_MI",
+        "CHR_NIN_BIE_000_CUSTOM_HAT_MI"
+    ],
+    "CDF_CHR_BRD_000_SYS_000": [
+        "CHR_BONE_BRD_000_MI",
+        "CHR_BRD_000_CHEST_MI"
+    ],
+    "CDF_CHR_BRD_001_SYS_000": [
+        "CHR_BONE_BRD_000_MI",
+        "CHR_BRD_001_CHEST_MI"
+    ],
+    "CDF_CHR_BSA_000_SYS_000": [
+        "CHR_BONE_BSA_000_MI",
+        "CHR_BSA_000_CHEST_MI"
+    ],
+    "CDF_CHR_BSA_001_SYS_000": [
+        "CHR_BONE_BSA_000_MI",
+        "CHR_BSA_001_CHEST_MI"
+    ],
+    "CDF_CHR_CAT_000_SYS_000": [
+        "CHR_BONE_CAT_000_MI",
+        "CHR_CAT_000_CHEST_MI"
+    ],
+    "CDF_CHR_CAT_100_SYS_000": [
+        "CHR_BONE_CAT_000_MI",
+        "CHR_CAT_100_CHEST_MI"
+    ],
+    "CDF_CHR_CAT_200_SYS_000": [
+        "CHR_BONE_CAT_000_MI",
+        "CHR_CAT_200_CHEST_MI"
+    ],
+    "CDF_CHR_CAT_300_SYS_000": [
+        "CHR_BONE_CAT_000_MI",
+        "CHR_CAT_300_CHEST_MI"
+    ],
+    "CDF_CHR_CAT_400_SYS_000": [
+        "CHR_BONE_CAT_000_MI",
+        "CHR_CAT_400_CHEST_MI"
+    ],
+    "CDF_CHR_CAW_000_SYS_000": [
+        "CHR_BONE_CAW_000_MI",
+        "CHR_CAW_000_CHEST_MI"
+    ],
+    "CDF_CHR_CAW_001_SYS_000": [
+        "CHR_BONE_CAW_000_MI",
+        "CHR_CAW_001_CHEST_MI"
+    ],
+    "CDF_CHR_CEL_HUM_000_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_CEL_HUM_000_HAIR_MI",
+        "CHR_CEL_HUM_000_FACE_MI",
+        "CHR_CEL_HUM_000_CHEST_MI"
+    ],
+    "CDF_CHR_CEL_HUM_001_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_CEL_HUM_000_HAIR_MI",
+        "CHR_CEL_HUM_000_FACE_MI",
+        "CHR_CEL_HUM_000_CHEST_MI"
+    ],
+    "CDF_CHR_CER_TEN_000_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_CER_TEN_000_FACE_MI",
+        "CHR_CER_TEN_000_CHEST_MI"
+    ],
+    "CDF_CHR_CER_TEN_050_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_CER_TEN_000_FACE_MI",
+        "CHR_CER_TEN_050_CHEST_MI"
+    ],
+    "CDF_CHR_CHI_000_SYS_000": [
+        "CHR_BONE_CHI_000_MI",
+        "CHR_CHI_000_CHEST_MI"
+    ],
+    "CDF_CHR_CRB_000_SYS_000": [
+        "CHR_BONE_CRB_000_MI",
+        "CHR_CRB_000_CHEST_MI"
+    ],
+    "CDF_CHR_CRO_000_SYS_000": [
+        "CHR_BONE_CRO_000_MI",
+        "CHR_CRO_000_CHEST_MI"
+    ],
+    "CDF_CHR_DOG_000_SYS_000": [
+        "CHR_BONE_DOG_000_MI",
+        "CHR_DOG_000_FACE_MI",
+        "CHR_DOG_000_CHEST_MI"
+    ],
+    "CDF_CHR_DOG_100_SYS_000": [
+        "CHR_BONE_DOG_000_MI",
+        "CHR_DOG_100_CHEST_MI"
+    ],
+    "CDF_CHR_DOG_200_SYS_000": [
+        "CHR_BONE_DOG_000_MI",
+        "CHR_DOG_200_CHEST_MI"
+    ],
+    "CDF_CHR_DOG_300_SYS_000": [
+        "CHR_BONE_DOG_000_MI",
+        "CHR_DOG_300_CHEST_MI"
+    ],
+    "CDF_CHR_EDN_TEN_000_SYS_000": [
+        "CHR_BONE_EDN_ALL_000_MI",
+        "CHR_EDN_TEN_000_HAIR_MI",
+        "CHR_EDN_TEN_000_FACE_MI",
+        "CHR_EDN_TEN_000_CHEST_LO_REDUCT",
+        "CHR_EDN_TEN_000_LEG_LO_REDUCT",
+        "CHR_EDN_TEN_000_HAND_L_MI",
+        "CHR_EDN_TEN_000_HAND_R_MI"
+    ],
+    "CDF_CHR_EDN_TEN_000_TEST_001": [
+        "CHR_BONE_EDN_ALL_000_MI",
+        "CHR_EDN_TEN_000_HAIR_MI",
+        "CHR_EDN_TEN_000_FACE_MI",
+        "CHR_EDN_TEN_000_CHEST_MI",
+        "CHR_EDN_TEN_000_LEG_MI",
+        "CHR_EDN_TEN_000_HAND_L_MI",
+        "CHR_EDN_TEN_000_HAND_R_MI"
+    ],
+    "CDF_CHR_EDN_TEN_500_SYS_000": [
+        "CHR_BONE_EDN_ALL_000_MI",
+        "CHR_EDN_TEN_000_HAIR_MI",
+        "CHR_EDN_TEN_000_FACE_MI",
+        "CHR_EDN_TEN_500_CHEST_MI",
+        "CHR_EDN_TEN_500_HAND_L_MI"
+    ],
+    "CDF_CHR_EDN_TEN_500_SYS_100": [
+        "CHR_BONE_EDN_ALL_000_MI",
+        "CHR_EDN_TEN_000_HAIR_MI",
+        "CHR_EDN_TEN_000_FACE_MI",
+        "CHR_EDN_TEN_500_CHEST_MI",
+        "CHR_EDN_TEN_500_HAND_L_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_000_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_000_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_000_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_000_TEST_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_000_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_000_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_000_TEST_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_000_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_000_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_002_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_000_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_002_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_003_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_000_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_003_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_003_SYS_TEST": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_000_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_003_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_005_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_000_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_005_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_006_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_000_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_006_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_007_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_000_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_007_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_008_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_000_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_008_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_010_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_010_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_010_NECK_MI",
+        "CHR_EIZ_TEN_010_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_011_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_011_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_010_NECK_MI",
+        "CHR_EIZ_TEN_011_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_012_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_012_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_010_NECK_MI",
+        "CHR_EIZ_TEN_012_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_013_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_013_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_010_NECK_MI",
+        "CHR_EIZ_TEN_013_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_014_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_014_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_010_NECK_MI",
+        "CHR_EIZ_TEN_014_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_015_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_015_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_010_NECK_MI",
+        "CHR_EIZ_TEN_015_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_100_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_100_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_100_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_100_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_100_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_100_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_101_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_101_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_101_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_101_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_101_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_101_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_102_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_102_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_102_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_102_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_102_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_102_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_105_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_105_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_105_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_105_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_105_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_105_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_108_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_108_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_108_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_108_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_108_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_108_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_110_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_100_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_110_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_110_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_100_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_110_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_111_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_111_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_111_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_111_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_111_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_111_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_120_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_100_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_120_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_120_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_100_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_120_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_121_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_121_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_121_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_121_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_121_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_121_CHEST_MI"
+    ],
+    "CDF_CHR_EIZ_TEN_200_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_EIZ_TEN_000_HAIR_MI",
+        "CHR_EIZ_TEN_000_FACE_MI",
+        "CHR_EIZ_TEN_200_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_000_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_000_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_000_TEST_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_000_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_000_TEST_001": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_000_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_001_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_000_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_001_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_002_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_000_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_002_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_003_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_000_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_003_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_003_SYS_001": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_000_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_003_001_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_003_SYS_TEST": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_000_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_003_001_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_005_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_000_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_005_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_006_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_000_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_006_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_007_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_000_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_007_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_010_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_010_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_010_NECK_MI",
+        "CHR_ELN_GUR_010_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_011_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_011_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_010_NECK_MI",
+        "CHR_ELN_GUR_011_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_012_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_012_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_010_NECK_MI",
+        "CHR_ELN_GUR_012_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_013_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_013_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_010_NECK_MI",
+        "CHR_ELN_GUR_013_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_014_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_014_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_010_NECK_MI",
+        "CHR_ELN_GUR_014_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_015_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_015_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_010_NECK_MI",
+        "CHR_ELN_GUR_015_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_100_ALL_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_100_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_100_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_100_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_100_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_100_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_101_ALL_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_101_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_101_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_101_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_101_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_101_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_102_ALL_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_102_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_102_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_102_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_102_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_102_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_103_ALL_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_103_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_103_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_103_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_103_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_103_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_104_ALL_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_104_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_104_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_104_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_104_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_104_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_105_ALL_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_105_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_105_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_105_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_105_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_105_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_107_ALL_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_107_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_107_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_107_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_107_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_107_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_108_ALL_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_108_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_108_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_108_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_108_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_108_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_110_ALL_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_110_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_110_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_110_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_110_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_110_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_111_ALL_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_111_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_111_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_111_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_111_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_111_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_120_ALL_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_120_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_120_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_120_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_120_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_120_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_121_ALL_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_121_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_121_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_121_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_121_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_121_CHEST_MI"
+    ],
+    "CDF_CHR_ELN_GUR_200_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_ELN_GUR_200_HAIR_MI",
+        "CHR_ELN_GUR_000_FACE_MI",
+        "CHR_ELN_GUR_200_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_000_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_000_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_000_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_000_TEST_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_000_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_000_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_000_TEST_001": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_000_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_000_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_001_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_000_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_001_CHEST_MI",
+        "CHR_FIS_TEN_000_HAND_L_MI"
+    ],
+    "CDF_CHR_FIS_TEN_002_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_000_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_002_CHEST_MI",
+        "CHR_FIS_TEN_000_HAND_L_MI"
+    ],
+    "CDF_CHR_FIS_TEN_003_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_000_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_003_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_003_SYS_TEST": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_000_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_003_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_004_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_000_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_NFC_EEL_000_CHEST_MI",
+        "CHR_FIS_TEN_000_HAND_L_MI"
+    ],
+    "CDF_CHR_FIS_TEN_005_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_000_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_005_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_006_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_000_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_006_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_007_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_007_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_007_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_010_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_010_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_010_NECK_MI",
+        "CHR_FIS_TEN_010_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_011_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_011_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_010_NECK_MI",
+        "CHR_FIS_TEN_011_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_012_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_012_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_010_NECK_MI",
+        "CHR_FIS_TEN_012_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_013_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_013_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_010_NECK_MI",
+        "CHR_FIS_TEN_013_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_014_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_014_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_010_NECK_MI",
+        "CHR_FIS_TEN_014_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_015_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_015_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_010_NECK_MI",
+        "CHR_FIS_TEN_015_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_016_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_016_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_010_NECK_MI",
+        "CHR_FIS_TEN_016_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_100_ALL_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_100_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_100_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_100_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_100_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_100_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_101_ALL_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_101_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_101_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_101_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_101_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_101_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_102_ALL_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_102_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_102_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_102_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_102_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_102_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_105_ALL_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_105_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_105_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_105_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_105_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_105_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_106_ALL_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_106_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_106_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_106_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_106_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_106_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_108_ALL_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_108_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_108_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_108_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_108_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_108_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_109_ALL_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_109_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_010_NECK_MI",
+        "CHR_FIS_TEN_109_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_109_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_109_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_010_NECK_MI",
+        "CHR_FIS_TEN_109_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_110_ALL_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_100_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_110_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_110_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_100_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_110_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_111_ALL_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_101_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_111_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_111_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_101_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_111_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_120_ALL_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_100_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_120_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_120_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_100_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_120_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_121_ALL_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_101_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_121_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_121_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_101_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_121_CHEST_MI"
+    ],
+    "CDF_CHR_FIS_TEN_200_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_FIS_TEN_000_HAIR_MI",
+        "CHR_FIS_TEN_000_FACE_MI",
+        "CHR_FIS_TEN_200_CHEST_MI"
+    ],
+    "CDF_CHR_FRG_000_SYS_000": [
+        "CHR_BONE_FRG_000_MI",
+        "CHR_FRG_000_CHEST_MI"
+    ],
+    "CDF_CHR_FSH_000_SYS_000": [
+        "CHR_BONE_FSH_000_MI",
+        "CHR_FSH_000_CHEST_MI"
+    ],
+    "CDF_CHR_GOA_000_SYS_000": [
+        "CHR_BONE_GOA_000_MI",
+        "CHR_GOA_000_CHEST_MI"
+    ],
+    "CDF_CHR_GOA_001_SYS_000": [
+        "CHR_BONE_GOA_000_MI",
+        "CHR_GOA_001_CHEST_MI"
+    ],
+    "CDF_CHR_GRI_NOL_000_SYS_000": [
+        "CHR_BONE_NIN_ALL_001_MI",
+        "CHR_NIN_GRI_000_CHEST_MI",
+        "CHR_NIN_GRI_000_CUSTOM_HAT_MI"
+    ],
+    "CDF_CHR_HOR_000_SYS_000": [
+        "CHR_BONE_HOR_000_MI",
+        "CHR_HOR_000_CHEST_MI"
+    ],
+    "CDF_CHR_HOR_001_SYS_000": [
+        "CHR_BONE_HOR_000_MI",
+        "CHR_HOR_001_CHEST_MI"
+    ],
+    "CDF_CHR_HOR_002_SYS_000": [
+        "CHR_BONE_HOR_000_MI",
+        "CHR_HOR_002_CHEST_MI"
+    ],
+    "CDF_CHR_HOR_003_SYS_000": [
+        "CHR_BONE_HOR_000_MI",
+        "CHR_HOR_003_CHEST_MI"
+    ],
+    "CDF_CHR_HOR_004_SYS_000": [
+        "CHR_BONE_HOR_000_MI",
+        "CHR_HOR_004_CHEST_MI"
+    ],
+    "CDF_CHR_HOR_010_SYS_000": [
+        "CHR_BONE_HOR_000_MI",
+        "CHR_HOR_010_CHEST_MI"
+    ],
+    "CDF_CHR_HOR_013_SYS_000": [
+        "CHR_BONE_HOR_000_MI",
+        "CHR_HOR_013_CHEST_MI"
+    ],
+    "CDF_CHR_HOR_102_SYS_000": [
+        "CHR_BONE_HOR_000_MI",
+        "CHR_HOR_102_CHEST_MI"
+    ],
+    "CDF_CHR_HOR_202_SYS_000": [
+        "CHR_BONE_HOR_000_MI",
+        "CHR_HOR_202_CHEST_MI"
+    ],
+    "CDF_CHR_JUR_000_SYS_000": [
+        "CHR_BONE_JUD_HUM_000_MI",
+        "CHR_JUD_GST_000_FACE_MI",
+        "CHR_JUD_GST_000_CHEST_MI"
+    ],
+    "CDF_CHR_JUR_000_SYS_100": [
+        "CHR_BONE_JUD_HUM_000_MI",
+        "CHR_JUD_GST_000_FACE_MI",
+        "CHR_JUD_GST_000_CHEST_MI"
+    ],
+    "CDF_CHR_KAN_TEN_000_SYS_000": [
+        "CHR_BONE_KAN_ALL_000_MI",
+        "CHR_KAN_TEN_000_HAIR_MI",
+        "CHR_KAN_TEN_000_FACE_MI",
+        "CHR_KAN_TEN_000_CHEST_MI"
+    ],
+    "CDF_CHR_KAN_TEN_000_SYS_100": [
+        "CHR_BONE_KAN_ALL_000_MI",
+        "CHR_KAN_TEN_000_HAIR_MI",
+        "CHR_KAN_TEN_000_FACE_MI",
+        "CHR_KAN_TEN_000_CHEST_MI"
+    ],
+    "CDF_CHR_LAI_TEN_000_TEST_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_LAI_TEN_000_HAIR_MI",
+        "CHR_LAI_TEN_000_FACE_MI",
+        "CHR_LAI_TEN_000_CHEST_MI",
+        "CHR_LAI_TEN_000_HAND_L_MI"
+    ],
+    "CDF_CHR_LFI_HUM_000_SYS_000": [
+        "CHR_BONE_KAN_ALL_000_MI",
+        "CHR_LFI_HUM_000_HAIR_MI",
+        "CHR_LFI_HUM_000_FACE_MI",
+        "CHR_LFI_HUM_000_CHEST_MI"
+    ],
+    "CDF_CHR_LFI_HUM_050_SYS_000": [
+        "CHR_BONE_KAN_ALL_000_MI",
+        "CHR_LFI_HUM_000_HAIR_MI",
+        "CHR_LFI_HUM_000_FACE_MI",
+        "CHR_LFI_HUM_050_CHEST_MI"
+    ],
+    "CDF_CHR_LZT_HUM_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_LZT_HUM_000_FACE",
+        "CHR_NMY_HUM_000_CHEST_MI",
+        "CHR_NMY_HUM_000_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_MAH_HUM_000_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_HUM_000_HAIR_MI",
+        "CHR_NFM_HOT_000_FACE_MI",
+        "CHR_NFM_COL_300_CHEST_MI",
+        "CHR_NFM_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_MEL_GUR_000_SYS_000": [
+        "CHR_BONE_NMM_MNI_000_MI",
+        "CHR_MEL_GUR_000_FACE_MI",
+        "CHR_MEL_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_MEL_GUR_000_SYS_100": [
+        "CHR_BONE_NMM_MNI_000_MI",
+        "CHR_MEL_GUR_000_FACE_MI",
+        "CHR_MEL_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_MEL_GUR_001_SYS_000": [
+        "CHR_BONE_NMM_MNI_000_MI",
+        "CHR_MEL_GUR_001_FACE_MI",
+        "CHR_MEL_GUR_001_CHEST_MI"
+    ],
+    "CDF_CHR_MEL_GUR_001_SYS_100": [
+        "CHR_BONE_NMM_MNI_000_MI",
+        "CHR_MEL_GUR_001_FACE_MI",
+        "CHR_MEL_GUR_001_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_000_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_000_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_000_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_000_TEST_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_000_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_000_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_000_TEST_001": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_000_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_000_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_002_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_000_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_002_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_003_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_003_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_003_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_003_SYS_TEST": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_003_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_003_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_005_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_003_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_005_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_006_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_003_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_006_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_007_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_000_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_007_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_010_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_010_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_010_NECK_MI",
+        "CHR_MGL_HUM_010_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_011_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_011_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_010_NECK_MI",
+        "CHR_MGL_HUM_011_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_012_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_012_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_010_NECK_MI",
+        "CHR_MGL_HUM_012_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_013_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_013_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_010_NECK_MI",
+        "CHR_MGL_HUM_013_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_014_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_014_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_010_NECK_MI",
+        "CHR_MGL_HUM_014_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_015_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_015_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_010_NECK_MI",
+        "CHR_MGL_HUM_015_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_100_ALL_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_100_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_100_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_100_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_100_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_100_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_101_ALL_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_101_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_101_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_101_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_101_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_101_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_102_ALL_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_102_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_102_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_102_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_102_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_102_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_103_ALL_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_103_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_103_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_103_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_103_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_103_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_104_ALL_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_104_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_104_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_104_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_104_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_104_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_105_ALL_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_105_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_105_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_105_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_105_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_105_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_107_ALL_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_107_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_107_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_107_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_107_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_107_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_108_ALL_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_108_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_108_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_108_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_108_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_108_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_110_ALL_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_110_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_110_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_110_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_110_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_110_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_111_ALL_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_111_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_111_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_111_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_111_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_111_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_120_ALL_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_120_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_120_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_120_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_120_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_120_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_121_ALL_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_121_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_121_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_121_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_121_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_121_CHEST_MI"
+    ],
+    "CDF_CHR_MGL_HUM_200_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_MGL_HUM_200_HAIR_MI",
+        "CHR_MGL_HUM_000_FACE_MI",
+        "CHR_MGL_HUM_200_CHEST_MI"
+    ],
+    "CDF_CHR_MIR_000_SYS_000": [
+        "CHR_BONE_MIR_TEN_000_MI",
+        "CHR_MIR_GST_000_FACE_MI",
+        "CHR_MIR_GST_000_CHEST_MI"
+    ],
+    "CDF_CHR_MIR_000_SYS_100": [
+        "CHR_BONE_MIR_TEN_000_MI",
+        "CHR_MIR_GST_000_FACE_MI",
+        "CHR_MIR_GST_000_CHEST_MI"
+    ],
+    "CDF_CHR_MKZ_TEN_000_SYS_000": [
+        "CHR_BONE_GMA_TEN_005_MI",
+        "CHR_GMA_TEN_005_FACE_MI",
+        "CHR_GMA_TEN_005_CHEST_MI"
+    ],
+    "CDF_CHR_MOU_000_SYS_000": [
+        "CHR_BONE_MOU_000_MI",
+        "CHR_MOU_000_CHEST_MI"
+    ],
+    "CDF_CHR_MOU_100_SYS_000": [
+        "CHR_BONE_MOU_000_MI",
+        "CHR_MOU_100_CHEST_MI"
+    ],
+    "CDF_CHR_NFC_COL_000_SYS_000": [
+        "CHR_BONE_NFC_ALL_000_MI",
+        "CHR_NFC_HUM_000_HAIR_MI",
+        "CHR_NFC_ALL_001_FACE_MI",
+        "CHR_NFC_COL_000_CHEST_MI"
+    ],
+    "CDF_CHR_NFC_COL_001_SYS_000": [
+        "CHR_BONE_NFC_ALL_000_MI",
+        "CHR_NFC_HUM_000_HAIR_MI",
+        "CHR_NFC_ALL_001_FACE_MI",
+        "CHR_NFC_COL_000_CHEST_MI"
+    ],
+    "CDF_CHR_NFC_COL_100_SYS_000": [
+        "CHR_BONE_NFC_ALL_000_MI",
+        "CHR_NFC_COL_000_HAIR_MI",
+        "CHR_NFC_ALL_001_FACE_MI",
+        "CHR_NFC_COL_100_CHEST_MI"
+    ],
+    "CDF_CHR_NFC_EEL_000_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NFC_EEL_000_HAIR_MI",
+        "CHR_NFC_EEL_000_FACE_MI",
+        "CHR_NFC_EEL_000_CHEST_MI",
+        "CHR_FIS_TEN_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFC_HUM_000_SYS_000": [
+        "CHR_BONE_NFC_ALL_000_MI",
+        "CHR_NFC_HUM_000_HAIR_MI",
+        "CHR_NFC_ALL_001_FACE_MI",
+        "CHR_NFC_HUM_000_CHEST_MI",
+        "CHR_NFC_HUM_000_LEG_MI",
+        "CHR_NFC_HUM_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFC_HUM_100_SYS_000": [
+        "CHR_BONE_NFC_ALL_000_MI",
+        "CHR_NFC_HUM_000_HAIR_MI",
+        "CHR_NFC_ALL_001_FACE_MI",
+        "CHR_NFC_HUM_100_CHEST_MI",
+        "CHR_NFC_HUM_100_LEG_MI",
+        "CHR_NFC_HUM_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFC_HUM_200_SYS_000": [
+        "CHR_BONE_NFC_ALL_000_MI",
+        "CHR_NFC_HUM_000_HAIR_MI",
+        "CHR_NFC_ALL_001_FACE_MI",
+        "CHR_NFC_HUM_200_CHEST_MI",
+        "CHR_NFC_HUM_200_LEG_MI",
+        "CHR_NFC_HUM_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFC_HUM_300_SYS_000": [
+        "CHR_BONE_NFC_ALL_000_MI",
+        "CHR_NFC_HUM_000_HAIR_MI",
+        "CHR_NFC_ALL_001_FACE_MI",
+        "CHR_NFC_HUM_300_CHEST_MI",
+        "CHR_NFC_HUM_300_LEG_MI",
+        "CHR_NFC_HUM_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFC_MIG_000_SYS_000": [
+        "CHR_BONE_NFC_ALL_000_MI",
+        "CHR_NFC_HUM_000_HAIR_MI",
+        "CHR_NFC_ALL_001_FACE_MI",
+        "CHR_NFC_HUM_000_CHEST_MI",
+        "CHR_NFC_HUM_000_LEG_MI",
+        "CHR_NFC_HUM_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFC_MIG_001_SYS_000": [
+        "CHR_BONE_NFC_ALL_000_MI",
+        "CHR_NFC_COL_000_HAIR_MI",
+        "CHR_NFC_ALL_001_FACE_MI",
+        "CHR_NFC_HUM_100_CHEST_MI",
+        "CHR_NFC_HUM_100_LEG_MI",
+        "CHR_NFC_HUM_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_COL_000_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_INN_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_COL_000_CHEST_MI"
+    ],
+    "CDF_CHR_NFM_COL_100_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_POO_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_COL_100_CHEST_MI"
+    ],
+    "CDF_CHR_NFM_COL_200_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_ROU_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_COL_200_CHEST_MI"
+    ],
+    "CDF_CHR_NFM_HOT_000_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_ROU_000_HAIR_MI",
+        "CHR_NFM_HOT_000_FACE_MI",
+        "CHR_NFM_HOT_000_CHEST_MI",
+        "CHR_NFM_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_HOT_100_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_INN_000_HAIR_MI",
+        "CHR_NFM_HOT_000_FACE_MI",
+        "CHR_NFM_HOT_100_CHEST_MI",
+        "CHR_NFM_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_HOT_200_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_POO_000_HAIR_MI",
+        "CHR_NFM_HOT_000_FACE_MI",
+        "CHR_NFM_HOT_200_CHEST_MI",
+        "CHR_NFM_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_HUM_000_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_HUM_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_HUM_000_CHEST_MI",
+        "CHR_NFM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_HUM_100_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_INN_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_HUM_100_CHEST_MI",
+        "CHR_NFM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_HUM_200_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_POO_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_HUM_200_CHEST_MI",
+        "CHR_NFM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_HUM_300_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_POO_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_HUM_300_CHEST_MI",
+        "CHR_NFM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_INN_000_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_INN_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_INN_000_CHEST_MI",
+        "CHR_NFM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_POO_000_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_POO_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_POO_000_CHEST_MI",
+        "CHR_NFM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_POO_100_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_INN_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_POO_100_CHEST_MI",
+        "CHR_NFM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_POO_200_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_ROU_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_POO_200_CHEST_MI",
+        "CHR_NFM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_POO_300_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_POO_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_POO_300_CHEST_MI",
+        "CHR_NFM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_ROU_000_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_ROU_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_ROU_000_CHEST_MI",
+        "CHR_NFM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_ROU_100_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_ROU_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_ROU_100_CHEST_MI",
+        "CHR_NFM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_ROU_200_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_POO_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_ROU_200_CHEST_MI",
+        "CHR_NFM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFM_ROU_300_SYS_000": [
+        "CHR_BONE_NFM_ALL_000_MI",
+        "CHR_NFM_INN_000_HAIR_MI",
+        "CHR_NFM_ALL_000_FACE_MI",
+        "CHR_NFM_ROU_300_CHEST_MI",
+        "CHR_NFM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFO_HUM_000_SYS_000": [
+        "CHR_BONE_NFO_ALL_000_MI",
+        "CHR_NFO_HUM_000_HAIR_MI",
+        "CHR_NFO_ALL_000_FACE_MI",
+        "CHR_NFO_HUM_000_CHEST_MI",
+        "CHR_NFO_HUM_000_LEG_MI",
+        "CHR_NFO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFO_HUM_100_SYS_000": [
+        "CHR_BONE_NFO_ALL_000_MI",
+        "CHR_NFO_HUM_000_HAIR_MI",
+        "CHR_NFO_ALL_000_FACE_MI",
+        "CHR_NFO_HUM_100_CHEST_MI",
+        "CHR_NFO_HUM_100_LEG_MI",
+        "CHR_NFO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFO_HUM_200_SYS_000": [
+        "CHR_BONE_NFO_ALL_000_MI",
+        "CHR_NFO_HUM_000_HAIR_MI",
+        "CHR_NFO_ALL_000_FACE_MI",
+        "CHR_NFO_HUM_200_CHEST_MI",
+        "CHR_NFO_HUM_200_LEG_MI",
+        "CHR_NFO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFO_HUM_300_SYS_000": [
+        "CHR_BONE_NFO_ALL_000_MI",
+        "CHR_NFO_HUM_000_HAIR_MI",
+        "CHR_NFO_ALL_000_FACE_MI",
+        "CHR_NFO_HUM_300_CHEST_MI",
+        "CHR_NFO_HUM_300_LEG_MI",
+        "CHR_NFO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFO_POO_000_SYS_000": [
+        "CHR_BONE_NFO_ALL_000_MI",
+        "CHR_NFO_POO_000_HAIR_MI",
+        "CHR_NFO_ALL_000_FACE_MI",
+        "CHR_NFO_POO_000_CHEST_MI",
+        "CHR_NFO_POO_000_LEG_MI",
+        "CHR_NFO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFO_POO_100_SYS_000": [
+        "CHR_BONE_NFO_ALL_000_MI",
+        "CHR_NFO_POO_000_HAIR_MI",
+        "CHR_NFO_ALL_000_FACE_MI",
+        "CHR_NFO_POO_100_CHEST_MI",
+        "CHR_NFO_POO_100_LEG_MI",
+        "CHR_NFO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFO_POO_200_SYS_000": [
+        "CHR_BONE_NFO_ALL_000_MI",
+        "CHR_NFO_POO_000_HAIR_MI",
+        "CHR_NFO_ALL_000_FACE_MI",
+        "CHR_NFO_POO_200_CHEST_MI",
+        "CHR_NFO_POO_200_LEG_MI",
+        "CHR_NFO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFO_POO_300_SYS_000": [
+        "CHR_BONE_NFO_ALL_000_MI",
+        "CHR_NFO_POO_000_HAIR_MI",
+        "CHR_NFO_ALL_000_FACE_MI",
+        "CHR_NFO_POO_300_CHEST_MI",
+        "CHR_NFO_POO_300_LEG_MI",
+        "CHR_NFO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_COL_000_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_HUM_000_HAIR_MI",
+        "CHR_NFY_ALL_001_FACE_MI",
+        "CHR_NFY_COL_000_CHEST_MI",
+        "CHR_NFY_COL_000_LEG_MI",
+        "CHR_NFY_COL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_COL_100_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_HUM_010_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_COL_100_CHEST_MI",
+        "CHR_NFY_COL_100_LEG_MI",
+        "CHR_NFY_COL_100_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_COL_200_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_MAI_000_HAIR_MI",
+        "CHR_NFY_ALL_001_FACE_MI",
+        "CHR_NFY_COL_200_CHEST_MI",
+        "CHR_NFY_COL_200_LEG_MI",
+        "CHR_NFY_COL_100_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_DAN_000_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_DAN_000_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_DAN_000_CHEST_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI",
+        "CHR_NFY_DAN_000_CUSTOM_CORSAGE_MI"
+    ],
+    "CDF_CHR_NFY_EEL_000_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_NFY_EEL_000_HAIR_MI",
+        "CHR_NFY_EEL_000_CHEST_MI",
+        "CHR_NFY_EEL_000_LEG_MI"
+    ],
+    "CDF_CHR_NFY_EEL_100_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_NFY_EEL_000_HAIR_MI",
+        "CHR_NFY_EEL_100_CHEST_MI",
+        "CHR_NFY_EEL_000_LEG_MI"
+    ],
+    "CDF_CHR_NFY_EEL_101_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_NFY_EEL_001_FACE_MI",
+        "CHR_NFY_EEL_001_CHEST_MI"
+    ],
+    "CDF_CHR_NFY_EEL_200_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_NFY_EEL_000_HAIR_MI",
+        "CHR_NFY_EEL_200_CHEST_MI",
+        "CHR_NFY_EEL_000_LEG_MI"
+    ],
+    "CDF_CHR_NFY_EEL_300_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_NFY_EEL_000_HAIR_MI",
+        "CHR_NFY_EEL_300_CHEST_MI",
+        "CHR_NFY_EEL_000_LEG_MI"
+    ],
+    "CDF_CHR_NFY_GUR_000_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_NFY_GUR_000_HAIR_MI",
+        "CHR_NFY_GUR_000_CHEST_MI",
+        "CHR_NFY_GUR_000_LEG_MI"
+    ],
+    "CDF_CHR_NFY_GUR_001_SYS_000": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_NFY_GUR_001_CHEST_MI"
+    ],
+    "CDF_CHR_NFY_GUR_001_SYS_100": [
+        "CHR_BONE_ALI_ALL_000_MI",
+        "CHR_NFY_GUR_001_CHEST_MI"
+    ],
+    "CDF_CHR_NFY_HOT_000_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_HOT_000_HAIR_MI",
+        "CHR_NFY_HOT_000_FACE_MI",
+        "CHR_NFY_HOT_000_CHEST_MI",
+        "CHR_NFY_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_HOT_100_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_POO_010_HAIR_MI",
+        "CHR_NFY_HOT_000_FACE_MI",
+        "CHR_NFY_HOT_100_CHEST_MI",
+        "CHR_NFY_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_HOT_200_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_DAN_000_HAIR_MI",
+        "CHR_NFY_HOT_000_FACE_MI",
+        "CHR_NFY_HOT_200_CHEST_MI",
+        "CHR_NFY_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_HUM_000_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_HUM_000_HAIR_MI",
+        "CHR_NFY_ALL_001_FACE_MI",
+        "CHR_NFY_HUM_000_CHEST_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_HUM_100_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_HUM_000_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_HUM_100_CHEST_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_HUM_200_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_DAN_000_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_HUM_200_CHEST_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_HUM_300_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_HUM_010_HAIR_MI",
+        "CHR_NFY_ALL_001_FACE_MI",
+        "CHR_NFY_HUM_300_CHEST_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_MAI_000_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_MAI_000_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_MAI_000_CHEST_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI",
+        "CHR_NFY_MAI_000_CUSTOM_HEADDRESS_MI"
+    ],
+    "CDF_CHR_NFY_MAI_001_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_MAI_001_HAIR_MI",
+        "CHR_NFY_ALL_001_FACE_MI",
+        "CHR_NFY_MAI_001_CHEST_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI",
+        "CHR_NFY_MAI_001_CUSTOM_HEADDRESS_MI"
+    ],
+    "CDF_CHR_NFY_POO_000_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_POO_000_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_POO_000_CHEST_MI",
+        "CHR_NFY_POO_000_LEG_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_POO_100_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_POO_010_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_POO_100_CHEST_MI",
+        "CHR_NFY_POO_100_LEG_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_POO_200_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_MAI_000_HAIR_MI",
+        "CHR_NFY_ALL_001_FACE_MI",
+        "CHR_NFY_POO_200_CHEST_MI",
+        "CHR_NFY_POO_200_LEG_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_POO_300_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_MAI_001_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_POO_300_CHEST_MI",
+        "CHR_NFY_POO_300_LEG_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_ROU_000_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_ROU_000_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_ROU_000_CHEST_MI",
+        "CHR_NFY_ROU_000_LEG_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_ROU_100_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_MAI_000_HAIR_MI",
+        "CHR_NFY_ALL_001_FACE_MI",
+        "CHR_NFY_ROU_100_CHEST_MI",
+        "CHR_NFY_ROU_100_LEG_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_ROU_200_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_POO_010_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_ROU_200_CHEST_MI",
+        "CHR_NFY_ROU_200_LEG_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NFY_ROU_300_SYS_000": [
+        "CHR_BONE_NFY_ALL_000_MI",
+        "CHR_NFY_ROU_010_HAIR_MI",
+        "CHR_NFY_ALL_000_FACE_MI",
+        "CHR_NFY_ROU_300_CHEST_MI",
+        "CHR_NFY_ROU_300_LEG_MI",
+        "CHR_NFY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NIC_DOG_000_SYS_000": [
+        "CHR_BONE_DOG_000_MI",
+        "CHR_NIC_DOG_000_FACE_MI",
+        "CHR_NIC_DOG_000_CHEST_MI"
+    ],
+    "CDF_CHR_NIC_DOG_001_SYS_000": [
+        "CHR_BONE_DOG_000_MI",
+        "CHR_NIC_DOG_001_FACE_MI",
+        "CHR_NIC_DOG_001_CHEST_MI"
+    ],
+    "CDF_CHR_NIC_HUM_000_SYS_000": [
+        "CHR_BONE_ROS_ALL_000_MI",
+        "CHR_NIC_HUM_000_FACE_MI",
+        "CHR_NIC_HUM_000_CHEST_MI"
+    ],
+    "CDF_CHR_NIN_KMN_000_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NIN_KMN_000_FACE_MI",
+        "CHR_NIN_KMN_000_CHEST_MI"
+    ],
+    "CDF_CHR_NIN_KMN_001_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NIN_KMN_001_FACE_MI",
+        "CHR_NIN_KMN_001_CHEST_MI"
+    ],
+    "CDF_CHR_NIN_KMN_001_SYS_100": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NIN_KMN_001_FACE_MI",
+        "CHR_NIN_KMN_001_CHEST_MI"
+    ],
+    "CDF_CHR_NIN_KMN_002_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NIN_KMN_002_FACE_MI",
+        "CHR_NIN_KMN_002_CHEST_MI"
+    ],
+    "CDF_CHR_NIN_NEK_000_SYS_000": [
+        "CHR_BONE_NIN_NEK_000_MI",
+        "CHR_NIN_NEK_000_FACE_MI",
+        "CHR_NIN_NEK_000_CHEST_MI"
+    ],
+    "CDF_CHR_NIN_NEK_100_SYS_000": [
+        "CHR_BONE_NIN_NEK_000_MI",
+        "CHR_NIN_NEK_000_FACE_MI",
+        "CHR_NIN_NEK_100_CHEST_MI"
+    ],
+    "CDF_CHR_NIN_NEK_200_SYS_000": [
+        "CHR_BONE_NIN_NEK_000_MI",
+        "CHR_NIN_NEK_000_FACE_MI",
+        "CHR_NIN_NEK_200_CHEST_MI"
+    ],
+    "CDF_CHR_NIN_NEK_300_SYS_000": [
+        "CHR_BONE_NIN_NEK_000_MI",
+        "CHR_NIN_NEK_000_FACE_MI",
+        "CHR_NIN_NEK_300_CHEST_MI"
+    ],
+    "CDF_CHR_NIN_NEK_400_SYS_000": [
+        "CHR_BONE_NIN_NEK_000_MI",
+        "CHR_NIN_NEK_000_FACE_MI",
+        "CHR_NIN_NEK_400_CHEST_MI",
+        "CHR_NIN_NEK_400_CUSTOM_MI"
+    ],
+    "CDF_CHR_NIN_NEK_400_SYS_001": [
+        "CHR_BONE_NIN_NEK_000_MI",
+        "CHR_NIN_NEK_000_FACE_MI",
+        "CHR_NIN_NEK_000_CHEST_MI",
+        "CHR_NIN_NEK_400_CUSTOM_MI"
+    ],
+    "CDF_CHR_NIN_NEK_400_SYS_002": [
+        "CHR_BONE_NIN_NEK_000_MI",
+        "CHR_NIN_NEK_000_FACE_MI",
+        "CHR_NIN_NEK_100_CHEST_MI",
+        "CHR_NIN_NEK_400_CUSTOM_MI"
+    ],
+    "CDF_CHR_NIN_NEK_400_SYS_003": [
+        "CHR_BONE_NIN_NEK_000_MI",
+        "CHR_NIN_NEK_000_FACE_MI",
+        "CHR_NIN_NEK_200_CHEST_MI",
+        "CHR_NIN_NEK_400_CUSTOM_MI"
+    ],
+    "CDF_CHR_NIN_NEK_400_SYS_004": [
+        "CHR_BONE_NIN_NEK_000_MI",
+        "CHR_NIN_NEK_000_FACE_MI",
+        "CHR_NIN_NEK_300_CHEST_MI",
+        "CHR_NIN_NEK_400_CUSTOM_MI"
+    ],
+    "CDF_CHR_NIN_NOL_000_SYS_000": [
+        "CHR_BONE_NIN_ALL_001_MI",
+        "CHR_NIN_NOL_000_CHEST_MI",
+        "CHR_NIN_NOL_000_CUSTOM_HAT_MI"
+    ],
+    "CDF_CHR_NIN_NOL_100_SYS_000": [
+        "CHR_BONE_NIN_ALL_001_MI",
+        "CHR_NIN_NOL_100_CHEST_MI",
+        "CHR_NIN_NOL_100_CUSTOM_HAT_MI"
+    ],
+    "CDF_CHR_NIN_NOL_200_SYS_000": [
+        "CHR_BONE_NIN_ALL_001_MI",
+        "CHR_NIN_NOL_200_CHEST_MI",
+        "CHR_NIN_NOL_200_CUSTOM_HAT_MI"
+    ],
+    "CDF_CHR_NIN_NOL_300_SYS_000": [
+        "CHR_BONE_NIN_ALL_001_MI",
+        "CHR_NIN_NOL_300_CHEST_MI",
+        "CHR_NIN_NOL_300_CUSTOM_HAT_MI"
+    ],
+    "CDF_CHR_NIN_NOL_400_SYS_000": [
+        "CHR_BONE_NIN_ALL_001_MI",
+        "CHR_NIN_NOL_400_CHEST_MI",
+        "CHR_NIN_NOL_400_CUSTOM_HAT_MI"
+    ],
+    "CDF_CHR_NIN_NOL_500_SYS_000": [
+        "CHR_BONE_NIN_ALL_001_MI",
+        "CHR_NIN_NOL_500_CHEST_MI",
+        "CHR_NIN_NOL_500_CUSTOM_HAT_MI"
+    ],
+    "CDF_CHR_NMC_COL_000_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_HUM_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_COL_000_CHEST_MI"
+    ],
+    "CDF_CHR_NMC_COL_100_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_POO_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_COL_100_CHEST_MI"
+    ],
+    "CDF_CHR_NMC_COL_101_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_HUM_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_COL_100_CHEST_MI"
+    ],
+    "CDF_CHR_NMC_HUM_000_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_HUM_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_HUM_000_CHEST_MI",
+        "CHR_NMC_HUM_000_LEG_MI",
+        "CHR_NMC_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMC_HUM_100_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_POO_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_HUM_100_CHEST_MI",
+        "CHR_NMC_HUM_100_LEG_MI",
+        "CHR_NMC_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMC_HUM_200_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_HUM_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_HUM_200_CHEST_MI",
+        "CHR_NMC_HUM_200_LEG_MI",
+        "CHR_NMC_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMC_HUM_300_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_HUM_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_HUM_300_CHEST_MI",
+        "CHR_NMC_HUM_300_LEG_MI",
+        "CHR_NMC_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMC_MIG_000_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_HUM_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_HUM_000_CHEST_MI",
+        "CHR_NMC_HUM_000_LEG_MI",
+        "CHR_NMC_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMC_MIG_001_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_HUM_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_HUM_100_CHEST_MI",
+        "CHR_NMC_HUM_100_LEG_MI",
+        "CHR_NMC_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMC_MIG_002_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_POO_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_HUM_300_CHEST_MI",
+        "CHR_NMC_HUM_300_LEG_MI",
+        "CHR_NMC_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMC_POO_000_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_POO_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_POO_000_CHEST_MI",
+        "CHR_NMC_POO_000_LEG_MI",
+        "CHR_NMC_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMC_POO_100_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_HUM_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_POO_100_CHEST_MI",
+        "CHR_NMC_POO_100_LEG_MI",
+        "CHR_NMC_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMC_POO_200_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_POO_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_POO_200_CHEST_MI",
+        "CHR_NMC_POO_200_LEG_MI",
+        "CHR_NMC_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMC_POO_300_SYS_000": [
+        "CHR_BONE_NMC_ALL_000_MI",
+        "CHR_NMC_POO_000_HAIR_MI",
+        "CHR_NMC_ALL_001_FACE_MI",
+        "CHR_NMC_POO_300_CHEST_MI",
+        "CHR_NMC_POO_300_LEG_MI",
+        "CHR_NMC_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_BLS_000_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_BLS_000_HAIR_MI",
+        "CHR_NMM_ALL_000_FACE_MI",
+        "CHR_NMM_BLS_000_CHEST_MI",
+        "CHR_NMM_BLS_000_LEG_MI"
+    ],
+    "CDF_CHR_NMM_COL_000_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_BLS_000_HAIR_MI",
+        "CHR_NMM_ALL_001_FACE_MI",
+        "CHR_NMM_COL_000_CHEST_MI",
+        "CHR_NMM_COL_000_LEG_MI",
+        "CHR_NMM_COL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_COL_100_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_POO_000_HAIR_MI",
+        "CHR_NMM_ALL_002_FACE_MI",
+        "CHR_NMM_COL_100_CHEST_MI",
+        "CHR_NMM_COL_100_LEG_MI",
+        "CHR_NMM_COL_100_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_COL_200_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_HUM_000_HAIR_MI",
+        "CHR_NMM_ALL_000_FACE_MI",
+        "CHR_NMM_COL_200_CHEST_MI",
+        "CHR_NMM_COL_200_LEG_MI",
+        "CHR_NMM_COL_100_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_CRA_000_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_CRA_000_HAIR_MI",
+        "CHR_NMM_ALL_001_FACE_MI",
+        "CHR_NMM_CRA_000_CHEST_MI",
+        "CHR_NMM_CRA_000_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI",
+        "CHR_NMM_ALL_000_CUSTOM_SKIN_MI"
+    ],
+    "CDF_CHR_NMM_EMP_000_SYS_000": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_NMM_EMP_000_HAIR_MI",
+        "CHR_NMM_EMP_000_FACE_MI",
+        "CHR_NMM_EMP_000_CHEST_MI"
+    ],
+    "CDF_CHR_NMM_FAR_000_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_FAR_000_HAIR_MI",
+        "CHR_NMM_ALL_002_FACE_MI",
+        "CHR_NMM_FAR_000_CHEST_MI",
+        "CHR_NMM_FAR_000_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_GOF_000_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_FAR_000_HAIR_MI",
+        "CHR_NMM_ALL_002_FACE_MI",
+        "CHR_NMM_GOF_000_CHEST_MI",
+        "CHR_NMM_GOF_000_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_GOF_001_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_ALL_002_FACE_MI",
+        "CHR_NMM_GOF_000_CHEST_MI",
+        "CHR_NMM_GOF_000_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI",
+        "CHR_NMM_ALL_000_CUSTOM_SKIN_MI"
+    ],
+    "CDF_CHR_NMM_HOT_000_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_POO_000_HAIR_MI",
+        "CHR_NMM_HOT_000_FACE_MI",
+        "CHR_NMM_HOT_000_CHEST_MI",
+        "CHR_NMM_ROU_000_LEG_MI",
+        "CHR_NMM_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_HOT_100_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_HOT_000_FACE_MI",
+        "CHR_NMM_HOT_100_CHEST_MI",
+        "CHR_NMM_ROU_100_LEG_MI",
+        "CHR_NMM_HOT_000_HAND_L_MI",
+        "CHR_NMM_HOT_000_CUSTOM_SKIN_MI"
+    ],
+    "CDF_CHR_NMM_HOT_200_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_HUM_010_HAIR_MI",
+        "CHR_NMM_HOT_000_FACE_MI",
+        "CHR_NMM_HOT_200_CHEST_MI",
+        "CHR_NMM_ROU_200_LEG_MI",
+        "CHR_NMM_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_HUM_000_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_HUM_000_HAIR_MI",
+        "CHR_NMM_ALL_000_FACE_MI",
+        "CHR_NMM_HUM_000_CHEST_MI",
+        "CHR_NMM_HUM_000_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_HUM_010_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_HUM_010_HAIR_MI",
+        "CHR_NMM_HOT_000_FACE_MI",
+        "CHR_NMM_HOT_000_CHEST_MI",
+        "CHR_NMM_HUM_000_LEG_MI",
+        "CHR_NMM_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_HUM_100_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_BLS_000_HAIR_MI",
+        "CHR_NMM_ALL_001_FACE_MI",
+        "CHR_NMM_HUM_100_CHEST_MI",
+        "CHR_NMM_HUM_100_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_HUM_200_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_ALL_002_FACE_MI",
+        "CHR_NMM_HUM_200_CHEST_MI",
+        "CHR_NMM_HUM_200_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI",
+        "CHR_NMM_ALL_000_CUSTOM_SKIN_MI"
+    ],
+    "CDF_CHR_NMM_HUM_300_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_FAR_000_HAIR_MI",
+        "CHR_NMM_ALL_000_FACE_MI",
+        "CHR_NMM_HUM_300_CHEST_MI",
+        "CHR_NMM_HUM_300_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_MIG_000_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_ALL_002_FACE_MI",
+        "CHR_NMM_POO_100_CHEST_MI",
+        "CHR_NMM_POO_100_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI",
+        "CHR_NMM_ALL_000_CUSTOM_SKIN_MI"
+    ],
+    "CDF_CHR_NMM_PIR_000_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_PRI_000_HAIR_MI",
+        "CHR_NMM_PRI_000_FACE_MI",
+        "CHR_NMM_PRI_000_CHEST_MI",
+        "CHR_NMM_PRI_000_LEG_MI",
+        "CHR_NMM_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_PIR_100_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_HUM_000_HAIR_MI",
+        "CHR_NMM_ALL_002_FACE_MI",
+        "CHR_NMM_PRI_001_CHEST_MI",
+        "CHR_NMM_POO_100_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_PIR_200_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_HOT_000_FACE_MI",
+        "CHR_NMM_PRI_003_CHEST_MI",
+        "CHR_NMM_PRI_001_LEG_MI",
+        "CHR_NMM_HOT_000_HAND_L_MI",
+        "CHR_NMM_HOT_000_CUSTOM_SKIN_MI"
+    ],
+    "CDF_CHR_NMM_PIR_300_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_HUM_010_HAIR_MI",
+        "CHR_NMM_HOT_000_FACE_MI",
+        "CHR_NMM_PRI_002_CHEST_MI",
+        "CHR_NMM_ROU_200_LEG_MI",
+        "CHR_NMM_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_POO_000_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_POO_000_HAIR_MI",
+        "CHR_NMM_ALL_000_FACE_MI",
+        "CHR_NMM_POO_000_CHEST_MI",
+        "CHR_NMM_POO_000_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_POO_100_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_POO_000_HAIR_MI",
+        "CHR_NMM_ALL_002_FACE_MI",
+        "CHR_NMM_POO_100_CHEST_MI",
+        "CHR_NMM_POO_100_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_POO_200_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_POO_000_HAIR_MI",
+        "CHR_NMM_ALL_002_FACE_MI",
+        "CHR_NMM_POO_200_CHEST_MI",
+        "CHR_NMM_POO_200_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_POO_300_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_POO_000_HAIR_MI",
+        "CHR_NMM_ALL_001_FACE_MI",
+        "CHR_NMM_POO_300_CHEST_MI",
+        "CHR_NMM_POO_300_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_ROU_000_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_ROU_000_HAIR_MI",
+        "CHR_NMM_ALL_002_FACE_MI",
+        "CHR_NMM_ROU_000_CHEST_MI",
+        "CHR_NMM_ROU_000_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_ROU_100_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_POO_000_HAIR_MI",
+        "CHR_NMM_ALL_000_FACE_MI",
+        "CHR_NMM_ROU_100_CHEST_MI",
+        "CHR_NMM_ROU_100_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_ROU_200_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_HUM_010_HAIR_MI",
+        "CHR_NMM_ALL_001_FACE_MI",
+        "CHR_NMM_ROU_200_CHEST_MI",
+        "CHR_NMM_ROU_200_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMM_ROU_300_SYS_000": [
+        "CHR_BONE_NMM_ALL_000_MI",
+        "CHR_NMM_BLS_000_HAIR_MI",
+        "CHR_NMM_ALL_000_FACE_MI",
+        "CHR_NMM_ROU_300_CHEST_MI",
+        "CHR_NMM_ROU_300_LEG_MI",
+        "CHR_NMM_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_FIS_000_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_FIS_000_HAIR_MI",
+        "CHR_NMO_ALL_000_FACE_MI",
+        "CHR_NMO_FIS_000_CHEST_MI",
+        "CHR_NMO_FIS_000_LEG_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_GOF_000_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_HUM_000_HAIR_MI",
+        "CHR_NMO_ALL_000_FACE_MI",
+        "CHR_NMO_GOF_000_CHEST_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI",
+        "CHR_NMO_GOF_000_CUSTOM_HAT_MI"
+    ],
+    "CDF_CHR_NMO_GOF_001_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_FIS_000_HAIR_MI",
+        "CHR_NMO_ALL_000_FACE_MI",
+        "CHR_NMO_GOF_200_CHEST_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_GOF_002_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_HUM_100_HAIR_MI",
+        "CHR_NMO_ALL_001_FACE_MI",
+        "CHR_NMO_GOF_200_CHEST_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_GOF_100_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_ROU_000_HAIR_MI",
+        "CHR_NMO_ALL_000_FACE_MI",
+        "CHR_NMO_GOF_100_CHEST_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_HUM_000_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_HUM_000_HAIR_MI",
+        "CHR_NMO_ALL_000_FACE_MI",
+        "CHR_NMO_HUM_000_CHEST_MI",
+        "CHR_NMO_HUM_000_LEG_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_HUM_100_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_POO_000_HAIR_MI",
+        "CHR_NMO_ALL_000_FACE_MI",
+        "CHR_NMO_HUM_100_CHEST_MI",
+        "CHR_NMO_HUM_100_LEG_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_HUM_200_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_HUM_000_HAIR_MI",
+        "CHR_NMO_ALL_000_FACE_MI",
+        "CHR_NMO_HUM_200_CHEST_MI",
+        "CHR_NMO_HUM_200_LEG_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_HUM_300_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_FIS_000_HAIR_MI",
+        "CHR_NMO_ALL_000_FACE_MI",
+        "CHR_NMO_HUM_300_CHEST_MI",
+        "CHR_NMO_HUM_300_LEG_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_POO_000_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_POO_000_HAIR_MI",
+        "CHR_NMO_ALL_001_FACE_MI",
+        "CHR_NMO_POO_000_CHEST_MI",
+        "CHR_NMO_POO_000_LEG_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_POO_100_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_FIS_000_HAIR_MI",
+        "CHR_NMO_ALL_000_FACE_MI",
+        "CHR_NMO_POO_100_CHEST_MI",
+        "CHR_NMO_POO_100_LEG_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_POO_200_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_POO_000_HAIR_MI",
+        "CHR_NMO_ALL_001_FACE_MI",
+        "CHR_NMO_POO_200_CHEST_MI",
+        "CHR_NMO_POO_200_LEG_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_POO_300_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_HUM_000_HAIR_MI",
+        "CHR_NMO_ALL_000_FACE_MI",
+        "CHR_NMO_POO_300_CHEST_MI",
+        "CHR_NMO_POO_300_LEG_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_ROU_000_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_FIS_000_HAIR_MI",
+        "CHR_NMO_ALL_000_FACE_MI",
+        "CHR_NMO_ROU_000_CHEST_MI",
+        "CHR_NMO_ROU_000_LEG_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_ROU_100_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_FIS_000_HAIR_MI",
+        "CHR_NMO_ALL_000_FACE_MI",
+        "CHR_NMO_ROU_100_CHEST_MI",
+        "CHR_NMO_ROU_100_LEG_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_ROU_200_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_POO_000_HAIR_MI",
+        "CHR_NMO_ALL_001_FACE_MI",
+        "CHR_NMO_ROU_200_CHEST_MI",
+        "CHR_NMO_ROU_200_LEG_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMO_ROU_300_SYS_000": [
+        "CHR_BONE_NMO_ALL_000_MI",
+        "CHR_NMO_ROU_000_HAIR_MI",
+        "CHR_NMO_ALL_000_FACE_MI",
+        "CHR_NMO_ROU_300_CHEST_MI",
+        "CHR_NMO_ROU_300_LEG_MI",
+        "CHR_NMO_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_ARI_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ARI_000_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_ARI_000_CHEST_MI",
+        "CHR_NMY_ARI_000_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_ARI_100_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ART_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_ARI_100_CHEST_MI",
+        "CHR_NMY_ARI_100_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_ARI_200_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ROU_000_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_ARI_200_CHEST_MI",
+        "CHR_NMY_ARI_200_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_ARI_300_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ARI_000_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_ARI_300_CHEST_MI",
+        "CHR_NMY_ARI_300_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_ART_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ART_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_ART_000_CHEST_MI",
+        "CHR_NMY_ART_000_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_ASP_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ARI_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_ASP_000_CHEST_MI",
+        "CHR_NMY_ASP_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_BAN_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_BAN_000_HAIR_MI",
+        "CHR_NMY_HOT_000_FACE_MI",
+        "CHR_NMY_BAN_000_CHEST_MI",
+        "CHR_NMY_BAN_000_LEG_MI",
+        "CHR_NMY_BAN_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_BAN_001_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_PIR_002_HAIR_MI",
+        "CHR_NMY_HOT_000_FACE_MI",
+        "CHR_NMY_BAN_000_CHEST_MI",
+        "CHR_NMY_BAN_000_LEG_MI",
+        "CHR_NMY_BAN_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_BAN_100_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_BAN_001_HAIR_MI",
+        "CHR_NMY_HOT_000_FACE_MI",
+        "CHR_NMY_BAN_001_CHEST_MI",
+        "CHR_NMY_POO_000_LEG_MI",
+        "CHR_NMY_BAN_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_BAN_101_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_POO_000_HAIR_MI",
+        "CHR_NMY_HOT_000_FACE_MI",
+        "CHR_NMY_BAN_001_CHEST_MI",
+        "CHR_NMY_POO_000_LEG_MI",
+        "CHR_NMY_BAN_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_BAN_200_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_BAN_002_HAIR_MI",
+        "CHR_NMY_HOT_000_FACE_MI",
+        "CHR_NMY_BAN_002_CHEST_MI",
+        "CHR_NMY_BAN_000_LEG_MI",
+        "CHR_NMY_BAN_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_BAN_201_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_POO_010_HAIR_MI",
+        "CHR_NMY_HOT_000_FACE_MI",
+        "CHR_NMY_BAN_002_CHEST_MI",
+        "CHR_NMY_BAN_000_LEG_MI",
+        "CHR_NMY_BAN_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_BAN_300_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_BAN_003_HAIR_MI",
+        "CHR_NMY_HOT_000_FACE_MI",
+        "CHR_NMY_BAN_003_CHEST_MI",
+        "CHR_NMY_BAN_000_LEG_MI",
+        "CHR_NMY_BAN_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_BAN_400_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_BAN_004_HAIR_MI",
+        "CHR_NMY_HOT_000_FACE_MI",
+        "CHR_NMY_BAN_004_CHEST_MI",
+        "CHR_NMY_BAN_000_LEG_MI",
+        "CHR_NMY_BAN_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_COL_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ROU_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_COL_000_CHEST_MI",
+        "CHR_NMY_COL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_COL_100_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_POO_010_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_COL_100_CHEST_MI",
+        "CHR_NMY_COL_100_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_COL_200_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_POO_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_COL_200_CHEST_MI",
+        "CHR_NMY_COL_200_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_EEL_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_EEL_000_HAIR_MI",
+        "CHR_NMY_EEL_000_CHEST_MI",
+        "CHR_NMY_EEL_000_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_EEL_001_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ART_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_EEL_001_CHEST_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_EEL_100_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_EEL_000_HAIR_MI",
+        "CHR_NMY_EEL_100_CHEST_MI",
+        "CHR_NMY_EEL_000_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_EEL_101_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ARI_000_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_EEL_101_CHEST_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_EEL_200_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_EEL_000_HAIR_MI",
+        "CHR_NMY_EEL_200_CHEST_MI",
+        "CHR_NMY_EEL_000_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_EEL_201_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ARI_000_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_EEL_201_CHEST_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_EEL_300_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_EEL_000_HAIR_MI",
+        "CHR_NMY_EEL_300_CHEST_MI",
+        "CHR_NMY_EEL_000_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_EEL_301_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ART_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_EEL_301_CHEST_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_EMP_000_SYS_000": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_NMY_EMP_000_CHEST_MI"
+    ],
+    "CDF_CHR_NMY_GUR_000_SYS_000": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_NMY_GUR_000_HAIR_MI",
+        "CHR_NMY_GUR_000_CHEST_MI",
+        "CHR_NMY_GUR_000_LEG_MI"
+    ],
+    "CDF_CHR_NMY_GUR_001_SYS_000": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_NMY_GUR_001_CHEST_MI"
+    ],
+    "CDF_CHR_NMY_GUR_001_SYS_100": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_NMY_GUR_001_CHEST_MI"
+    ],
+    "CDF_CHR_NMY_HOT_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ROU_000_HAIR_MI",
+        "CHR_NMY_HOT_000_FACE_MI",
+        "CHR_NMY_HOT_000_CHEST_MI",
+        "CHR_NMY_HOT_000_LEG_MI",
+        "CHR_NMY_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_HOT_100_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_HUM_000_HAIR_MI",
+        "CHR_NMY_HOT_000_FACE_MI",
+        "CHR_NMY_HOT_100_CHEST_MI",
+        "CHR_NMY_HOT_100_LEG_MI",
+        "CHR_NMY_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_HOT_200_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ART_000_HAIR_MI",
+        "CHR_NMY_HOT_000_FACE_MI",
+        "CHR_NMY_HOT_200_CHEST_MI",
+        "CHR_NMY_ROU_000_LEG_MI",
+        "CHR_NMY_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_HUM_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_HUM_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_HUM_000_CHEST_MI",
+        "CHR_NMY_HUM_000_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_HUM_000_SYS_000_TEST": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_HUM_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_HUM_000_CHEST_MI",
+        "CHR_NMY_HUM_000_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_HUM_100_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ART_000_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_HUM_100_CHEST_MI",
+        "CHR_NMY_HUM_100_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_HUM_200_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ARI_000_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_HUM_200_CHEST_MI",
+        "CHR_NMY_HUM_200_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_HUM_300_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_HUM_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_HUM_300_CHEST_MI",
+        "CHR_NMY_HUM_300_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_MER_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_MER_000_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_MER_000_CHEST_MI",
+        "CHR_NMY_MER_000_LEG_MI",
+        "CHR_NMY_MER_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_MER_001_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_MER_001_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_MER_001_CHEST_MI",
+        "CHR_NMY_MER_000_LEG_MI",
+        "CHR_NMY_MER_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_MER_002_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_MER_002_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_MER_002_CHEST_MI",
+        "CHR_NMY_MER_002_LEG_MI",
+        "CHR_NMY_COL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_MER_003_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_MER_003_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_MER_003_CHEST_MI",
+        "CHR_NMY_MER_000_LEG_MI",
+        "CHR_NMY_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_MER_004_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_MER_004_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_MER_004_CHEST_MI",
+        "CHR_NMY_MER_002_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_PIR_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ROU_010_HAIR_MI",
+        "CHR_NMY_HOT_000_FACE_MI",
+        "CHR_NMY_PIR_000_CHEST_MI",
+        "CHR_NMY_PIR_000_LEG_MI",
+        "CHR_NMY_HOT_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_PIR_001_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ART_000_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_PIR_001_CHEST_MI",
+        "CHR_NMY_ROU_300_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_PIR_002_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_PIR_002_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_PIR_002_CHEST_MI",
+        "CHR_NMY_PIR_000_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_PIR_003_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_POO_010_HAIR_MI",
+        "CHR_NMY_HOT_000_FACE_MI",
+        "CHR_NMY_PIR_003_CHEST_MI",
+        "CHR_NMY_ROU_200_LEG_MI",
+        "CHR_NMY_ASP_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_POO_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_POO_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_POO_000_CHEST_MI",
+        "CHR_NMY_POO_000_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_POO_100_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_POO_010_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_POO_100_CHEST_MI",
+        "CHR_NMY_POO_100_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_POO_200_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ART_000_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_POO_200_CHEST_MI",
+        "CHR_NMY_POO_200_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_POO_300_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ROU_000_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_POO_300_CHEST_MI",
+        "CHR_NMY_POO_300_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_ROU_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ROU_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_ROU_000_CHEST_MI",
+        "CHR_NMY_ROU_000_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_ROU_100_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ROU_010_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_ROU_100_CHEST_MI",
+        "CHR_NMY_ROU_100_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_ROU_200_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_ARI_000_HAIR_MI",
+        "CHR_NMY_ALL_000_FACE_MI",
+        "CHR_NMY_ROU_200_CHEST_MI",
+        "CHR_NMY_ROU_200_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_NMY_ROU_300_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_NMY_POO_000_HAIR_MI",
+        "CHR_NMY_ALL_001_FACE_MI",
+        "CHR_NMY_ROU_300_CHEST_MI",
+        "CHR_NMY_ROU_300_LEG_MI",
+        "CHR_NMY_ALL_000_HAND_L_MI"
+    ],
+    "CDF_CHR_OSC_GUR_000_SYS_000": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_OSC_GUR_000_HAIR_MI",
+        "CHR_OSC_GUR_000_FACE_MI",
+        "CHR_OSC_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_OSC_GUR_000_SYS_100": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_OSC_GUR_000_HAIR_MI",
+        "CHR_OSC_GUR_000_FACE_MI",
+        "CHR_OSC_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_OSC_GUR_001_SYS_000": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_OSC_GUR_001_HAIR_MI",
+        "CHR_OSC_GUR_001_FACE_MI",
+        "CHR_OSC_GUR_001_CHEST_MI",
+        "CHR_OSC_GUR_002_CUSTOM_BAND_MI"
+    ],
+    "CDF_CHR_OSC_GUR_001_SYS_100": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_OSC_GUR_001_HAIR_MI",
+        "CHR_OSC_GUR_001_FACE_MI",
+        "CHR_OSC_GUR_001_CHEST_MI",
+        "CHR_OSC_GUR_002_CUSTOM_BAND_MI"
+    ],
+    "CDF_CHR_OSC_GUR_002_SYS_000": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_OSC_GUR_000_HAIR_MI",
+        "CHR_OSC_GUR_002_FACE_MI",
+        "CHR_OSC_GUR_000_CHEST_MI",
+        "CHR_OSC_GUR_002_CUSTOM_BAND_MI"
+    ],
+    "CDF_CHR_OSC_GUR_002_SYS_100": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_OSC_GUR_000_HAIR_MI",
+        "CHR_OSC_GUR_000_FACE_MI",
+        "CHR_OSC_GUR_000_CHEST_MI",
+        "CHR_OSC_GUR_002_CUSTOM_BAND_MI"
+    ],
+    "CDF_CHR_OSC_GUR_003_SYS_000": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_OSC_GUR_000_HAIR_MI",
+        "CHR_OSC_GUR_002_FACE_MI",
+        "CHR_OSC_GUR_002_CHEST_MI",
+        "CHR_OSC_GUR_002_CUSTOM_BAND_MI"
+    ],
+    "CDF_CHR_OSC_GUR_003_SYS_100": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_OSC_GUR_000_HAIR_MI",
+        "CHR_OSC_GUR_002_FACE_MI",
+        "CHR_OSC_GUR_002_CHEST_MI",
+        "CHR_OSC_GUR_002_CUSTOM_BAND_MI"
+    ],
+    "CDF_CHR_PAR_HUM_000_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_PAR_HUM_000_HAIR_MI",
+        "CHR_PAR_HUM_000_FACE_MI",
+        "CHR_PAR_HUM_000_NECK_MI",
+        "CHR_PAR_HUM_000_CHEST_MI"
+    ],
+    "CDF_CHR_PAR_HUM_001_SYS_000": [
+        "CHR_BONE_NMY_ALL_000_MI",
+        "CHR_PAR_HUM_000_HAIR_MI",
+        "CHR_PAR_HUM_000_FACE_MI",
+        "CHR_PAR_HUM_000_NECK_MI",
+        "CHR_PAR_HUM_001_CHEST_MI"
+    ],
+    "CDF_CHR_PGN_000_SYS_000": [
+        "CHR_BONE_PGN_000_MI",
+        "CHR_PGN_000_CHEST_MI"
+    ],
+    "CDF_CHR_PGN_001_SYS_000": [
+        "CHR_BONE_PGN_001_MI",
+        "CHR_PGN_001_CHEST_MI"
+    ],
+    "CDF_CHR_PGY_000_SYS_000": [
+        "CHR_BONE_PGY_000_MI",
+        "CHR_PGY_000_CHEST_MI"
+    ],
+    "CDF_CHR_PGY_001_SYS_000": [
+        "CHR_BONE_PGY_000_MI",
+        "CHR_PGY_001_CHEST_MI"
+    ],
+    "CDF_CHR_RAB_000_SYS_000": [
+        "CHR_BONE_RAB_000_MI",
+        "CHR_RAB_000_CHEST_MI"
+    ],
+    "CDF_CHR_RAB_100_SYS_000": [
+        "CHR_BONE_RAB_000_MI",
+        "CHR_RAB_100_CHEST_MI"
+    ],
+    "CDF_CHR_RAB_200_SYS_000": [
+        "CHR_BONE_RAB_000_MI",
+        "CHR_RAB_200_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_000_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_000_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_000_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_000_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_000_SYS_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_000_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_000_SYS_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_000_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_000_TEST_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_000_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_000_TEST_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_000_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_000_TEST_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_000_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_000_TEST_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_000_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_002_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_002_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_002_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_002_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_002_SYS_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_002_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_002_SYS_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_002_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_003_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_003_00_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_003_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_003_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_003_SYS_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_003_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_003_SYS_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_003_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_003_SYS_TEST": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_003_00_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_005_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_005_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_005_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_005_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI",
+        "CHR_ROK_HUM_005_CUSTOM_MI"
+    ],
+    "CDF_CHR_ROK_HUM_005_SYS_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_005_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI",
+        "CHR_ROK_HUM_005_CUSTOM_MI"
+    ],
+    "CDF_CHR_ROK_HUM_005_SYS_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_005_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI",
+        "CHR_ROK_HUM_005_CUSTOM_MI"
+    ],
+    "CDF_CHR_ROK_HUM_006_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_006_00_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_006_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_006_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_006_SYS_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_006_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_006_SYS_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_006_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_007_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_007_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_007_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_007_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_007_SYS_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_007_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_007_SYS_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_007_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_010_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_010_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_010_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_010_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_010_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_010_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_010_SYS_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_010_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_010_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_010_SYS_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_010_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_010_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_011_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_011_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_011_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_011_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_011_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_011_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_011_SYS_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_011_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_011_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_011_SYS_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_011_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_011_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_012_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_012_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_012_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_012_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_012_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_012_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_012_SYS_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_012_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_012_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_012_SYS_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_012_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_012_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_013_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_013_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_013_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_013_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_013_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_013_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_013_SYS_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_013_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_013_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_013_SYS_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_013_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_013_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_014_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_014_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_014_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_014_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_014_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_014_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_014_SYS_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_014_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_014_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_014_SYS_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_014_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_014_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_015_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_015_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_015_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_015_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_015_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_015_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_015_SYS_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_015_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_015_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_015_SYS_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_015_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_010_NECK_MI",
+        "CHR_ROK_HUM_015_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_100_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_100_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_100_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_100_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_100_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_100_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_100_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_100_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_100_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_101_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_101_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_101_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_101_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_101_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_101_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_101_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_101_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_101_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_102_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_102_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_102_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_102_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_102_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_102_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_102_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_102_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_102_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_105_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_105_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_105_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_105_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_105_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_105_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_105_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_105_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_105_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_108_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_108_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_108_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_108_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_108_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_108_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_108_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_108_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_108_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_110_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_110_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_110_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_110_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_110_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_110_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_110_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_110_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_110_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_111_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_111_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_111_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_111_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_111_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_111_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_111_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_111_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_111_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_120_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_120_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_120_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_120_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_120_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_120_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_120_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_120_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_120_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_121_ALL_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_121_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_121_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_121_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_121_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_121_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_121_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_121_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_121_CHEST_MI"
+    ],
+    "CDF_CHR_ROK_HUM_200_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_200_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_200_SYS_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_200_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_200_SYS_002": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_200_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_ROK_HUM_200_SYS_003": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ROK_HUM_000_HAIR_MI",
+        "CHR_ROK_HUM_000_FACE_MI",
+        "CHR_ROK_HUM_200_CHEST_MI",
+        "CHR_ROK_HUM_000_CUSTOM_EYE_MI"
+    ],
+    "CDF_CHR_SBD_000_SYS_000": [
+        "CHR_BONE_SBD_000_MI",
+        "CHR_SBD_000_CHEST_MI"
+    ],
+    "CDF_CHR_SBD_001_SYS_000": [
+        "CHR_BONE_SBD_000_MI",
+        "CHR_SBD_001_CHEST_MI"
+    ],
+    "CDF_CHR_SBD_002_SYS_000": [
+        "CHR_BONE_SBD_000_MI",
+        "CHR_SBD_002_CHEST_MI"
+    ],
+    "CDF_CHR_SHE_000_SYS_000": [
+        "CHR_BONE_SHE_000_MI",
+        "CHR_SHE_000_CHEST_MI"
+    ],
+    "CDF_CHR_SHI_GUR_000_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_SHI_GUR_000_FACE_MI",
+        "CHR_SHI_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_SHI_GUR_000_SYS_100": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_SHI_GUR_000_FACE_MI",
+        "CHR_SHI_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_SHI_GUR_050_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_SHI_GUR_000_FACE_MI",
+        "CHR_SHI_GUR_050_CHEST_MI"
+    ],
+    "CDF_CHR_SQU_000_SYS_000": [
+        "CHR_BONE_SQU_000_MI",
+        "CHR_SQU_000_CHEST_MI"
+    ],
+    "CDF_CHR_TAB_HUM_000_SYS_000": [
+        "CHR_BONE_NFO_ALL_000_MI",
+        "CHR_TAB_HUM_000_FACE_MI",
+        "CHR_TAB_HUM_000_CHEST_MI"
+    ],
+    "CDF_CHR_TER_GUR_000_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_TER_GUR_000_FACE_MI",
+        "CHR_TER_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_TER_GUR_000_SYS_100": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_TER_GUR_000_FACE_MI",
+        "CHR_TER_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_TER_GUR_000_TEST_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_TER_GUR_000_FACE_MI",
+        "CHR_TER_GUR_000_CHEST_MI"
+    ],
+    "CDF_CHR_TER_UNC_000_SYS_000": [
+        "CHR_BONE_TER_UNC_ALL_MI",
+        "CHR_TER_UNC_000_FACE_MI",
+        "CHR_TER_UNC_000_CHEST_MI"
+    ],
+    "CDF_CHR_TER_UNC_000_SYS_100": [
+        "CHR_BONE_TER_UNC_ALL_MI",
+        "CHR_TER_UNC_000_FACE_MI",
+        "CHR_TER_UNC_000_CHEST_MI"
+    ],
+    "CDF_CHR_TER_UNC_000_SYS_101": [
+        "CHR_BONE_TER_UNC_ALL_MI",
+        "CHR_TER_UNC_000_FACE_MI",
+        "CHR_TER_UNC_001_CHEST_MI"
+    ],
+    "CDF_CHR_TER_UNC_000_TEST_000": [
+        "CHR_BONE_TER_UNC_ALL_MI",
+        "CHR_TER_UNC_000_FACE_MI",
+        "CHR_TER_UNC_000_CHEST_MI"
+    ],
+    "CDF_CHR_UNC_BRD_001_SYS_000": [
+        "CHR_BONE_HAW_000_MI",
+        "CHR_UNC_BRD_001_CHEST_MI"
+    ],
+    "CDF_CHR_UNC_BRD_010_SYS_000": [
+        "CHR_BONE_HAW_001_MI",
+        "CHR_UNC_BRD_010_CHEST_MI"
+    ],
+    "CDF_CHR_UNC_DOG_004_SYS_000": [
+        "CHR_BONE_DOG_000_MI",
+        "CHR_UNC_DOG_004_FACE_MI",
+        "CHR_UNC_DOG_004_CHEST_MI"
+    ],
+    "CDF_CHR_UNC_DOG_005_SYS_000": [
+        "CHR_BONE_DOG_000_MI",
+        "CHR_UNC_DOG_005_FACE_MI",
+        "CHR_UNC_DOG_005_CHEST_MI"
+    ],
+    "CDF_CHR_UNC_HUM_002_SYS_000": [
+        "CHR_BONE_NFC_ALL_000_MI",
+        "CHR_UNC_HUM_002_FACE_MI",
+        "CHR_UNC_HUM_002_CHEST_MI"
+    ],
+    "CDF_CHR_UNC_HUM_003_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_UNC_HUM_003_FACE_MI",
+        "CHR_UNC_HUM_003_CHEST_MI"
+    ],
+    "CDF_CHR_VEL_HUM_000_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_000_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM1_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_000_TEST_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_000_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM1_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_000_TEST_001": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_000_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM1_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_001_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_001_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_001_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_001_TEST_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_001_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_001_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_001_TEST_100": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_001_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_001_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_002_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_002_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM1_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_003_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_003_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_003_SYS_001": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_003_001_CHEST_MI"
+    ],
+    "CDF_CHR_VEL_HUM_003_SYS_TEST": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_003_001_CHEST_MI"
+    ],
+    "CDF_CHR_VEL_HUM_004_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_004_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM2_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_004_TEST_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_004_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM2_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_005_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_005_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_006_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_006_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_007_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_007_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_010_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_010_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_010_NECK_MI",
+        "CHR_VEL_HUM_010_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_011_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_011_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_010_NECK_MI",
+        "CHR_VEL_HUM_011_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_012_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_012_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_010_NECK_MI",
+        "CHR_VEL_HUM_012_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_013_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_013_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_010_NECK_MI",
+        "CHR_VEL_HUM_013_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_014_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_014_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_010_NECK_MI",
+        "CHR_VEL_HUM_014_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_015_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_015_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_010_NECK_MI",
+        "CHR_VEL_HUM_015_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_100_ALL_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_100_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_100_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_100_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_100_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_100_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_101_ALL_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_101_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_101_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_101_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_101_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_101_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_102_ALL_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_102_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_102_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_102_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_102_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_102_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_103_ALL_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_103_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_103_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_103_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_103_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_103_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_104_ALL_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_104_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_104_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_104_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_104_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_104_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_105_ALL_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_105_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_105_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_105_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_105_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_105_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_106_ALL_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_106_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_106_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_106_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_106_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_106_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_107_ALL_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_107_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_107_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_107_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_107_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_107_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_108_ALL_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_108_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_108_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_108_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_108_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_108_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_110_ALL_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_110_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_110_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_110_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_110_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_110_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_111_ALL_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_101_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_111_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_111_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_101_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_111_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_120_ALL_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_120_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_120_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_120_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_120_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_120_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_121_ALL_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_101_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_121_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_121_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_101_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_121_CHEST_MI",
+        "CHR_VEL_HUM_000_CUSTOM_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_200_SYS_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_200_CHEST_MI",
+        "CHR_VEL_HUM_200_CUSTOM0_HAND_MI"
+    ],
+    "CDF_CHR_VEL_HUM_200_TEST_000": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_HAIR_MI",
+        "CHR_VEL_HUM_000_FACE_MI",
+        "CHR_VEL_HUM_200_CHEST_MI",
+        "CHR_VEL_HUM_200_CUSTOM0_HAND_MI"
+    ],
+    "CDF_CHR_ZAB_TEN_000_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ZAB_TEN_020_HAIR_MI",
+        "CHR_ZAB_TEN_000_FACE_MI",
+        "CHR_ZAB_TEN_000_CHEST_MI",
+        "CHR_ZAB_TEN_000_LEG_LO_REDUCT",
+        "CHR_ZAB_TEN_000_HAND_L_MI",
+        "CHR_ZAB_TEN_000_HAND_R_MI"
+    ],
+    "CDF_CHR_ZAB_TEN_000_TEST_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ZAB_TEN_000_HAIR_MI",
+        "CHR_ZAB_TEN_000_FACE_MI",
+        "CHR_ZAB_TEN_000_CHEST_MI",
+        "CHR_ZAB_TEN_000_LEG_MI",
+        "CHR_ZAB_TEN_000_HAND_L_MI",
+        "CHR_ZAB_TEN_000_HAND_R_MI"
+    ],
+    "CDF_CHR_ZAB_TEN_000_TEST_001": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ZAB_TEN_000_HAIR_MI",
+        "CHR_ZAB_TEN_000_FACE_MI",
+        "CHR_ZAB_TEN_000_CHEST_MI",
+        "CHR_ZAB_TEN_000_LEG_MI",
+        "CHR_ZAB_TEN_000_HAND_L_MI",
+        "CHR_ZAB_TEN_000_HAND_R_MI"
+    ],
+    "CDF_CHR_ZAB_TEN_500_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ZAB_TEN_500_HAIR_MI",
+        "CHR_ZAB_TEN_500_FACE_MI",
+        "CHR_ZAB_TEN_500_CHEST_MI"
+    ],
+    "CDF_CHR_ZAB_TEN_500_SYS_100": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ZAB_TEN_500_HAIR_MI",
+        "CHR_ZAB_TEN_500_FACE_MI",
+        "CHR_ZAB_TEN_500_CHEST_MI"
+    ],
+    "CDF_CHR_ZAB_TEN_550_SYS_000": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ZAB_TEN_500_HAIR_MI",
+        "CHR_ZAB_TEN_500_FACE_MI",
+        "CHR_ZAB_TEN_550_CHEST_MI"
+    ],
+    "CDF_CHR_ZAB_TEN_550_SYS_100": [
+        "CHR_BONE_DEZ_ALL_000_MI",
+        "CHR_ZAB_TEN_500_HAIR_MI",
+        "CHR_ZAB_TEN_500_FACE_MI",
+        "CHR_ZAB_TEN_550_CHEST_MI"
+    ],
+    "CDF_MON_AIF_000_BTL_000": [
+        "MON_BONE_AIF_000_MI",
+        "MON_AIF_000_FACE_MI",
+        "MON_AIF_000_CHEST_MI"
+    ],
+    "CDF_MON_AIF_001_BTL_000": [
+        "MON_BONE_AIF_000_MI",
+        "MON_AIF_001_CHEST_MI"
+    ],
+    "CDF_MON_ARM_000_BTL_000": [
+        "MON_BONE_ARM_000_MI",
+        "MON_ARM_000_CHEST_MI"
+    ],
+    "CDF_MON_ARM_001_BTL_000": [
+        "MON_BONE_ARM_000_MI",
+        "MON_ARM_001_CHEST_MI"
+    ],
+    "CDF_MON_ARM_002_BTL_000": [
+        "MON_BONE_ARM_000_MI",
+        "MON_ARM_002_CHEST_MI"
+    ],
+    "CDF_MON_ARM_100_BTL_000": [
+        "MON_BONE_ARM_000_MI",
+        "MON_ARM_100_CHEST_MI"
+    ],
+    "CDF_MON_ARM_101_BTL_000": [
+        "MON_BONE_ARM_000_MI",
+        "MON_ARM_101_CHEST_MI"
+    ],
+    "CDF_MON_ASU_000_BTL_000": [
+        "MON_BONE_ASU_000_MI",
+        "MON_ASU_000_CHEST_MI"
+    ],
+    "CDF_MON_ASU_001_BTL_000": [
+        "MON_BONE_ASU_000_MI",
+        "MON_ASU_001_CHEST_MI"
+    ],
+    "CDF_MON_ASU_002_BTL_000": [
+        "MON_BONE_ASU_000_MI",
+        "MON_ASU_002_CHEST_MI"
+    ],
+    "CDF_MON_AXE_000_BTL_000": [
+        "MON_BONE_AXE_000_MI",
+        "MON_AXE_000_CHEST_MI"
+    ],
+    "CDF_MON_AXE_001_BTL_000": [
+        "MON_BONE_AXE_000_MI",
+        "MON_AXE_001_CHEST_MI"
+    ],
+    "CDF_MON_AXE_002_BTL_000": [
+        "MON_BONE_AXE_000_MI",
+        "MON_AXE_002_CHEST_MI"
+    ],
+    "CDF_MON_AXE_003_BTL_000": [
+        "MON_BONE_AXE_000_MI",
+        "MON_AXE_003_CHEST_MI"
+    ],
+    "CDF_MON_AXE_004_BTL_000": [
+        "MON_BONE_AXE_000_MI",
+        "MON_AXE_004_CHEST_MI"
+    ],
+    "CDF_MON_BAL_000_BTL_000": [
+        "MON_BONE_BAL_000_MI",
+        "MON_BAL_010_CHEST_MI"
+    ],
+    "CDF_MON_BAT_000_BTL_000": [
+        "MON_BONE_BAT_000_MI",
+        "MON_BAT_000_CHEST_MI"
+    ],
+    "CDF_MON_BAT_001_BTL_000": [
+        "MON_BONE_BAT_000_MI",
+        "MON_BAT_001_CHEST_MI"
+    ],
+    "CDF_MON_BAT_002_BTL_000": [
+        "MON_BONE_BAT_000_MI",
+        "MON_BAT_002_CHEST_MI"
+    ],
+    "CDF_MON_BAT_100_BTL_000": [
+        "MON_BONE_BAT_000_MI",
+        "MON_BAT_100_CHEST_MI"
+    ],
+    "CDF_MON_BAT_200_BTL_000": [
+        "MON_BONE_BAT_000_MI",
+        "MON_BAT_200_CHEST_MI"
+    ],
+    "CDF_MON_BDR_000_BTL_000": [
+        "MON_BONE_BDR_000_MI",
+        "MON_BDR_000_CHEST_MI"
+    ],
+    "CDF_MON_BDR_001_BTL_000": [
+        "MON_BONE_BDR_000_MI",
+        "MON_BDR_001_CHEST_MI"
+    ],
+    "CDF_MON_BLN_000_BTL_000": [
+        "MON_BONE_BLN_000_MI",
+        "MON_BLN_000_CHEST_MI"
+    ],
+    "CDF_MON_BOA_000_BTL_000": [
+        "MON_BONE_BOA_000_MI",
+        "MON_BOA_000_CHEST_MI"
+    ],
+    "CDF_MON_BOA_001_BTL_000": [
+        "MON_BONE_BOA_000_MI",
+        "MON_BOA_001_CHEST_MI"
+    ],
+    "CDF_MON_BOA_002_BTL_000": [
+        "MON_BONE_BOA_000_MI",
+        "MON_BOA_002_CHEST_MI"
+    ],
+    "CDF_MON_BOA_003_BTL_000": [
+        "MON_BONE_BOA_000_MI",
+        "MON_BOA_003_CHEST_MI"
+    ],
+    "CDF_MON_BOA_004_BTL_000": [
+        "MON_BONE_BOA_000_MI",
+        "MON_BOA_004_CHEST_MI"
+    ],
+    "CDF_MON_BOA_005_BTL_000": [
+        "MON_BONE_BOA_000_MI",
+        "MON_BOA_005_CHEST_MI"
+    ],
+    "CDF_MON_BOA_100_BTL_000": [
+        "MON_BONE_BOA_000_MI",
+        "MON_BOA_100_CHEST_MI"
+    ],
+    "CDF_MON_BOA_104_BTL_000": [
+        "MON_BONE_BOA_000_MI",
+        "MON_BOA_104_CHEST_MI"
+    ],
+    "CDF_MON_CEN_000_BTL_000": [
+        "MON_BONE_CEN_000_MI",
+        "MON_CEN_000_CHEST_MI"
+    ],
+    "CDF_MON_CEN_001_BTL_000": [
+        "MON_BONE_CEN_000_MI",
+        "MON_CEN_001_CHEST_MI"
+    ],
+    "CDF_MON_CEN_002_BTL_000": [
+        "MON_BONE_CEN_000_MI",
+        "MON_CEN_002_CHEST_MI"
+    ],
+    "CDF_MON_CEN_003_BTL_000": [
+        "MON_BONE_CEN_000_MI",
+        "MON_CEN_003_CHEST_MI"
+    ],
+    "CDF_MON_CEN_102_BTL_000": [
+        "MON_BONE_CEN_000_MI",
+        "MON_CEN_102_CHEST_MI"
+    ],
+    "CDF_MON_CHI_000_BTL_000": [
+        "MON_BONE_CHI_000_MI",
+        "MON_CHI_000_CHEST_MI"
+    ],
+    "CDF_MON_CHI_001_BTL_000": [
+        "MON_BONE_CHI_000_MI",
+        "MON_CHI_001_CHEST_MI"
+    ],
+    "CDF_MON_CHI_002_BTL_000": [
+        "MON_BONE_CHI_000_MI",
+        "MON_CHI_002_CHEST_MI"
+    ],
+    "CDF_MON_DEV_000_BTL_000": [
+        "MON_BONE_DEV_000_MI",
+        "MON_DEV_000_CHEST_MI"
+    ],
+    "CDF_MON_DEV_001_BTL_000": [
+        "MON_BONE_DEV_000_MI",
+        "MON_DEV_001_CHEST_MI"
+    ],
+    "CDF_MON_DEV_002_BTL_000": [
+        "MON_BONE_DEV_000_MI",
+        "MON_DEV_002_FACE_MI",
+        "MON_DEV_002_CHEST_MI"
+    ],
+    "CDF_MON_DEV_003_BTL_000": [
+        "MON_BONE_DEV_000_MI",
+        "MON_DEV_003_CHEST_MI"
+    ],
+    "CDF_MON_DEV_004_BTL_000": [
+        "MON_BONE_DEV_000_MI",
+        "MON_DEV_004_FACE_MI",
+        "MON_DEV_004_CHEST_MI"
+    ],
+    "CDF_MON_DEV_100_BTL_000": [
+        "MON_BONE_DEV_000_MI",
+        "MON_DEV_100_CHEST_MI"
+    ],
+    "CDF_MON_DPU_000_BTL_000": [
+        "MON_BONE_DPU_000_MI",
+        "MON_DPU_000_CHEST_MI"
+    ],
+    "CDF_MON_DPU_001_BTL_000": [
+        "MON_BONE_DPU_000_MI",
+        "MON_DPU_001_CHEST_MI"
+    ],
+    "CDF_MON_DPU_002_BTL_000": [
+        "MON_BONE_DPU_000_MI",
+        "MON_DPU_002_CHEST_MI"
+    ],
+    "CDF_MON_DUL_000_BTL_000": [
+        "MON_BONE_DUL_000_MI",
+        "MON_DUL_000_CHEST_MI"
+    ],
+    "CDF_MON_DUL_001_BTL_000": [
+        "MON_BONE_DUL_000_MI",
+        "MON_DUL_001_CHEST_MI"
+    ],
+    "CDF_MON_FAI_000_BTL_000": [
+        "MON_BONE_DEV_000_MI",
+        "MON_FAI_000_CHEST_MI"
+    ],
+    "CDF_MON_FAI_001_BTL_000": [
+        "MON_BONE_DEV_000_MI",
+        "MON_FAI_001_CHEST_MI"
+    ],
+    "CDF_MON_FAI_002_BTL_000": [
+        "MON_BONE_DEV_000_MI",
+        "MON_FAI_002_CHEST_MI"
+    ],
+    "CDF_MON_FAI_003_BTL_000": [
+        "MON_BONE_DEV_000_MI",
+        "MON_FAI_003_FACE_MI",
+        "MON_FAI_003_CHEST_MI"
+    ],
+    "CDF_MON_FAI_004_BTL_000": [
+        "MON_BONE_DEV_000_MI",
+        "MON_FAI_004_CHEST_MI"
+    ],
+    "CDF_MON_GIB_000_BTL_000": [
+        "MON_BONE_GIB_000_MI",
+        "MON_GIB_000_CHEST_MI"
+    ],
+    "CDF_MON_GIB_001_BTL_000": [
+        "MON_BONE_GIB_000_MI",
+        "MON_GIB_001_CHEST_MI"
+    ],
+    "CDF_MON_GIB_002_BTL_000": [
+        "MON_BONE_GIB_000_MI",
+        "MON_GIB_002_CHEST0_MI"
+    ],
+    "CDF_MON_GIB_003_BTL_000": [
+        "MON_BONE_GIB_000_MI",
+        "MON_GIB_003_CHEST_MI"
+    ],
+    "CDF_MON_GIB_100_BTL_000": [
+        "MON_BONE_GIB_000_MI",
+        "MON_GIB_100_CHEST_MI"
+    ],
+    "CDF_MON_GIN_000_BTL_000": [
+        "MON_BONE_GIN_000_MI",
+        "MON_GIN_000_CHEST_MI"
+    ],
+    "CDF_MON_GIN_001_BTL_000": [
+        "MON_BONE_GIN_000_MI",
+        "MON_GIN_001_CHEST_MI"
+    ],
+    "CDF_MON_GIN_002_BTL_000": [
+        "MON_BONE_GIN_000_MI",
+        "MON_GIN_002_CHEST_MI"
+    ],
+    "CDF_MON_GNO_000_BTL_000": [
+        "MON_BONE_GNO_000_MI",
+        "MON_GNO_000_CHEST_MI"
+    ],
+    "CDF_MON_GNO_001_BTL_000": [
+        "MON_BONE_GNO_000_MI",
+        "MON_GNO_001_CHEST_MI"
+    ],
+    "CDF_MON_GNO_002_BTL_000": [
+        "MON_BONE_GNO_000_MI",
+        "MON_GNO_002_CHEST_MI"
+    ],
+    "CDF_MON_GNO_003_BTL_000": [
+        "MON_BONE_GNO_000_MI",
+        "MON_GNO_003_CHEST_MI"
+    ],
+    "CDF_MON_GNO_100_BTL_000": [
+        "MON_BONE_GNO_000_MI",
+        "MON_GNO_100_CHEST_MI"
+    ],
+    "CDF_MON_GOL_000_BTL_000": [
+        "MON_BONE_TRO_000_MI",
+        "MON_GOL_000_CHEST_MI"
+    ],
+    "CDF_MON_GOL_100_BTL_000": [
+        "MON_BONE_TRO_000_MI",
+        "MON_GOL_100_CHEST_MI"
+    ],
+    "CDF_MON_GOL_200_BTL_000": [
+        "MON_BONE_TRO_000_MI",
+        "MON_GOL_200_CHEST_MI"
+    ],
+    "CDF_MON_GOL_300_BTL_000": [
+        "MON_BONE_TRO_000_MI",
+        "MON_GOL_300_CHEST_MI"
+    ],
+    "CDF_MON_GOL_400_BTL_000": [
+        "MON_BONE_TRO_000_MI",
+        "MON_GOL_400_CHEST_MI"
+    ],
+    "CDF_MON_HAR_000_BTL_000": [
+        "MON_BONE_HAR_000_MI",
+        "MON_HAR_000_CHEST_MI"
+    ],
+    "CDF_MON_HAR_001_BTL_000": [
+        "MON_BONE_HAR_000_MI",
+        "MON_HAR_001_CHEST_MI"
+    ],
+    "CDF_MON_HAR_002_BTL_000": [
+        "MON_BONE_HAR_000_MI",
+        "MON_HAR_002_CHEST_MI"
+    ],
+    "CDF_MON_HAR_003_BTL_000": [
+        "MON_BONE_HAR_000_MI",
+        "MON_HAR_003_CHEST_MI"
+    ],
+    "CDF_MON_HAR_004_BTL_000": [
+        "MON_BONE_HAR_000_MI",
+        "MON_HAR_004_CHEST_MI"
+    ],
+    "CDF_MON_HAW_000_BTL_000": [
+        "MON_BONE_HAW_000_MI",
+        "MON_HAW_000_CHEST_MI"
+    ],
+    "CDF_MON_HAW_001_BTL_000": [
+        "MON_BONE_HAW_000_MI",
+        "MON_HAW_001_CHEST_MI"
+    ],
+    "CDF_MON_HAW_002_BTL_000": [
+        "MON_BONE_HAW_000_MI",
+        "MON_HAW_002_CHEST_MI"
+    ],
+    "CDF_MON_HAW_003_BTL_000": [
+        "MON_BONE_HAW_000_MI",
+        "MON_HAW_003_CHEST_MI"
+    ],
+    "CDF_MON_HAW_004_BTL_000": [
+        "MON_BONE_HAW_000_MI",
+        "MON_HAW_004_CHEST_MI"
+    ],
+    "CDF_MON_INS_000_BTL_000": [
+        "MON_BONE_INS_000_MI",
+        "MON_INS_000_CHEST_MI"
+    ],
+    "CDF_MON_INS_001_BTL_000": [
+        "MON_BONE_INS_000_MI",
+        "MON_INS_001_CHEST_MI"
+    ],
+    "CDF_MON_INS_002_BTL_000": [
+        "MON_BONE_INS_000_MI",
+        "MON_INS_002_CHEST_MI"
+    ],
+    "CDF_MON_INS_003_BTL_000": [
+        "MON_BONE_INS_000_MI",
+        "MON_INS_003_CHEST_MI"
+    ],
+    "CDF_MON_INS_004_BTL_000": [
+        "MON_BONE_INS_000_MI",
+        "MON_INS_004_CHEST_MI"
+    ],
+    "CDF_MON_INS_101_BTL_000": [
+        "MON_BONE_INS_000_MI",
+        "MON_INS_101_CHEST_MI"
+    ],
+    "CDF_MON_KER_000_BTL_000": [
+        "MON_BONE_KER_000_MI",
+        "MON_KER_000_CHEST_MI"
+    ],
+    "CDF_MON_KER_001_BTL_000": [
+        "MON_BONE_KER_000_MI",
+        "MON_KER_001_CHEST_MI"
+    ],
+    "CDF_MON_LAM_000_BTL_000": [
+        "MON_BONE_MED_000_MI",
+        "MON_LAM_000_CHEST_MI"
+    ],
+    "CDF_MON_LAM_000_BTL_0000": [
+        "MON_BONE_MED_000_MI",
+        "MON_LAM_000_CHEST_MI"
+    ],
+    "CDF_MON_LAM_001_BTL_000": [
+        "MON_BONE_MED_000_MI",
+        "MON_LAM_001_CHEST_MI"
+    ],
+    "CDF_MON_LAM_002_BTL_000": [
+        "MON_BONE_MED_000_MI",
+        "MON_LAM_002_CHEST_MI"
+    ],
+    "CDF_MON_LAM_003_BTL_000": [
+        "MON_BONE_MED_000_MI",
+        "MON_LAM_003_FACE_MI",
+        "MON_LAM_003_CHEST_MI"
+    ],
+    "CDF_MON_LAM_004_BTL_000": [
+        "MON_BONE_MED_000_MI",
+        "MON_LAM_004_CHEST_MI"
+    ],
+    "CDF_MON_LAR_000_BTL_000": [
+        "MON_BONE_LAR_000_MI",
+        "MON_LAR_000_CHEST_MI"
+    ],
+    "CDF_MON_LAR_001_BTL_000": [
+        "MON_BONE_LAR_000_MI",
+        "MON_LAR_001_CHEST_MI"
+    ],
+    "CDF_MON_LAR_002_BTL_000": [
+        "MON_BONE_LAR_000_MI",
+        "MON_LAR_002_CHEST_MI"
+    ],
+    "CDF_MON_LAR_003_BTL_000": [
+        "MON_BONE_LAR_000_MI",
+        "MON_LAR_003_CHEST_MI"
+    ],
+    "CDF_MON_LAR_004_BTL_000": [
+        "MON_BONE_LAR_000_MI",
+        "MON_LAR_004_CHEST_MI"
+    ],
+    "CDF_MON_LAR_005_BTL_000": [
+        "MON_BONE_LAR_000_MI",
+        "MON_LAR_005_CHEST_MI"
+    ],
+    "CDF_MON_LAR_006_BTL_000": [
+        "MON_BONE_LAR_006_MI",
+        "MON_LAR_006_CHEST_MI"
+    ],
+    "CDF_MON_LAR_007_BTL_000": [
+        "MON_BONE_LAR_006_MI",
+        "MON_LAR_007_CHEST_MI"
+    ],
+    "CDF_MON_LAR_103_BTL_000": [
+        "MON_BONE_LAR_000_MI",
+        "MON_LAR_103_CHEST_MI"
+    ],
+    "CDF_MON_LIC_000_BTL_000": [
+        "MON_BONE_LIC_000_MI",
+        "MON_LIC_000_CHEST_MI"
+    ],
+    "CDF_MON_LIC_001_BTL_000": [
+        "MON_BONE_LIC_000_MI",
+        "MON_LIC_001_CHEST_MI"
+    ],
+    "CDF_MON_LIC_002_BTL_000": [
+        "MON_BONE_LIC_000_MI",
+        "MON_LIC_002_CHEST_MI"
+    ],
+    "CDF_MON_LIC_003_BTL_000": [
+        "MON_BONE_LIC_000_MI",
+        "MON_LIC_003_CHEST_MI"
+    ],
+    "CDF_MON_LIC_004_BTL_000": [
+        "MON_BONE_LIC_000_MI",
+        "MON_LIC_004_CHEST_MI"
+    ],
+    "CDF_MON_LIC_005_BTL_000": [
+        "MON_BONE_LIC_000_MI",
+        "MON_LIC_005_CHEST_MI"
+    ],
+    "CDF_MON_LIZ_000_BTL_000": [
+        "MON_BONE_LIZ_000_MI",
+        "MON_LIZ_000_CHEST_MI"
+    ],
+    "CDF_MON_LIZ_001_BTL_000": [
+        "MON_BONE_LIZ_000_MI",
+        "MON_LIZ_001_CHEST_MI"
+    ],
+    "CDF_MON_LIZ_002_BTL_000": [
+        "MON_BONE_LIZ_000_MI",
+        "MON_LIZ_002_CHEST_MI"
+    ],
+    "CDF_MON_LIZ_003_BTL_000": [
+        "MON_BONE_LIZ_000_MI",
+        "MON_LIZ_003_CHEST_MI"
+    ],
+    "CDF_MON_LIZ_004_BTL_000": [
+        "MON_BONE_LIZ_000_MI",
+        "MON_LIZ_004_CHEST_MI"
+    ],
+    "CDF_MON_LIZ_005_BTL_000": [
+        "MON_BONE_LIZ_000_MI",
+        "MON_LIZ_005_CHEST_MI"
+    ],
+    "CDF_MON_LIZ_006_BTL_000": [
+        "MON_BONE_LIZ_006_MI",
+        "MON_LIZ_006_FACE_MI",
+        "MON_LIZ_006_CHEST_MI"
+    ],
+    "CDF_MON_LIZ_007_BTL_000": [
+        "MON_BONE_LIZ_006_MI",
+        "MON_LIZ_007_CHEST_MI"
+    ],
+    "CDF_MON_MED_000_BTL_000": [
+        "MON_BONE_MED_000_MI",
+        "MON_MED_000_FACE_MI",
+        "MON_MED_000_CHEST_MI"
+    ],
+    "CDF_MON_MED_001_BTL_000": [
+        "MON_BONE_MED_000_MI",
+        "MON_MED_001_FACE_MI",
+        "MON_MED_001_CHEST_MI"
+    ],
+    "CDF_MON_MED_002_BTL_000": [
+        "MON_BONE_MED_000_MI",
+        "MON_MED_002_FACE_MI",
+        "MON_MED_002_CHEST_MI"
+    ],
+    "CDF_MON_MIN_000_BTL_000": [
+        "MON_BONE_ASU_000_MI",
+        "MON_MIN_000_CHEST_MI"
+    ],
+    "CDF_MON_MLI_000_BTL_000": [
+        "MON_BONE_MLI_000_MI",
+        "MON_MLI_000_CHEST_MI"
+    ],
+    "CDF_MON_MLI_001_BTL_000": [
+        "MON_BONE_MLI_000_MI",
+        "MON_MLI_001_CHEST_MI"
+    ],
+    "CDF_MON_MOK_000_BTL_000": [
+        "MON_BONE_MOK_000_MI",
+        "MON_MOK_000_CHEST_MI"
+    ],
+    "CDF_MON_MOK_001_BTL_000": [
+        "MON_BONE_MOK_000_MI",
+        "MON_MOK_001_CHEST_MI"
+    ],
+    "CDF_MON_MOL_000_BTL_000": [
+        "MON_BONE_MOL_000_MI",
+        "MON_MOL_000_CHEST_MI"
+    ],
+    "CDF_MON_MOL_001_BTL_000": [
+        "MON_BONE_MOL_000_MI",
+        "MON_MOL_001_CHEST_MI"
+    ],
+    "CDF_MON_MOL_002_BTL_000": [
+        "MON_BONE_MOL_000_MI",
+        "MON_MOL_002_CHEST_MI"
+    ],
+    "CDF_MON_MOL_003_BTL_000": [
+        "MON_BONE_MOL_000_MI",
+        "MON_MOL_003_CHEST_MI"
+    ],
+    "CDF_MON_MOL_004_BTL_000": [
+        "MON_BONE_MOL_000_MI",
+        "MON_MOL_004_CHEST_MI"
+    ],
+    "CDF_MON_OCT_000_BTL_000": [
+        "MON_BONE_OCT_000_MI",
+        "MON_OCT_000_CHEST_MI"
+    ],
+    "CDF_MON_OCT_001_BTL_000": [
+        "MON_BONE_OCT_000_MI",
+        "MON_OCT_001_CHEST_MI"
+    ],
+    "CDF_MON_OCT_002_BTL_000": [
+        "MON_BONE_OCT_000_MI",
+        "MON_OCT_002_CHEST_MI"
+    ],
+    "CDF_MON_OCT_100_BTL_000": [
+        "MON_BONE_OCT_000_MI",
+        "MON_OCT_100_CHEST_MI"
+    ],
+    "CDF_MON_OCT_102_BTL_000": [
+        "MON_BONE_OCT_000_MI",
+        "MON_OCT_102_CHEST_MI"
+    ],
+    "CDF_MON_ODI_000_BTL_000": [
+        "MON_BONE_DUL_000_MI",
+        "MON_ODI_000_CHEST_MI"
+    ],
+    "CDF_MON_ORC_000_BTL_000": [
+        "MON_BONE_ORC_000_MI",
+        "MON_ORC_000_CHEST_MI"
+    ],
+    "CDF_MON_ORC_001_BTL_000": [
+        "MON_BONE_ORC_000_MI",
+        "MON_ORC_001_CHEST_MI"
+    ],
+    "CDF_MON_ORC_002_BTL_000": [
+        "MON_BONE_ORC_000_MI",
+        "MON_ORC_002_CHEST_MI"
+    ],
+    "CDF_MON_ORC_003_BTL_000": [
+        "MON_BONE_ORC_000_MI",
+        "MON_ORC_003_CHEST_MI"
+    ],
+    "CDF_MON_ORC_004_BTL_000": [
+        "MON_BONE_ORC_000_MI",
+        "MON_ORC_004_CHEST_MI"
+    ],
+    "CDF_MON_PLA_000_BTL_000": [
+        "MON_BONE_PLA_000_MI",
+        "MON_PLA_000_CHEST_MI"
+    ],
+    "CDF_MON_PLA_001_BTL_000": [
+        "MON_BONE_PLA_000_MI",
+        "MON_PLA_001_CHEST_MI"
+    ],
+    "CDF_MON_PLA_002_BTL_000": [
+        "MON_BONE_PLA_000_MI",
+        "MON_PLA_002_CHEST_MI"
+    ],
+    "CDF_MON_PLA_003_BTL_000": [
+        "MON_BONE_PLA_000_MI",
+        "MON_PLA_003_CHEST_MI"
+    ],
+    "CDF_MON_PLA_004_BTL_000": [
+        "MON_BONE_PLA_000_MI",
+        "MON_PLA_004_CHEST_MI"
+    ],
+    "CDF_MON_QDR_000_BTL_000": [
+        "MON_BONE_QDR_000_MI",
+        "MON_QDR_000_CHEST_MI"
+    ],
+    "CDF_MON_QDR_001_BTL_000": [
+        "MON_BONE_QDR_000_MI",
+        "MON_QDR_001_CHEST_MI"
+    ],
+    "CDF_MON_QDR_002_BTL_000": [
+        "MON_BONE_QDR_000_MI",
+        "MON_QDR_002_CHEST_MI"
+    ],
+    "CDF_MON_QDR_003_BTL_000": [
+        "MON_BONE_QDR_000_MI",
+        "MON_QDR_003_CHEST_MI"
+    ],
+    "CDF_MON_SCO_000_BTL_000": [
+        "MON_BONE_SCO_000_MI",
+        "MON_SCO_000_CHEST_MI"
+    ],
+    "CDF_MON_SCO_001_BTL_000": [
+        "MON_BONE_SCO_000_MI",
+        "MON_SCO_001_CHEST_MI"
+    ],
+    "CDF_MON_SCO_002_BTL_000": [
+        "MON_BONE_SCO_000_MI",
+        "MON_SCO_002_CHEST_MI"
+    ],
+    "CDF_MON_SCO_003_BTL_000": [
+        "MON_BONE_SCO_000_MI",
+        "MON_SCO_003_CHEST_MI"
+    ],
+    "CDF_MON_SCO_004_BTL_000": [
+        "MON_BONE_SCO_000_MI",
+        "MON_SCO_004_CHEST_MI"
+    ],
+    "CDF_MON_SDR_000_BTL_000": [
+        "MON_BONE_SDR_000_MI",
+        "MON_SDR_000_CHEST_MI"
+    ],
+    "CDF_MON_SDR_001_BTL_000": [
+        "MON_BONE_SDR_000_MI",
+        "MON_SDR_001_CHEST_MI"
+    ],
+    "CDF_MON_SDR_002_BTL_000": [
+        "MON_BONE_SDR_000_MI",
+        "MON_SDR_002_CHEST_MI"
+    ],
+    "CDF_MON_SKU_000_BTL_000": [
+        "MON_BONE_SKU_000_MI",
+        "MON_SKU_000_CHEST_MI"
+    ],
+    "CDF_MON_SKU_001_BTL_000": [
+        "MON_BONE_SKU_000_MI",
+        "MON_SKU_001_CHEST_MI"
+    ],
+    "CDF_MON_SKU_002_BTL_000": [
+        "MON_BONE_SKU_000_MI",
+        "MON_SKU_002_CHEST_MI"
+    ],
+    "CDF_MON_SKU_003_BTL_000": [
+        "MON_BONE_SKU_000_MI",
+        "MON_SKU_003_CHEST_MI"
+    ],
+    "CDF_MON_SKU_103_BTL_000": [
+        "MON_BONE_SKU_000_MI",
+        "MON_SKU_103_CHEST_MI"
+    ],
+    "CDF_MON_SLI_000_BTL_000": [
+        "MON_BONE_SLI_000_MI",
+        "MON_SLI_000_CHEST_MI"
+    ],
+    "CDF_MON_SLI_001_BTL_000": [
+        "MON_BONE_SLI_000_MI",
+        "MON_SLI_001_CHEST_MI"
+    ],
+    "CDF_MON_SLI_002_BTL_000": [
+        "MON_BONE_SLI_000_MI",
+        "MON_SLI_002_CHEST_MI"
+    ],
+    "CDF_MON_SLI_100_BTL_000": [
+        "MON_BONE_SLI_000_MI",
+        "MON_SLI_100_CHEST_MI"
+    ],
+    "CDF_MON_SLI_200_BTL_000": [
+        "MON_BONE_SLI_000_MI",
+        "MON_SLI_200_CHEST_MI"
+    ],
+    "CDF_MON_SNA_000_BTL_000": [
+        "MON_BONE_SNA_000_MI",
+        "MON_SNA_000_CHEST_MI"
+    ],
+    "CDF_MON_SNA_001_BTL_000": [
+        "MON_BONE_SNA_000_MI",
+        "MON_SNA_001_CHEST_MI"
+    ],
+    "CDF_MON_SNA_002_BTL_000": [
+        "MON_BONE_SNA_000_MI",
+        "MON_SNA_002_CHEST_MI"
+    ],
+    "CDF_MON_SNA_003_BTL_000": [
+        "MON_BONE_SNA_000_MI",
+        "MON_SNA_003_CHEST_MI"
+    ],
+    "CDF_MON_SNA_102_BTL_000": [
+        "MON_BONE_SNA_000_MI",
+        "MON_SNA_102_CHEST_MI"
+    ],
+    "CDF_MON_SNA_103_BTL_000": [
+        "MON_BONE_SNA_000_MI",
+        "MON_SNA_103_CHEST_MI"
+    ],
+    "CDF_MON_TAR_000_BTL_000": [
+        "MON_BONE_TAR_000_MI",
+        "MON_TAR_000_CHEST_MI"
+    ],
+    "CDF_MON_TAR_001_BTL_000": [
+        "MON_BONE_TAR_000_MI",
+        "MON_TAR_001_CHEST_MI"
+    ],
+    "CDF_MON_TAR_002_BTL_000": [
+        "MON_BONE_TAR_000_MI",
+        "MON_TAR_002_CHEST_MI"
+    ],
+    "CDF_MON_TAR_004_BTL_000": [
+        "MON_BONE_TAR_000_MI",
+        "MON_TAR_004_CHEST_MI"
+    ],
+    "CDF_MON_TAR_100_BTL_000": [
+        "MON_BONE_TAR_000_MI",
+        "MON_TAR_100_FACE_MI",
+        "MON_TAR_100_CHEST_MI"
+    ],
+    "CDF_MON_TRE_000_BTL_000": [
+        "MON_BONE_OCT_000_MI",
+        "MON_TRE_000_CHEST_MI"
+    ],
+    "CDF_MON_TRE_001_BTL_000": [
+        "MON_BONE_OCT_000_MI",
+        "MON_TRE_001_CHEST_MI"
+    ],
+    "CDF_MON_TRE_002_BTL_000": [
+        "MON_BONE_OCT_000_MI",
+        "MON_TRE_002_CHEST_MI"
+    ],
+    "CDF_MON_TRE_003_BTL_000": [
+        "MON_BONE_OCT_000_MI",
+        "MON_TRE_003_CHEST_MI"
+    ],
+    "CDF_MON_TRE_100_BTL_000": [
+        "MON_BONE_OCT_000_MI",
+        "MON_TRE_100_CHEST_MI"
+    ],
+    "CDF_MON_TRE_200_BTL_000": [
+        "MON_BONE_OCT_000_MI",
+        "MON_TRE_200_CHEST_MI"
+    ],
+    "CDF_MON_TRO_000_BTL_000": [
+        "MON_BONE_TRO_000_MI",
+        "MON_TRO_000_CHEST_MI"
+    ],
+    "CDF_MON_TRO_001_BTL_000": [
+        "MON_BONE_TRO_000_MI",
+        "MON_TRO_001_CHEST_MI"
+    ],
+    "CDF_MON_TRO_002_BTL_000": [
+        "MON_BONE_TRO_000_MI",
+        "MON_TRO_002_CHEST_MI"
+    ],
+    "CDF_MON_TRO_003_BTL_000": [
+        "MON_BONE_TRO_000_MI",
+        "MON_TRO_003_CHEST_MI"
+    ],
+    "CDF_MON_TRO_004_BTL_000": [
+        "MON_BONE_TRO_000_MI",
+        "MON_TRO_004_CHEST_MI"
+    ],
+    "CDF_MON_TWI_000_BTL_000": [
+        "MON_BONE_TWI_000_MI",
+        "MON_TWI_000_CHEST_MI"
+    ],
+    "CDF_MON_TWI_001_BTL_000": [
+        "MON_BONE_TWI_000_MI",
+        "MON_TWI_001_CHEST_MI"
+    ],
+    "CDF_MON_WIL_000_BTL_000": [
+        "MON_BONE_DEY_000_MI",
+        "MON_WIL_000_CHEST_MI"
+    ],
+    "CDF_MON_WIL_001_BTL_000": [
+        "MON_BONE_DEY_000_MI",
+        "MON_WIL_001_CHEST_MI"
+    ],
+    "CDF_MON_WIL_002_BTL_000": [
+        "MON_BONE_DEY_000_MI",
+        "MON_WIL_002_CHEST_MI"
+    ],
+    "CDF_MON_WIL_003_BTL_000": [
+        "MON_BONE_DEY_000_MI",
+        "MON_WIL_003_CHEST_MI"
+    ],
+    "CDF_MON_WIL_004_BTL_000": [
+        "MON_BONE_DEY_000_MI",
+        "MON_WIL_004_CHEST_MI"
+    ],
+    "CDF_MON_WIT_000_BTL_000": [
+        "MON_BONE_WIT_000_MI",
+        "MON_WIT_000_CHEST_MI"
+    ],
+    "CDF_MON_WIT_001_BTL_000": [
+        "MON_BONE_WIT_000_MI",
+        "MON_WIT_001_CHEST_MI"
+    ],
+    "CDF_MON_WIT_002_BTL_000": [
+        "MON_BONE_WIT_000_MI",
+        "MON_WIT_002_CHEST_MI"
+    ],
+    "CDF_MON_WIT_003_BTL_000": [
+        "MON_BONE_WIT_000_MI",
+        "MON_WIT_003_CHEST_MI"
+    ],
+    "CDF_MON_WIT_100_BTL_000": [
+        "MON_BONE_WIT_000_MI",
+        "MON_WIT_100_CHEST_MI"
+    ],
+    "CDF_MON_WMA_000_BTL_000": [
+        "MON_BONE_WMA_000_MI",
+        "MON_WMA_000_CHEST_MI"
+    ],
+    "CDF_MON_WMA_001_BTL_000": [
+        "MON_BONE_WMA_000_MI",
+        "MON_WMA_001_CHEST_MI"
+    ],
+    "CDF_MON_WMA_002_BTL_000": [
+        "MON_BONE_WMA_000_MI",
+        "MON_WMA_002_CHEST_MI"
+    ],
+    "CDF_MON_WMA_003_BTL_000": [
+        "MON_BONE_WMA_000_MI",
+        "MON_WMA_003_CHEST_MI"
+    ],
+    "CDF_MON_WMA_004_BTL_000": [
+        "MON_BONE_WMA_000_MI",
+        "MON_WMA_004_CHEST_MI"
+    ],
+    "CDF_MON_WMA_100_BTL_000": [
+        "MON_BONE_WMA_000_MI",
+        "MON_WMA_100_CHEST_MI"
+    ],
+    "CDF_MON_WOL_000_BTL_000": [
+        "MON_BONE_WOL_000_MI",
+        "MON_WOL_000_CHEST_MI"
+    ],
+    "CDF_MON_WOL_001_BTL_000": [
+        "MON_BONE_WOL_000_MI",
+        "MON_WOL_001_CHEST_MI"
+    ],
+    "CDF_MON_WOL_002_BTL_000": [
+        "MON_BONE_WOL_000_MI",
+        "MON_WOL_002_CHEST_MI"
+    ],
+    "CDF_MON_WOL_003_BTL_000": [
+        "MON_BONE_WOL_000_MI",
+        "MON_WOL_003_CHEST_MI"
+    ],
+    "CDF_MON_WOL_102_BTL_000": [
+        "MON_BONE_WOL_000_MI",
+        "MON_WOL_102_CHEST_MI"
+    ],
+    "CDF_MON_WRA_000_BTL_000": [
+        "MON_BONE_WRA_000_MI",
+        "MON_WRA_000_CHEST_MI"
+    ],
+    "CDF_MON_WRA_001_BTL_000": [
+        "MON_BONE_WRA_000_MI",
+        "MON_WRA_001_CHEST_MI"
+    ],
+    "CDF_MON_WRA_002_BTL_000": [
+        "MON_BONE_WRA_000_MI",
+        "MON_WRA_002_CHEST_MI"
+    ],
+    "CDF_MON_WRA_003_BTL_000": [
+        "MON_BONE_WRA_000_MI",
+        "MON_WRA_003_CHEST_MI"
+    ],
+    "CDF_MON_WRA_004_BTL_000": [
+        "MON_BONE_WRA_000_MI",
+        "MON_WRA_004_CHEST_MI"
+    ],
+    "CDF_MON_WTI_000_BTL_000": [
+        "MON_BONE_WTI_000_MI",
+        "MON_WTI_000_CHEST_MI"
+    ],
+    "CDF_MON_WWO_000_BTL_000": [
+        "MON_BONE_WWO_000_MI",
+        "MON_WWO_000_CHEST_MI"
+    ],
+    "CDF_MON_WWO_001_BTL_000": [
+        "MON_BONE_WWO_000_MI",
+        "MON_WWO_001_CHEST_MI"
+    ],
+    "CDF_MON_WWO_002_BTL_000": [
+        "MON_BONE_WWO_000_MI",
+        "MON_WWO_002_CHEST_MI"
+    ],
+    "CDF_MON_WWO_003_BTL_000": [
+        "MON_BONE_WWO_000_MI",
+        "MON_WWO_003_CHEST_MI"
+    ],
+    "CDF_MON_WWO_004_BTL_000": [
+        "MON_BONE_WWO_000_MI",
+        "MON_WWO_004_CHEST_MI"
+    ],
+    "CDF_MON_WWO_005_BTL_000": [
+        "MON_BONE_WWO_000_MI",
+        "MON_WWO_005_CHEST_MI"
+    ],
+    "CDF_MON_WWO_006_BTL_000": [
+        "MON_BONE_WWO_006_MI",
+        "MON_WWO_006_CHEST_MI"
+    ],
+    "CDF_MON_WWO_007_BTL_000": [
+        "MON_BONE_WWO_006_MI",
+        "MON_WWO_007_CHEST_MI"
+    ],
+    "CDF_MON_WWO_008_BTL_000": [
+        "MON_BONE_WWO_000_MI",
+        "MON_WWO_008_CHEST_MI"
+    ],
+    "CDF_MON_WWO_009_BTL_000": [
+        "MON_BONE_WWO_000_MI",
+        "MON_WWO_000_CHEST_MI"
+    ],
+    "CDF_MON_WWO_101_BTL_000": [
+        "MON_BONE_WWO_000_MI",
+        "MON_WWO_101_CHEST_MI"
+    ],
+    "CDF_MON_WYV_000_BTL_000": [
+        "MON_BONE_WYV_000_MI",
+        "MON_WYV_000_CHEST_MI"
+    ],
+    "CDF_MON_WYV_001_BTL_000": [
+        "MON_BONE_WYV_000_MI",
+        "MON_WYV_001_CHEST_MI"
+    ],
+    "CDF_MON_WYV_002_BTL_000": [
+        "MON_BONE_WYV_000_MI",
+        "MON_WYV_002_CHEST_MI"
+    ],
+    "CDF_MON_WYV_003_BTL_000": [
+        "MON_BONE_WYV_000_MI",
+        "MON_WYV_003_CHEST_MI"
+    ],
+    "CDF_MON_WYV_004_BTL_000": [
+        "MON_BONE_WYV_000_MI",
+        "MON_WYV_004_CHEST_MI"
+    ],
+    "CDF_MON_WYV_005_BTL_000": [
+        "MON_BONE_WYV_000_MI",
+        "MON_WYV_005_CHEST_MI"
+    ],
+    "CDF_MON_ZOM_000_BTL_000": [
+        "MON_BONE_ZOM_000_MI",
+        "MON_ZOM_000_CHEST_MI"
+    ],
+    "CDF_MON_ZOM_001_BTL_000": [
+        "MON_BONE_ZOM_000_MI",
+        "MON_ZOM_001_CHEST_MI"
+    ],
+    "CDF_MON_ZOM_002_BTL_000": [
+        "MON_BONE_ZOM_000_MI",
+        "MON_ZOM_002_CHEST_MI"
+    ],
+    "CDF_MON_ZOM_003_BTL_000": [
+        "MON_BONE_ZOM_000_MI",
+        "MON_ZOM_003_CHEST_MI"
+    ],
+    "CDF_MON_ZOM_004_BTL_000": [
+        "MON_BONE_ZOM_000_MI",
+        "MON_ZOM_004_CHEST_MI"
+    ],
+    "NewPartsModel": [
+        "CHR_BONE_SRA_ALL_000_MI"
+    ],
+    "TEST_CDF_CHR_ENDO": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_VEL_HUM_000_CHEST_MI"
+    ],
+    "TEST_CDF_CHR_ENDO2": [
+        "CHR_BONE_LAI_ALL_000_MI",
+        "CHR_MAL_HUM_000_HAIR_MI",
+        "CHR_MAL_HUM_000_FACE_MI",
+        "CHR_MAL_HUM_000_CHEST_MI"
+    ],
+    "TEST_CDF_CHR_SRA_HUM_000_SYS_000": [
+        "CHR_BONE_SRA_ALL_000_MI",
+        "CHR_SRA_HUM_000_HAIR_MI",
+        "CHR_SRA_HUM_000_FACE_MI",
+        "CHR_SRA_HUM_000_CHEST_MI",
+        "CHR_SRA_HUM_000_LEG_MI",
+        "CHR_SRA_HUM_000_HAND_L_MI",
+        "CHR_SRA_HUM_000_HAND_R_MI",
+        "CHR_SRA_HUM_000_CUSTOM_MANT_MI"
+    ],
+    "WDF_DAG_000_KMN_L00": [
+        "WPN_BONE_DAG_000_ROS_L00",
+        "WPN_DAG_000_KMN_L00"
+    ],
+    "WDF_DAG_000_KMN_R00": [
+        "WPN_BONE_DAG_000_ROS_R00",
+        "WPN_DAG_000_KMN_R00"
+    ],
+    "WDF_DAG_000_ROS_L00": [
+        "WPN_BONE_DAG_000_ROS_L00",
+        "WPN_DAG_000_ROS_L00"
+    ],
+    "WDF_DAG_000_ROS_L01": [
+        "WPN_BONE_DAG_000_ROS_L01",
+        "WPN_DAG_000_ROS_L01"
+    ],
+    "WDF_DAG_000_ROS_R00": [
+        "WPN_BONE_DAG_000_ROS_R00",
+        "WPN_DAG_000_ROS_R00"
+    ],
+    "WDF_DAG_000_ROS_R01": [
+        "WPN_BONE_DAG_000_ROS_R01",
+        "WPN_DAG_000_ROS_R01"
+    ],
+    "WDF_PEN_000_DEZ_L00": [
+        "WPN_BONE_PEN_000_DEZ_L00",
+        "WPN_PEN_000_DEZ_L00"
+    ],
+    "WDF_PEN_000_DEZ_R00": [
+        "WPN_BONE_PEN_000_DEZ_R00",
+        "WPN_PEN_000_DEZ_R00"
+    ],
+    "WDF_PEN_007_DEZ_L00": [
+        "WPN_BONE_PEN_000_DEZ_L00",
+        "WPN_PEN_007_DEZ_L00"
+    ],
+    "WDF_PEN_007_DEZ_R00": [
+        "WPN_BONE_PEN_000_DEZ_R00",
+        "WPN_PEN_007_DEZ_R00"
+    ],
+    "WDF_SPE_000_ALI_B00": [
+        "WPN_BONE_SPE_000_ALI_B00",
+        "WPN_SPE_000_ALI_B00"
+    ],
+    "WDF_SPE_000_ALI_R00": [
+        "WPN_BONE_SPE_000_ALI_R00",
+        "WPN_SPE_000_ALI_R00"
+    ],
+    "WDF_SPE_000_MAL_R00": [
+        "WPN_BONE_SPE_000_ALI_R00",
+        "WPN_SPE_000_MAL_R00"
+    ],
+    "WDF_SWO_000_SRA_L00": [
+        "WPN_BONE_SWO_100_SRA_L00",
+        "WPN_SWO_100_SRA_L00"
+    ],
+    "WDF_SWO_000_SRA_R00": [
+        "WPN_BONE_SWO_000_SRA_R00",
+        "WPN_SWO_000_SRA_R00"
+    ],
+    "WDF_SWO_000_SRA_R01": [
+        "WPN_BONE_SWO_000_SRA_R01",
+        "WPN_SWO_000_SRA_R01"
+    ],
+    "WDF_SWO_100_SRA_L00": [
+        "WPN_BONE_SWO_100_SRA_L00",
+        "WPN_SWO_100_SRA_L00"
+    ],
+    "WDF_SWO_100_SRA_R00": [
+        "WPN_BONE_SWO_100_SRA_R00",
+        "WPN_SWO_100_SRA_R00"
+    ],
+    "WDF_SWO_100_SRA_R01": [
+        "WPN_BONE_SWO_100_SRA_R01",
+        "WPN_SWO_100_SRA_R01"
+    ],
+    "WDF_UMB_000_EDN_L00": [
+        "WPN_BONE_UMB_000_EDN_L00",
+        "WPN_UMB_000_EDN_L00"
+    ],
+    "WDF_WAN_000_MIC_L00": [
+        "WPN_BONE_WAN_000_MIC_L00",
+        "WPN_WAN_000_MIC_L00"
+    ]
+}
