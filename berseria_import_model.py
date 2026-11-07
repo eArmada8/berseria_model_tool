@@ -942,16 +942,17 @@ def process_tomdlb (tomdlb_file, swap_endian = False):
                 new_opening_dict_strings = [dlp_file, anmb_file] + all_tex_names
                 new_opening_dict = write_string_dict(new_opening_dict_strings)[0]
                 # Create new skeleton block
-                new_s0_start_offset = (4 + (4 if addr_size == 8 else 0) + (2 * addr_size)
-                    + 8 + (12 * addr_size) + len(new_opening_dict))
+                file_header_size = 4 + (4 if addr_size == 8 else 0) + (2 * addr_size) + 8
+                new_s0_start_offset = file_header_size + (12 * addr_size) + len(new_opening_dict)
                 data_blocks[0] = create_section_0(raw_skel_data, skel_unk[0], skel_unk[1], new_s0_start_offset)
                 # Create new animation default data block
-                new_s11_start_offset = (4 + (4 if addr_size == 8 else 0) + (2 * addr_size)
-                    + 8 + (12 * addr_size) + len(new_opening_dict)
+                new_s11_start_offset = (file_header_size + (12 * addr_size) + len(new_opening_dict)
                     + sum([len(data_blocks[i]) for i in range(11)]))
                 data_blocks[11] = create_section_11(raw_ani_default_data, new_s11_start_offset)
                 # Create new internal file (BLDM block)
-                new_bldm_block, dict_offset = create_data_block (data_blocks, new_opening_dict, addr_size, 1, addr_size)
+                new_bldm_block, dict_offset = create_data_block (data_blocks, new_opening_dict, addr_size, 1, 1)
+                if (file_header_size + len(new_bldm_block)) % 8:
+                    new_bldm_block += b'\x00' * (8 - ((file_header_size + len(new_bldm_block)) % 8))
                 # Instead of overwriting backups, it will just tag a number onto the end
                 backup_suffix = ''
                 if os.path.exists(tomdlb_file + '.bak' + backup_suffix):
