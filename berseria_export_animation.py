@@ -24,6 +24,10 @@ except ModuleNotFoundError as e:
     input("Press Enter to abort.")
     raise
 
+# Configuration variable:
+# Convert the model from left-handed to right-handed (from Tales space to glTF space)
+flip_model_handedness_for_gltf = True
+
 # Global variables, do not edit
 addr_size = 8
 e = '<'
@@ -368,6 +372,9 @@ def write_glTF (ani_data, skel_struct, basename, write_glb = True):
             del(gltf_data['nodes'][i]['children'])
     if len(gltf_data['nodes']) == 0:
         gltf_data['nodes'].append({'name': 'root'})
+    if flip_model_handedness_for_gltf == True:
+        for i in range(len(gltf_data['nodes'])):
+            gltf_data['nodes'][i] = flip_node_handedness_for_gltf (gltf_data['nodes'][i])
     # Animations
     node_dict = {gltf_data['nodes'][j]['name']:j for j in range(len(gltf_data['nodes']))}
     bone_id_to_name = {x['id']:x['name'] for x in skel_struct}
@@ -380,14 +387,22 @@ def write_glTF (ani_data, skel_struct, basename, write_glb = True):
         outputs = []
         for j in range(len(outputs_raw)):
             if ani_list[i]['type'] == 0x20003:
+                if flip_model_handedness_for_gltf == True:
+                    out = [outputs_raw[j][0], outputs_raw[j][1], -outputs_raw[j][2]]
+                else:
+                    out = outputs_raw[j]
                 if 'translation' in gltf_data['nodes'][node_dict[bone_id_to_name[ani_list[i]['target']]]]:
-                    new_ = (numpy.array(outputs_raw[j])
+                    new_ = (numpy.array(out)
                         + numpy.array(gltf_data['nodes'][node_dict[bone_id_to_name[ani_list[i]['target']]]]['translation']))
                     outputs.append(new_.tolist())
                 else:
-                    outputs.append(outputs_raw[j])
+                    outputs.append(out)
             if ani_list[i]['type'] == 0x10014:
-                qc = Quaternion([outputs_raw[j][3]] + outputs_raw[j][0:3])
+                if flip_model_handedness_for_gltf == True:
+                    out = [-outputs_raw[j][0], -outputs_raw[j][1], outputs_raw[j][2], outputs_raw[j][3]]
+                else:
+                    out = outputs_raw[j]
+                qc = Quaternion([out[3]] + out[0:3])
                 if 'rotation' in gltf_data['nodes'][node_dict[bone_id_to_name[ani_list[i]['target']]]]:
                     q1 = gltf_data['nodes'][node_dict[bone_id_to_name[ani_list[i]['target']]]]['rotation']
                     qp = Quaternion([q1[3]] + q1[0:3])

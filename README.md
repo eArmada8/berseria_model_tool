@@ -21,6 +21,7 @@ I used AI (Claude, attached to ghidra) as a debugger / decompiler to help me deb
 4. berseria_export_model.py is dependent on lib_fmtibvb.py, which must be in the same folder.  berseria_import_model.py is dependent on berseria_export_model.py, lib_fmtibvb.py and the pyffi_tstrip module, all of which must be in the same folder.
 
 ## Usage:
+
 ### berseria_export_model.py
 Double click the python script and it will search the current folder for all .TOMDLB_D files that are not skeletons (`BONE` is not in the name) and with its corresponding .TOMDLP_P file.  Additionally, it will output 7 JSON files per .TOMDLB_D file that are used to reconstruct the .TOMDLB_D file:
 
@@ -35,6 +36,8 @@ Double click the python script and it will search the current folder for all .TO
 *Note:* When used without command line arguments, the script will attempt to combine all models into a single .glb - editing the configuration variable `combine_models_into_single_gltf` at the top of the script will revert the script to processing models sequentially and outputting one .glb per model.  Raw buffers are still separated by model for game modding.  The script will also output a `{MODEL NAME}_full_skeleton.json` file when used in combined model format, to be used with berseria_export_animation.py.
 
 Additionally it will output a glTF file, by default in the binary .glb format.  Textures should be placed in a `textures` folder in .dds format (use totexp_p_to_dds.py or ps3_totexb_d_to_dds.py to convert textures).
+
+*NOTE: By default, the script will flip the model from left-handed space to right-handed space for glTF.  If you want to use the glTF for weight painting the raw buffers, turn this feature off by editing the global variable at the top of the script.*
 
 *NOTE: The export script supports both 64-bit and 32-bit addressing, as well as little endian (PC) and big endian (PS3) encoded assets.  The import script supports both 64-bit and 32-bit addressing, and both endian formats, but only little endian (PC) encoding has been extensively tested.*
 
@@ -59,6 +62,8 @@ Double click the python script to run and it will attempt to convert the TOANMB 
 *NOTE:* A compatible skeleton file must be in the folder, either in the form of a dumped skeleton (the `{MODEL NAME}_full_skeleton.json` file outputted by berseria_export_model.py) or the same binary skeleton file (.TOMDLB_D) used by berseria_export_model.py; dumped skeleton files are prioritized over binary skeleton files.  The script will only export animation channels targeted to the skeletal nodes; therefore utilizing dumped skeletons will produce a more complete animation as the model-specific physics bones will also be incorporated.  You can still use the --dumpanidata command without a skeleton to obtain all animation data in JSON format.
 
 It will search the current folder for TOANMB/TOANMSB files and convert them all, unless you use command line options.
+
+*NOTE: By default, the script will flip the model animation from left-handed space to right-handed space for glTF, which matches berseria_export_model.py.  If you changed the variable in berseria_export_model.py, be sure to change the same variable in this script to match.*
 
 **Command line arguments:**
 `berseria_export_animation.py [-h] [-o] [-t] [-d] animbin_file`
